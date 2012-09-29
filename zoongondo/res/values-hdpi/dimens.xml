@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="dimen2">2dp</dimen>
+    <dimen name="dimen5">5dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="thumbSize">48dp</dimen>
+    <dimen name="dialog_change_distance_width">300dp</dimen>
+    <dimen name="text_size_title_review">14sp</dimen>
+    <dimen name="height_title_review">27dp</dimen>
+	<dimen name="height_main_image_in_spotdetail_screen">167dp</dimen>
+	<dimen name="margin_pager">15dp</dimen>
+	<dimen name="size_avatar">64px</dimen>
+</resources>

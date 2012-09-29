@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" >
+
+        <GridView
+            android:id="@+id/listImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:horizontalSpacing="5dip"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="5dip" >
+        </GridView>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/imagePager"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#000000"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/pageIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dip"
+            android:background="#31000000"
+            android:paddingBottom="2dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="2dip"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/img_ab"
+        android:gravity="center_vertical" >
+
+        <ImageButton
+            android:id="@+id/btnBackToGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/btn_transparentblue"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/btn_backto_gallery_choosemedia"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/btn_take_camera"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/btn_ab_default"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/btn_take_camera" />
+
+        <ImageButton
+            android:id="@+id/btnSelected"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_ab_default"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/btn_backto_checkin" />
+
+        <TextView
+            android:id="@+id/txtNumbersImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/btnSelected"
+            android:layout_alignTop="@id/btnSelected"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_image_quality"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/btnSelected"
+            android:layout_toRightOf="@+id/btn_take_camera"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/showAllMedia"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@null"
+                android:button="@null"
+                android:checked="true"
+                android:drawablePadding="0dip"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/select_photo_all"
+                android:textColor="#fc8884" />
+
+            <RadioButton
+                android:id="@+id/showSeletedMedia"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:button="@null"
+                android:drawablePadding="0dip"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/select_photo_selected" />
+        </RadioGroup>
+    </RelativeLayout>
+
+</LinearLayout>

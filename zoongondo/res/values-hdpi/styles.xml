@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="NgonDoEditText" parent="@android:style/Widget.EditText">
+        <item name="android:typeface">sans</item>
+        <item name="android:textSize">@dimen/textsize_general</item>
+        <item name="android:textColor">@color/NgonDoTextColor</item>
+    </style>
+
+    <style name="ButtonActionBar">
+        <item name="android:background">@drawable/btn_ab_default</item>
+        <item name="android:textSize">@dimen/textsize_general</item>
+        <item name="android:textColor">@color/NgonDoWhite</item>
+        <item name="android:paddingRight">@dimen/padding_medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">@dimen/padding_medium</item>
+    </style>
+
+    <style name="NgonDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="FormTitleMain">
+        <item name="android:textColor">@color/NgonDoDarkGrey</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">serif</item>
+    </style>
+
+    <style name="FormTitleSecondary">
+        <item name="android:textColor">@color/NgonDoBlue</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:typeface">serif</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
+    <style name="FormTitleBlue">
+        <item name="android:textColor">@color/NgonDoBlue</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:typeface">serif</item>
+    </style>
+
+    <style name="FormTextSecondary">
+        <item name="android:textColor">@color/NgonDoGrey</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:typeface">serif</item>
+    </style>
+
+    <style name="FormText">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:typeface">serif</item>
+    </style>
+
+    <style name="FormTextSecondaryColored" parent="FormTextSecondary">
+        <item name="android:textColor">@color/NgonDoBlue</item>
+    </style>
+
+    <style name="StyledIndicators" parent="@android:style/Theme.Light">
+        <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
+        <item name="vpiLinePageIndicatorStyle">@style/CustomLinePageIndicator</item>
+        <item name="vpiTitlePageIndicatorStyle">@style/CustomTitlePageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
+    </style>
+
+    <style name="CustomTitlePageIndicator">
+        <item name="android:background">#18FF0000</item>
+        <item name="footerColor">#FFAA2222</item>
+        <item name="footerLineHeight">1dp</item>
+        <item name="footerIndicatorHeight">3dp</item>
+        <item name="footerIndicatorStyle">underline</item>
+        <item name="android:textColor">#AA000000</item>
+        <item name="selectedColor">#FF000000</item>
+        <item name="selectedBold">true</item>
+    </style>
+
+    <style name="CustomLinePageIndicator">
+        <item name="strokeWidth">4dp</item>
+        <item name="lineWidth">30dp</item>
+        <item name="unselectedColor">#FF888888</item>
+        <item name="selectedColor">#FF880000</item>
+    </style>
+
+    <style name="CustomCirclePageIndicator">
+        <item name="fillColor">#FF888888</item>
+        <item name="strokeColor">#FF000000</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="radius">10dp</item>
+        <item name="centered">true</item>
+    </style>
+
+    <style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
+        <item name="android:background">@drawable/custom_tab_indicator</item>
+        <item name="android:textColor">#FF555555</item>
+    </style>
+
+    <style name="CustomUnderlinePageIndicator">
+        <item name="selectedColor">#FFCC0000</item>
+        <item name="android:background">#FFCCCCCC</item>
+        <item name="fadeLength">1000</item>
+        <item name="fadeDelay">1000</item>
+    </style>
+
+    <style name="LocationTab">
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingTop">3dp</item>
+    </style>
+
+    <style name="LocationTab.Selected" parent="@style/LocationTab">
+        <item name="android:background">@drawable/img_btn_location_tab</item>
+        <item name="android:textColor">@color/NgonDoWhite</item>
+    </style>
+
+    <style name="LocationTab.UnSelected" parent="@style/LocationTab">
+        <item name="android:textColor">@color/NgonDoTextColor</item>
+        <item name="android:background">@drawable/blank</item>
+    </style>
+
+</resources>

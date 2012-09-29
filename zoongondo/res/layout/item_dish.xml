@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="true" >
+
+    <com.zoostudio.android.image.ZooImageDishBorder
+        android:id="@+id/thumbDish1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/content_description"
+        android:background="@drawable/icon_bg_dish" />
+
+    <com.zoostudio.android.image.ZooImageDishBorder
+        android:id="@+id/thumbDish2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dip"
+        android:layout_toRightOf="@+id/thumbDish1"
+        android:contentDescription="@string/content_description"
+        android:background="@drawable/icon_bg_dish" />
+
+    <com.zoostudio.android.image.ZooImageDishBorder
+        android:id="@+id/thumbDish3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/thumbDish1"
+        android:layout_marginTop="5dip"
+        android:contentDescription="@string/content_description"
+        android:background="@drawable/icon_bg_dish" />
+
+    <com.zoostudio.android.image.ZooImageDishBorder
+        android:id="@+id/thumbDish4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/thumbDish1"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="5dip"
+        android:layout_toRightOf="@+id/thumbDish3"
+        android:contentDescription="@string/content_description"
+        android:background="@drawable/icon_bg_dish" />
+
+</RelativeLayout>

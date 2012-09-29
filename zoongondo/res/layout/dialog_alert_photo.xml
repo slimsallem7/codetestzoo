@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/NgonDoBlue" />
+
+    <LinearLayout
+        android:id="@+id/innercustomview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#d4bc91"
+        android:paddingTop="1dp" >
+
+        <Button
+            android:id="@+id/negative"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_dialog_negative"
+            android:text="@string/app_name"
+            android:textColor="@color/btn_dialog_negative_text"
+            android:textSize="@dimen/textsize_general"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/neutral"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_dialog_neutral"
+            android:text="@string/app_name"
+            android:textColor="@color/btn_dialog_neutral_text"
+            android:textSize="@dimen/textsize_general"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/positive"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_dialog_positive"
+            android:text="@string/app_name"
+            android:textColor="@color/btn_dialog_positive_text"
+            android:textSize="@dimen/textsize_general"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

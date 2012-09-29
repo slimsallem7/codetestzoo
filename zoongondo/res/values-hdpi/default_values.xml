@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="defaultval_username_min">3</integer>
+    <integer name="defaultval_username_max">50</integer>
+    <integer name="defaultval_password_min">5</integer>
+    <integer name="defaultval_password_max">20</integer>
+</resources>

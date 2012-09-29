@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    tools:context=".ui.Register" >
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/img_ab" >
+
+        <com.zoostudio.ngon.views.ButtonUp
+            android:id="@+id/btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default" >
+        </com.zoostudio.ngon.views.ButtonUp>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/btn_up"
+            android:layout_alignTop="@id/btn_up"
+            android:layout_toLeftOf="@+id/divider"
+            android:layout_toRightOf="@id/btn_up"
+            android:gravity="center"
+            android:paddingLeft="15dip"
+            android:text="@string/register_title"
+            android:textColor="@color/NgonDoWhite"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/btn_register"
+            android:background="@drawable/img_ab_divider" />
+
+        <Button
+            android:id="@+id/btn_register"
+            style="@style/ButtonActionBar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/register_btn_register" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/registerform"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/login_form"
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
+
+        <EditText
+            android:id="@+id/txt_username"
+            style="@style/NgonDoEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/img_searchbox"
+            android:hint="@string/register_username_hint" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/txt_password"
+            style="@style/NgonDoEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/txt_username"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/btn_show_password"
+            android:background="@drawable/img_searchbox"
+            android:hint="@string/register_password_hint"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/txt_email"
+            style="@style/NgonDoEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/txt_password"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/img_searchbox"
+            android:hint="@string/register_email_hint"
+            android:inputType="textEmailAddress" />
+
+        <CheckBox
+            android:id="@+id/btn_show_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txt_password"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/txt_password"
+            android:textColor="#333333"
+            android:typeface="serif" />
+    </RelativeLayout>
+
+</RelativeLayout>

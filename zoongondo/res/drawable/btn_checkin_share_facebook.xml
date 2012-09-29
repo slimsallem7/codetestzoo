@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Enabled states -->
+    <item android:drawable="@drawable/ic_btn_facebook_on" 
+        android:state_checked="true" 
+        android:state_enabled="true" 
+        android:state_window_focused="false"/>   <!-- ON -->
+ 
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false" 
+        android:state_enabled="true" 
+        android:state_window_focused="false"/>   <!-- OFF -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_on" 
+        android:state_checked="true" 
+        android:state_enabled="true" 
+        android:state_pressed="true"/>   <!-- ON PRESSED -->
+ 
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false" 
+        android:state_enabled="true" 
+        android:state_pressed="true"/>    <!-- OFF PRESSED -->
+ 
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="true" 
+        android:state_enabled="true" 
+        android:state_focused="true"/>     <!-- ON SELECTED -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false" 
+        android:state_enabled="true" 
+        android:state_focused="true"/>    <!-- OFF SELECTED -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false" 
+        android:state_enabled="true"/>    <!-- OFF -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_on" 
+        android:state_checked="true" 
+        android:state_enabled="true"/>    <!-- ON -->
+ 
+    <!-- Disabled states -->
+    <item android:drawable="@drawable/ic_btn_facebook_on" 
+        android:state_checked="true" 
+        android:state_window_focused="false"/>   <!-- ON DISABLE -->
+ 
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false" 
+        android:state_window_focused="false"/>   <!-- OFF DISABLE -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="true" 
+        android:state_focused="true"/>    <!-- ON DISABLE FOCUSED -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false" 
+        android:state_focused="true"/>    <!-- OFF DISABLE FOCUSED -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_off" 
+        android:state_checked="false"/>    <!-- OFF DISABLE -->
+
+    <item android:drawable="@drawable/ic_btn_facebook_on" 
+        android:state_checked="true"/>     <!-- ON DISABLE -->
+
+</selector>

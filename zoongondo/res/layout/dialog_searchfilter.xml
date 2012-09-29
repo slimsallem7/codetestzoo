@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zoo="http://schemas.android.com/apk/res/com.zoostudio.ngon"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/dialog_searchfilter_distance_title"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="#dbdbdb"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:text="@string/dialog_searchfilter_distance_title"
+        android:textColor="@color/NgonDoBlack"
+        android:textSize="@dimen/textsize_general" />
+
+    <TextView
+        android:id="@+id/current_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_arrow_background"
+        android:gravity="center_vertical"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/checkin"
+        android:textColor="@color/NgonDoRed"
+        android:textSize="@dimen/textsize_general" />
+
+    <TextView
+        android:id="@+id/dialog_searchfilter_title_title"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="#dbdbdb"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:text="@string/dialog_searchfilter_title_title"
+        android:textColor="@color/NgonDoBlack"
+        android:textSize="@dimen/textsize_general" />
+
+    <com.zoostudio.ngon.views.CheckBoxExtended
+        android:id="@+id/mostliked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_transparentblue"
+        android:paddingLeft="@dimen/padding_medium"
+        android:textSize="@dimen/textsize_general"
+        zoo:text="@string/checkin"
+        zoo:textColor="@color/NgonDoBlack"
+        zoo:textStyle="bold" >
+    </com.zoostudio.ngon.views.CheckBoxExtended>
+
+    <View
+        android:id="@+id/horizontaldivider0"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/img_horizontaldivider_pattern" />
+
+    <com.zoostudio.ngon.views.CheckBoxExtended
+        android:id="@+id/mostcheckedin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_transparentblue"
+        android:paddingLeft="@dimen/padding_medium"
+        android:textSize="@dimen/textsize_general"
+        zoo:text="@string/checkin"
+        zoo:textColor="@color/NgonDoBlack"
+        zoo:textStyle="bold" >
+    </com.zoostudio.ngon.views.CheckBoxExtended>
+
+    <View
+        android:id="@+id/horizontaldivider1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/img_horizontaldivider_pattern" />
+
+    <com.zoostudio.ngon.views.CheckBoxExtended
+        android:id="@+id/mostrated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_transparentblue"
+        android:paddingLeft="@dimen/padding_medium"
+        android:textSize="@dimen/textsize_general"
+        zoo:text="@string/checkin"
+        zoo:textColor="@color/NgonDoBlack"
+        zoo:textStyle="bold" >
+    </com.zoostudio.ngon.views.CheckBoxExtended>
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_window_focused="false" android:state_enabled="true"
+        android:drawable="@color/NgonDoDialogBackground" /> <!-- Normal -->
+        
+    <item android:state_window_focused="false" android:state_enabled="false"
+        android:drawable="@color/NgonDoDialogBackground" /> <!--  Normal disable -->
+    
+    <item android:state_pressed="true" 
+        android:drawable="@color/NgonDoBlack" /> <!-- pressed -->
+    
+    <item android:state_focused="true" android:state_enabled="true"
+        android:drawable="@color/NgonDoBlack" /> <!-- selected -->
+    
+    <item android:state_enabled="true"
+        android:drawable="@color/NgonDoDialogBackground" /> <!-- normal -->
+    
+    <item android:state_focused="true"
+        android:drawable="@color/NgonDoDialogBackground" /> <!-- normal disable focused -->
+   
+    <item
+         android:drawable="@color/NgonDoDialogBackground" /> <!-- normal disable -->
+</selector>

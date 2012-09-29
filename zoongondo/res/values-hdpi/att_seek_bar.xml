@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        lineThickness: dimension
+    	nodeThickness: dimension
+    	showNode: boolean
+    -->
+    <declare-styleable name="ZooSeekBar">
+        <attr name="thumb" format="integer" />
+        <attr name="lineThickness" format="dimension" />
+        <attr name="nodeThickness" format="dimension" />
+        <attr name="showNode" format="boolean" />
+    </declare-styleable>
+
+</resources>

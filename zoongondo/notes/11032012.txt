@@ -1,0 +1,7 @@
+- trong 1 like item trong history se co info cua food hay spot hay ca 2 tuy theo type cua like
+
+Food item & Spot item: 
+
+id: int
+
+name: string

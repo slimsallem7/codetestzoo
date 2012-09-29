@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/img_ab" >
+
+        <com.zoostudio.ngon.views.ButtonUp
+            android:id="@+id/btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default" >
+        </com.zoostudio.ngon.views.ButtonUp>
+
+        <Button
+            android:id="@+id/checkin"
+            style="@style/ButtonActionBar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/button_done" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/checkin"
+            android:background="@drawable/img_ab_divider" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/list_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:divider="@drawable/blank"
+        android:dividerHeight="0dip"
+        android:fadingEdge="none" >
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/layoutDishSelected"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#649FA7" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingBottom="8dp"
+            android:paddingLeft="14dp"
+            android:paddingTop="10dp"
+            android:text="@string/selected_dish"
+            android:textColor="@color/NgonDoWhite"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txtDishchoices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/icon_white_arrow_right"
+            android:paddingBottom="8dp"
+            android:paddingRight="5dip"
+            android:paddingTop="10dp"
+            android:textColor="@color/NgonDoWhite" />
+    </RelativeLayout>
+
+</LinearLayout>

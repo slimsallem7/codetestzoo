@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zoostudio.ngon.views.VerticalImageThumbView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/btn_grey"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <com.zoostudio.android.image.ZooImageThumb
+        android:id="@+id/imgThumb1"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:contentDescription="@string/content_description"
+        android:paddingBottom="3dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_photo_dish_checkin" >
+    </com.zoostudio.android.image.ZooImageThumb>
+
+    <com.zoostudio.android.image.ZooImageThumb
+        android:id="@+id/imgThumb2"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_below="@+id/imgThumb1"
+        android:contentDescription="@string/content_description"
+        android:paddingBottom="3dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_photo_dish_checkin" >
+    </com.zoostudio.android.image.ZooImageThumb>
+
+    <com.zoostudio.android.image.ZooImageThumb
+        android:id="@+id/imgThumb3"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_below="@+id/imgThumb2"
+        android:contentDescription="@string/content_description"
+        android:paddingBottom="3dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_photo_dish_checkin" >
+    </com.zoostudio.android.image.ZooImageThumb>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgThumb3"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/icon_more" >
+    </ImageView>
+
+</com.zoostudio.ngon.views.VerticalImageThumbView>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/img_ab" >
+
+        <com.zoostudio.ngon.views.ButtonUp
+            android:id="@+id/btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default" >
+        </com.zoostudio.ngon.views.ButtonUp>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/create_spot"
+            android:background="@drawable/img_ab_divider" />
+
+        <Button
+            android:id="@+id/create_spot"
+            style="@style/ButtonActionBar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/button_done" />
+    </RelativeLayout>
+
+    <com.google.android.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/actionbar"
+        android:apiKey="0_EiDNtkUUkGuyy7_IfKBs-lMKcw8aWA6sYE8tA"
+        android:clickable="true"
+        android:enabled="true" >
+    </com.google.android.maps.MapView>
+
+    <RelativeLayout
+        android:id="@+id/newspot_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/actionbar"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/FormTitleSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/actionbar"
+            android:text="THÊM ĐỊA ĐIỂM" />
+
+        <AutoCompleteTextView
+            android:id="@+id/spot_name"
+            style="@style/NgonDoEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:hint="Tên địa điểm"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true" >
+
+            <requestFocus />
+        </AutoCompleteTextView>
+
+        <AutoCompleteTextView
+            android:id="@+id/spot_address"
+            style="@style/NgonDoEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/spot_name"
+            android:layout_toLeftOf="@+id/btn_get_location"
+            android:hint="Địa chỉ"
+            android:maxLines="3" />
+
+        <ImageButton
+            android:id="@+id/btn_get_location"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/spot_name"
+            android:background="@null" />
+    </RelativeLayout>
+
+    <!-- 0FhPPL2We4mAg1f04Kp-???-nv01MRFA0vVizVwJQQ -->
+
+</RelativeLayout>

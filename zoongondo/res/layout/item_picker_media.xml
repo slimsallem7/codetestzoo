@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.zoostudio.android.image.ZooAjustImageView
+        android:id="@+id/zooAjustImageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/picker_checkmark_hint" />
+
+    <com.zoostudio.ngon.views.PhotoToggleButton
+        android:id="@+id/check_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textOn=""
+        android:textOff=""
+        android:focusable="false"
+        android:background="@drawable/bg_check_box_image"
+        android:button="@null"
+        />
+
+</RelativeLayout>

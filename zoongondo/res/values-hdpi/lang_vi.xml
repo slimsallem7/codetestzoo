@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lang_vi_spotlist_nearby_empty_message">Không có địa điểm nào gần đây</string>
+    <string name="lang_vi_spotlist_error_message">Có lỗi khi lấy dữ liệu, xin bạn vui lòng thử lại</string>
+    <string name="lang_vi_spotlist_loading_message">Đang lấy dữ liệu</string>
+</resources>
