@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The duration (in milliseconds) of a long animation. -->
+    <integer name="config_longAnimTime">400</integer>
+    
+    <dimen name="textsize_general">14sp</dimen>
+
+</resources>

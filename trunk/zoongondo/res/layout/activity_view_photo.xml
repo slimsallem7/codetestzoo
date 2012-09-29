@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/img_ab" >
+
+        <com.zoostudio.ngon.views.ButtonUp
+            android:id="@+id/btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default" >
+        </com.zoostudio.ngon.views.ButtonUp>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/btn_up"
+            android:layout_alignTop="@id/btn_up"
+            android:layout_toRightOf="@id/btn_up"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dip"
+            android:text="@string/title_photo_checkin"
+            android:textColor="@color/NgonDoWhite"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/numberOfPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/btn_up"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/btn_up"
+            android:gravity="center_vertical"
+            android:paddingRight="10dip"
+            android:text="10"
+            android:textColor="@color/NgonDoWhite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/done"
+            android:background="@drawable/img_ab_divider"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default"
+            android:contentDescription="@string/content_description"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/ic_btn_share"
+            android:text="DONE"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!--
+    <com.devsmart.android.ui.HorizontalListView
+        android:id="@+id/listImage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </com.devsmart.android.ui.HorizontalListView>
+    
+    <TextView
+        android:id="@+id/captionPhoto"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/img_bg_caption_photo" />
+    -->
+
+    <Gallery
+        android:id="@+id/imageroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#00000000"
+        android:spacing="0dp" >
+    </Gallery>
+
+    <com.zoostudio.ngon.views.ImageRollIndicator
+        android:id="@+id/image_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" >
+    </com.zoostudio.ngon.views.ImageRollIndicator>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/img_bg_caption_photo"
+        android:gravity="top"
+        android:hint="@string/imageroll_caption_hint"
+        android:inputType="text"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#88FFFFFF"
+        android:textSize="@dimen/textsize_general" >
+
+        <requestFocus />
+    </EditText>
+
+</LinearLayout>

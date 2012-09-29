@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/img_itemmenu_bg"
+    android:orientation="vertical" >
+
+    <com.zoostudio.android.image.SmartImageView
+        android:id="@+id/menu_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_marginBottom="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="5dip"
+        android:src="@drawable/menu_sample" />
+
+    <TextView
+        android:id="@+id/txtNameMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/menu_image"
+        android:layout_alignTop="@+id/menu_image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/menu_price"
+        android:layout_toRightOf="@+id/menu_image"
+        android:gravity="center_vertical"
+        android:text="@string/app_name"
+        android:textColor="#4F4F4F"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/menu_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/menu_image"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/menu_image"
+        android:layout_marginRight="25dip"
+        android:gravity="center_vertical"
+        android:text="@string/testnumber"
+        android:textColor="#BA3129"
+        android:textSize="25sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dip"
+        android:layout_below="@+id/menu_image"
+        android:layout_marginTop="4dp" >
+
+        <CheckBox
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue"
+            android:drawableTop="@drawable/ic_menu_ate"
+            android:focusable="false"
+            android:gravity="center"
+            android:button="@null"
+            android:padding="2dp"
+            android:text="@string/menu_eat_title"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue"
+            android:drawableTop="@drawable/ic_menu_add"
+            android:focusable="false"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="@string/menu_add_title"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue"
+            android:drawableTop="@drawable/ic_menu_like"
+            android:focusable="false"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="@string/menu_like_title"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/checkBox1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_blue"
+            android:checked="false"
+            android:drawableTop="@drawable/ic_menu_detail"
+            android:focusable="false"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="@string/menu_detail_title"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</RelativeLayout>

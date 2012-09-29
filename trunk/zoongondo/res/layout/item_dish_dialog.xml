@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/txtTitleDish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="15dip"
+        android:paddingLeft="15dip"
+        android:paddingTop="15dip"
+        android:text="Medium Text"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/chkDish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtTitleDish"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/txtTitleDish"
+        android:layout_marginRight="10dip"
+        android:button="@drawable/zoo_checkbox"
+        android:paddingBottom="15dip" />
+
+</RelativeLayout>

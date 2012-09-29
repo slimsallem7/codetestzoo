@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<string name="error_200">Spotname short or long</string>
+	<string name="error_201">Address short or long</string>
+	<string name="error_0">Message for error code 0</string>
+	<string name="error_prefix">error_</string>
+</resources>

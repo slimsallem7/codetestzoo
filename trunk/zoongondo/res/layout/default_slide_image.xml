@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_main_image_in_spotdetail_screen"
+    android:background="@drawable/background_photo" >
+
+    <com.zoostudio.android.image.SmartImageView
+        android:id="@+id/imageViewPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop" >
+    </com.zoostudio.android.image.SmartImageView>
+
+    <TextView
+        android:id="@+id/addphotohint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewPhoto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:shadowColor="#FFFFFF"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="@string/notify_default"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#977428"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/thumbnail_list"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toLeftOf="@+id/addphoto"
+        android:background="@drawable/btn_opacity"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/padding_medium" >
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/addphoto"
+        android:layout_width="64dp"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/btn_opacity"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/ic_btn_addphoto" />
+
+</RelativeLayout>

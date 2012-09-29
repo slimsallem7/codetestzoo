@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/img_itemuseractivity_bg" >
+
+    <com.zoostudio.android.image.SmartImageView
+        android:id="@+id/imgAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#dddddd"
+        android:contentDescription="@string/content_description" />
+
+    <TextView
+        android:id="@+id/useractivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/imgAvatar"
+        android:text="@string/app_name"
+        android:textColor="@color/NgonDoBlack"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@id/spot_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/useractivity"
+        android:layout_alignRight="@+id/useractivity"
+        android:layout_below="@+id/useractivity"
+        android:text="@string/content_description"
+        android:textColor="@color/NgonDoGrey"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imgAvatar"
+        android:layout_alignRight="@+id/useractivity"
+        android:layout_below="@+id/imgAvatar"
+        android:background="@drawable/bg_textview_status"
+        android:text="@string/dialog_exit_msg"
+        android:textColor="@color/NgonDoDarkGrey"
+        android:textSize="12sp" />
+
+    <com.zoostudio.android.image.SmartImageView
+        android:id="@+id/imgSpot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtStatus"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/sample"
+        android:scaleType="fitXY"
+        android:tag="@drawable/sample" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgSpot"
+        android:background="#BF2E8193"
+        android:paddingBottom="3dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="3dp"
+        android:text="@string/app_name"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp" />
+
+</RelativeLayout>

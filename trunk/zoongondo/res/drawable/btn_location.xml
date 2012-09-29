@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_window_focused="false" android:state_enabled="true"
+        android:drawable="@color/BlueGrey" /> <!-- Normal -->
+        
+    <item android:state_window_focused="false" android:state_enabled="false"
+        android:drawable="@color/BlueGrey" /> <!--  Normal disable -->
+    
+    <item android:state_pressed="true" 
+        android:drawable="@color/Blue" /> <!-- pressed -->
+    
+    <item android:state_focused="true" android:state_enabled="true"
+        android:drawable="@color/Blue" /> <!-- selected -->
+    
+    <item android:state_enabled="true"
+        android:drawable="@color/BlueGrey" /> <!-- normal -->
+    
+    <item android:state_focused="true"
+        android:drawable="@color/BlueGrey" /> <!-- normal disable focused -->
+   
+    <item
+         android:drawable="@color/BlueGrey" /> <!-- normal disable -->
+</selector>

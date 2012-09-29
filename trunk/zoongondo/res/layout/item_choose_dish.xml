@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zoostudio.ngon.views.ZooRelativeAnimationView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <CheckBox
+        android:id="@+id/chkDishItem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtCost"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_checkbox_item_dish"
+        android:button="@null"
+        android:checked="false"
+        android:focusable="false" />
+
+    <com.zoostudio.android.image.SmartImageView
+        android:id="@+id/imgDish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtCost"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dip"
+        android:src="@drawable/anh_comment" >
+    </com.zoostudio.android.image.SmartImageView>
+
+    <TextView
+        android:id="@+id/txtTitleDish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtCost"
+        android:layout_alignParentTop="false"
+        android:layout_alignTop="@+id/txtCost"
+        android:layout_toLeftOf="@+id/txtCost"
+        android:layout_toRightOf="@+id/imgDish"
+        android:gravity="center_vertical"
+        android:paddingLeft="3dip"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#4F4F4F" />
+
+    <TextView
+        android:id="@+id/txtCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dip"
+        android:background="@drawable/ic_label_cost"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:text="@string/testnumber"
+        android:textColor="#640008" />
+
+</com.zoostudio.ngon.views.ZooRelativeAnimationView>

@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android1="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android1:background="#000000" >
+
+    <com.zoostudio.android.image.ZooAvatarImageView
+        android1:id="@+id/zooAvatarImageView1"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content" />
+
+    <com.zoostudio.android.image.ZooAvatarImageView
+        android1:id="@+id/zooAvatarImageView2"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content" />
+
+</LinearLayout>

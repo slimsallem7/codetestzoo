@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/btnPickFromCamera"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/btn_transparentblue"
+        android:drawablePadding="12dp"
+        android:drawableTop="@drawable/ic_dialogtakephoto_takephoto"
+        android:gravity="center"
+        android:padding="15dp"
+        android:focusable="false"
+        android:text="@string/dialog_pickphoto_camera"
+        android:textColor="@color/btn_transparentblue_text"
+        android:textSize="@dimen/textsize_general" />
+
+    <ImageView
+        android:layout_width="2dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/img_dialogpickphoto_verticaldivider" />
+
+    <Button
+        android:id="@+id/btnPickFromGallery"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/btn_transparentblue"
+        android:drawablePadding="12dp"
+        android:drawableTop="@drawable/ic_dialogtakephoto_gallery"
+        android:gravity="center"
+        android:focusable="false"
+        android:padding="15dp"
+        android:text="@string/dialog_pickphoto_gallery"
+        android:textColor="@color/btn_transparentblue_text"
+        android:textSize="@dimen/textsize_general" />
+
+</LinearLayout>

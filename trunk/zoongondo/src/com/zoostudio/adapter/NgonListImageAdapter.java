@@ -1,0 +1,95 @@
+package com.zoostudio.adapter;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+
+import com.zoostudio.adapter.item.WrapItem;
+import com.zoostudio.android.image.SmartImageView;
+import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.dialog.NgonDialog;
+import com.zoostudio.ngon.dialog.NgonDialog.Builder;
+
+public class NgonListImageAdapter extends ArrayAdapter<WrapItem> {
+	private LayoutInflater inflater;
+	private Activity parent;
+
+	public NgonListImageAdapter(Context context, int textViewResourceId,
+			ArrayList<WrapItem> objects, Activity pActivity) {
+		super(context, textViewResourceId, objects);
+		inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.parent = pActivity;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		WrapItem item = this.getItem(position);
+		ViewHolder holder;
+		if (null == convertView) {
+			holder = new ViewHolder();
+			convertView = inflater.inflate(R.layout.item_photo, null);
+			holder.imageView = (SmartImageView) convertView
+					.findViewById(R.id.imgDishCheckin);
+			holder.button = (ImageButton) convertView
+					.findViewById(R.id.imgBtnDeletePhoto);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+			holder.button.setOnClickListener(null);
+		}
+		holder.button.setOnClickListener(new OnDelete(item));
+		return convertView;
+	}
+
+	private class ViewHolder {
+		SmartImageView imageView;
+		ImageButton button;
+	}
+
+	private class OnDelete implements OnClickListener {
+		private WrapItem item;
+
+		public OnDelete(WrapItem item) {
+			this.item = item;
+		}
+
+		@Override
+		public void onClick(View v) {
+			showDialogConfirm(item);
+		}
+	}
+
+	private void showDialogConfirm(final WrapItem item) {
+		Builder dialog = new NgonDialog.Builder(parent);
+		dialog.setCancelable(true);
+		dialog.setTitle(R.string.string_notice);
+		dialog.setMessage(R.string.dialog_delete_msg);
+		dialog.setNegativeButton(R.string.string_cancel,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		dialog.setPositiveButton(R.string.button_done,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						NgonListImageAdapter.this.remove(item);
+						NgonListImageAdapter.this.notifyDataSetChanged();
+						dialog.dismiss();
+					}
+				});
+		dialog.show();
+	}
+
+}

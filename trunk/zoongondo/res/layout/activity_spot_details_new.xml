@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/img_ab" >
+
+        <com.zoostudio.ngon.views.ButtonUp
+            android:id="@+id/btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default" >
+        </com.zoostudio.ngon.views.ButtonUp>
+
+        <ImageButton
+            android:id="@+id/checkin"
+            android:layout_width="75dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_ab_default"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/ic_btn_checkin" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/checkin"
+            android:background="@drawable/img_ab_divider" />
+
+        <ImageButton
+            android:id="@+id/share"
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/divider"
+            android:background="@drawable/btn_ab_default"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/ic_btn_share" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar"
+        android:layout_marginBottom="38dp"
+        android:fadingEdge="none" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp" >
+
+            <com.zoostudio.zooslideshow.ZooSlideView
+                android:id="@+id/spot_details_slideImageDish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </com.zoostudio.zooslideshow.ZooSlideView>
+
+            <RelativeLayout
+                android:id="@+id/spot_details_info_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_below="@id/spot_details_slideImageDish"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="12dp" >
+
+                <TextView
+                    android:id="@+id/spot_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/spot_map"
+                    android:text="@string/app_name"
+                    android:textColor="#202020"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/spot_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/spot_name"
+                    android:layout_alignRight="@+id/spot_name"
+                    android:layout_below="@+id/spot_name"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/app_name"
+                    android:textColor="#434343"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+
+                <ImageButton
+                    android:id="@+id/spot_map"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/btn_transparentblue"
+                    android:contentDescription="@string/content_description"
+                    android:src="@drawable/ic_btn_map" />
+            </RelativeLayout>
+
+            <com.zoostudio.zooslideshow.ZooLikerView
+                android:id="@+id/zooLikerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spot_details_info_detail"
+                android:background="@drawable/btn_transparentblue"
+                android:clickable="true" >
+            </com.zoostudio.zooslideshow.ZooLikerView>
+
+            <View
+                android:id="@+id/horizontaldivider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/zooLikerView"
+                android:background="@drawable/img_horizontaldivider_pattern" />
+
+            <com.zoostudio.ngon.views.ListCommentView
+                android:id="@+id/reView_ListCommentView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/horizontaldivider" >
+            </com.zoostudio.ngon.views.ListCommentView>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/menu_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true" >
+
+        <TextView
+            android:id="@+id/addreview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/menu"
+            android:background="@drawable/btn_abbottom_menuleft_blue"
+            android:drawableTop="@drawable/ic_btn_addcomment"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:text="@string/spotdetail_addreview"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/menu"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_abbottom_menu"
+            android:clickable="false"
+            android:drawableTop="@drawable/ic_btn_detailmenu"
+            android:gravity="center_horizontal"
+            android:text="@string/spotdetail_menu"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/like"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/menu"
+            android:background="@drawable/btn_abbottom_menuright_blue"
+            android:drawableTop="@drawable/ic_btn_like"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:text="@string/spotdetail_like"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

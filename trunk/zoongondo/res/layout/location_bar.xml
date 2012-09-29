@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#3d414d" >
+
+    <TextView
+        android:id="@+id/location_address"
+        android:layout_width="0dip"
+        android:layout_height="26dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="@string/app_name"
+        android:textColor="#ffffff"
+        android:textSize="11dp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="26dp"
+        android:background="#63666f" />
+
+    <ImageButton
+        android:id="@+id/btn_home_location_edit"
+        android:layout_width="35dp"
+        android:layout_height="26dp"
+        android:background="@drawable/btn_transparentblue"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/ic_btn_autolocation" />
+
+</LinearLayout>

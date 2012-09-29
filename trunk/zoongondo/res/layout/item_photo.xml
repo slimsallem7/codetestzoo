@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.zoostudio.android.image.SmartImageView
+        android:id="@+id/imgDishCheckin"
+        android:layout_width="305dp"
+        android:layout_height="287dp"
+        android:background="@drawable/bg_photo_dish_checkin"
+        android:contentDescription="@string/content_description"
+        android:src="@drawable/img_photo_dish_sample" >
+    </com.zoostudio.android.image.SmartImageView>
+
+    <ImageButton
+        android:id="@+id/imgBtnDeletePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/imgDishCheckin"
+        android:background="@drawable/btn_delete_photo_checkin"
+        android:contentDescription="@string/content_description" />
+
+</RelativeLayout>

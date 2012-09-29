@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <com.zoostudio.ngon.views.ZooCheckBoxButtonView
+            android:id="@+id/flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/chk_flash"
+            android:button="@null"
+            android:checked="false" />
+
+        <CheckBox
+            android:id="@+id/chkFocusCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_camera_focus"
+            android:button="@null"
+            android:checked="false"
+            android:enabled="false"
+            android:focusableInTouchMode="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="64dp"
+        android:layout_height="fill_parent"
+        android:background="#2D8193"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/btnBackToGallery"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_transparentblue"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/btn_back_gallery" />
+
+        <com.zoostudio.ngon.views.ZooTextView
+            android:id="@+id/countImageCaptured"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/btnBackToGallery"
+            android:layout_alignTop="@id/btnBackToGallery"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/icon_bg_photo"
+            android:gravity="center"
+            android:textColor="@color/NgonDoWhite"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/ImageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/btnBackToGallery"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:background="@drawable/icon_line_camera"
+            android:contentDescription="@string/content_description" />
+
+        <com.zoostudio.ngon.views.ZooImageButtonView
+            android:id="@+id/btnCapture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/btn_camera" />
+
+        <ImageView
+            android:id="@+id/ImageView2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnChangeCamera"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:background="@drawable/icon_line_camera"
+            android:contentDescription="@string/content_description" />
+
+        <com.zoostudio.ngon.views.ZooImageView
+            android:id="@+id/btnChangeCamera"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/btn_transparentblue"
+            android:scaleType="center"
+            android:src="@drawable/btn_change_camera"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>

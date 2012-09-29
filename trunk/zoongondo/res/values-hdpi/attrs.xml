@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="HelloGallery">
+        <attr name="android:galleryItemBackground" />
+    </declare-styleable>
+    <declare-styleable name="NgonDo.Views">
+        <attr name="src" format="integer"></attr>
+        <attr name="text" format="string"></attr>
+        <attr name="color" format="string"></attr>
+        <attr name="icon" format="reference"></attr>
+        <attr name="iconPosition" format="string"></attr>
+    </declare-styleable>
+    
+    <declare-styleable name="TextAppearance">
+        <attr name="textColor" format="reference|color"></attr>
+        <attr name="textStyle" format="string"></attr>
+        <attr name="textSize" format="reference|dimension"></attr>
+    </declare-styleable>
+
+</resources>
