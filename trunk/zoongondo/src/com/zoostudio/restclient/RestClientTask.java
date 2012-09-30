@@ -15,7 +15,7 @@ import android.util.Log;
 import com.zoostudio.exception.ZooException;
 import com.zoostudio.ngon.RequestCode;
 import com.zoostudio.ngon.dialog.WaitingDialog;
-import com.zoostudio.ngon.ui.Login;
+import com.zoostudio.ngon.ui.LoginActivity;
 
 public abstract class RestClientTask extends AsyncTask<Void, Void, JSONObject> {
 
@@ -131,7 +131,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, JSONObject> {
 				editor.commit();
 
 				// request re-login
-				Intent i = new Intent(mActivity, Login.class);
+				Intent i = new Intent(mActivity, LoginActivity.class);
 				i.putExtra("relogin", true);
 				mActivity.startActivityForResult(i, RequestCode.RELOGIN);
 			}

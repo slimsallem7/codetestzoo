@@ -24,7 +24,7 @@ public class SplashScreen extends NgonActivity {
 		if (DeviceCore.checkInternetConnect(this)) {
 			ConfigSize configSize = new ConfigSize(getResources());
 			configSize.loadResources();
-			Intent i = new Intent(getApplicationContext(), Login.class);
+			Intent i = new Intent(getApplicationContext(), LoginActivity.class);
 			startActivity(i);
 			finish();
 		} else {

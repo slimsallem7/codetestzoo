@@ -28,7 +28,6 @@ public class LoginTask extends RestClientTask {
     }
     @Override
     public String getDumpData() {
-        // TODO Auto-generated method stub
         mDumpData = "{\"status\":true,\"username\":\"vietbq\",\"userid\":\"6\"}";
         return mDumpData;
     }

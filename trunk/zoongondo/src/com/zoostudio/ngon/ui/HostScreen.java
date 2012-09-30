@@ -31,22 +31,21 @@ public class HostScreen extends TabActivity {
 		tabWidget = (TabWidget) this.findViewById(android.R.id.tabs);
 		
 		TabSpec homeSpec = tabHost.newTabSpec("Home").setIndicator("Home");
-		Intent homeIntent = new Intent(this, MainScreen.class);
+		Intent homeIntent = new Intent(this, TabHome.class);
 		homeSpec.setContent(homeIntent);
 		createIndicator(homeSpec, R.drawable.ic_ab_home_on);
 
 		TabSpec userProfileSpec = tabHost.newTabSpec("Profile").setIndicator("Profile");
-		Intent userIntent = new Intent(this, Profile.class);
+		Intent userIntent = new Intent(this, TabProfile.class);
 		userProfileSpec.setContent(userIntent);
 		createIndicator(userProfileSpec, R.drawable.ic_ab_profile_on);
 
-		TabSpec commingSpec = tabHost.newTabSpec("Comming").setIndicator("Comming");
-		Intent commingIntent = new Intent(this, CommingSoon.class);
+		TabSpec commingSpec = tabHost.newTabSpec("Setting").setIndicator("Setting");
+		Intent commingIntent = new Intent(this, TabSetting.class);
 		commingSpec.setContent(commingIntent);
 		createIndicator(commingSpec, R.drawable.ic_ab_notification_on);
 		
 		button.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "TEST", Toast.LENGTH_SHORT).show();

@@ -56,7 +56,7 @@ public class ForgotPassword extends NgonActivity implements OnClickListener, OnP
 
     @Override
     public void actionPost(RestClientTask task, JSONObject result) {
-        startActivity(new Intent(this, Login.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
 	@Override
