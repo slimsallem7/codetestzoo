@@ -56,7 +56,7 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.Login"
+            android:name=".ui.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo.Cover" >
         </activity>
@@ -95,7 +95,12 @@
         </service>
 
         <activity
-            android:name=".ui.MainScreen"
+            android:name=".ui.TabHome"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NgonDo" >
+        </activity>
+        <activity
+            android:name=".ui.TabSetting"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
         </activity>
@@ -104,18 +109,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
         </activity>
-
-        <!--
-        <receiver android:name="com.zoostudio.broadcastservice.LocationBroadcast" >
-            <intent-filter>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="a" />
-            </intent-filter>
-        </receiver>
-        -->
-
         <activity
             android:name="com.zoostudio.cropimage.CropImageActivity"
             android:screenOrientation="portrait"
@@ -136,7 +129,7 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.Profile"
+            android:name=".ui.TabProfile"
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity

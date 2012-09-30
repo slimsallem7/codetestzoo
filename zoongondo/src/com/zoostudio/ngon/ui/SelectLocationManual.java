@@ -45,7 +45,7 @@ public class SelectLocationManual extends BaseMapActivity implements
 
 		Intent result = new Intent();
 		result.putExtra("NEW_ADDRESS", etAddress.getText().toString().trim());
-		this.setResult(MainScreen.RESULT_CHANGE_TO_MANUAL, result);
+		this.setResult(TabHome.RESULT_CHANGE_TO_MANUAL, result);
 		this.finish();
 	}
 
