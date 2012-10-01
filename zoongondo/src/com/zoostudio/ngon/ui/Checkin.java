@@ -11,10 +11,6 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
 import com.zoostudio.adapter.item.DishItem;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.android.image.SmartImageView;
@@ -22,21 +18,20 @@ import com.zoostudio.android.image.ZooImageDishBorder;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonDialog;
 import com.zoostudio.ngon.dialog.NgonDialog.Builder;
+import com.zoostudio.ngon.ui.base.BaseMapActivity;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.HorizontalPager;
 import com.zoostudio.ngon.views.VerticalImageThumbView;
 
-public class Checkin extends MapActivity implements
+public class Checkin extends BaseMapActivity implements
 		HorizontalPager.OnItemChangeListener,
 		HorizontalPager.OnScreenSwitchListener,
 		android.view.View.OnClickListener {
-	private MapView mapView;
 	private HorizontalPager pagerDish;
-	private MapController mapControl;
-	private GeoPoint mMeGeoPoint;
 	private VerticalImageThumbView mImageThumbViews;
 	private static final int CHOOSE_DISH = 0;
 	private static final int REQUEST_MEDIA = 1;
+	
 	private CheckBox mShareFacebook;
 	private CheckBox mShareTwitter;
 	private CheckBox mShareTumbler;
@@ -46,6 +41,7 @@ public class Checkin extends MapActivity implements
 	private ArrayList<DishItem> mDishseSelected;
 	private TextView lblDishSelected;
 	private String lblDishCount;
+	private TextView mAddressMap;
 	private String lblDish;
 	private StringBuilder builder;
 	private View incView;
@@ -54,22 +50,13 @@ public class Checkin extends MapActivity implements
 	private TextView pickImageFromCamera;
 	private ArrayList<MediaItem> mMediaSelected;
 
-	@Override
-	protected void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-		this.setContentView(R.layout.activity_checkin);
-		initControls();
-		initVariables();
-		initActions();
-	}
-
-	private void initControls() {
+	protected void initControls() {
+		super.initControls();
+		mAddressMap = (TextView) findViewById(R.id.maptitle);
 		pagerDish = (HorizontalPager) findViewById(R.id.dishPager);
-		mapView = (MapView) findViewById(R.id.mapView);
 		btnTakePhoto = (ImageButton) findViewById(R.id.take_photo);
 		mImageThumbViews = (VerticalImageThumbView) findViewById(R.id.taken_photos);
 		mImageThumbViews.initViews();
-		mapControl = mapView.getController();
 		lblDish = this.getResources().getString(R.string.comment_label_dish);
 		lblDishSelected = (TextView) this.findViewById(R.id.select_food);
 		mShareFacebook = (CheckBox) findViewById(R.id.share_facebook);
@@ -82,16 +69,20 @@ public class Checkin extends MapActivity implements
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
 	}
 
-	private void initVariables() {
+	protected void initVariables() {
+		super.initVariables();
 		mDishseSelected = new ArrayList<DishItem>();
 		mDishseOriginal = new ArrayList<DishItem>();
 		builder = new StringBuilder(1024);
 		lblDishCount = this.getResources().getString(
 				R.string.comment_dish_count);
 		lblDish = this.getResources().getString(R.string.comment_label_dish);
+		mAddressMap.setText(mCurrentAddress);
 	}
 
-	private void initActions() {
+	protected void initActions() {
+		super.initActions();
+		
 		pagerDish.setOnItemClick(this);
 
 		mUp.setOnClickListener(new View.OnClickListener() {
@@ -109,17 +100,17 @@ public class Checkin extends MapActivity implements
 				Checkin.this.startActivity(intent);
 			}
 		});
-
-		if (null == mMeGeoPoint) {
-			mMeGeoPoint = new GeoPoint((int) (21.025347 * 1E6),
-					(int) (105.843755 * 1E6));
-		}
-
-		mapControl.setCenter(mMeGeoPoint);
-		mapControl.setZoom(16);
-		mapControl.animateTo(mMeGeoPoint);
 	}
-
+	
+	
+	/*
+	 * Khong duoc xoa(non-Javadoc)
+	 * @see com.zoostudio.ngon.ui.base.BaseMapActivity#watcherAddress()
+	 */
+	@Override
+	protected void watcherAddress() {
+		
+	}
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
@@ -254,5 +245,25 @@ public class Checkin extends MapActivity implements
 	private void showDialogChooseImage() {
 		Intent intent = new Intent(this, ChooseImageActivity.class);
 		startActivityForResult(intent, REQUEST_MEDIA);
+	}
+
+	@Override
+	protected int getLayoutId() {
+		return R.layout.activity_checkin;
+	}
+
+	@Override
+	protected int getEditAddressId() {
+		return 0;
+	}
+
+	@Override
+	protected int getButtonGetLocationId() {
+		return 0;
+	}
+
+	@Override
+	protected int getMapViewId() {
+		return R.id.mapView;
 	}
 }

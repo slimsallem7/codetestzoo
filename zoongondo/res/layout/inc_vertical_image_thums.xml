@@ -2,39 +2,42 @@
 <com.zoostudio.ngon.views.VerticalImageThumbView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/btn_grey"
+    android:background="@drawable/bg_layout_image_thumb"
     android:orientation="vertical"
     android:padding="5dp" >
 
     <com.zoostudio.android.image.ZooImageThumb
         android:id="@+id/imgThumb1"
-        android:layout_width="48dip"
-        android:layout_height="48dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/content_description"
-        android:paddingBottom="3dip"
-        android:scaleType="centerCrop"
+        android:layout_marginBottom="5dip"
+        android:scaleType="fitCenter"
         android:src="@drawable/default_photo_dish_checkin" >
     </com.zoostudio.android.image.ZooImageThumb>
 
     <com.zoostudio.android.image.ZooImageThumb
         android:id="@+id/imgThumb2"
-        android:layout_width="48dip"
-        android:layout_height="48dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/imgThumb1"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/content_description"
-        android:paddingBottom="3dip"
-        android:scaleType="centerCrop"
+        android:layout_marginBottom="5dip"
+        android:scaleType="fitCenter"
         android:src="@drawable/default_photo_dish_checkin" >
     </com.zoostudio.android.image.ZooImageThumb>
 
     <com.zoostudio.android.image.ZooImageThumb
         android:id="@+id/imgThumb3"
-        android:layout_width="48dip"
-        android:layout_height="48dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/imgThumb2"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/content_description"
-        android:paddingBottom="3dip"
-        android:scaleType="centerCrop"
+        android:layout_marginBottom="5dip"
+        android:scaleType="fitCenter"
         android:src="@drawable/default_photo_dish_checkin" >
     </com.zoostudio.android.image.ZooImageThumb>
 

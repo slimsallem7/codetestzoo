@@ -18,4 +18,6 @@
     <color name="NgonDoDialogBackground">#fdf5e7</color>
     <color name="NgonDoDialogNeutral">#96763c</color>
 	<color name="NgonDoWhite">#FFFFFF</color>
+	<color name="NgonDoRedBold">#D03839</color>
+	<color name="NgonDoRedNormal">#E46061</color>
 </resources>
