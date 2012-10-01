@@ -11,4 +11,5 @@
 	<dimen name="height_main_image_in_spotdetail_screen">167dp</dimen>
 	<dimen name="margin_pager">15dp</dimen>
 	<dimen name="size_avatar">64px</dimen>
+	<dimen name="size_picker">21px</dimen>
 </resources>

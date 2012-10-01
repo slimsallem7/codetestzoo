@@ -32,6 +32,7 @@ import com.zoostudio.adapter.AutoCompleteAdapter;
 import com.zoostudio.adapter.item.InfoAddress;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonErrorDialog;
+import com.zoostudio.ngon.utils.ConfigSize;
 import com.zoostudio.ngon.utils.LocationUtil;
 import com.zoostudio.ngon.utils.NgonTextWatcher;
 import com.zoostudio.ngon.utils.OnAddressChanged;
@@ -41,11 +42,11 @@ import com.zoostudio.ngon.utils.OnLocationRecevier;
 public abstract class BaseMapActivity extends MapActivity implements
 		OnLocationRecevier, OnAddressChanged, OnAddressSuggestListener,
 		OnItemClickListener, OnClickListener {
-	
+
 	protected static final int DIALOG_ERROR = 0;
 
 	private static final String BUNDLE_ERROR_CODE = null;
-	
+
 	protected MapView mvSelectLocation;
 	protected MapController mapControl;
 	protected GeoPoint mCurrentGeoPoint;
@@ -63,7 +64,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 	protected ImageButton btnGetLoc;
 	private int mBtnGetLocationId;
 	private int mEdtAddressId;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,7 +79,6 @@ public abstract class BaseMapActivity extends MapActivity implements
 		etAddress = (AutoCompleteTextView) findViewById(mEdtAddressId);
 		mBtnGetLocationId = getButtonGetLocationId();
 		btnGetLoc = (ImageButton) findViewById(mBtnGetLocationId);
-		btnGetLoc.setOnClickListener(this);
 		mvSelectLocation = (MapView) findViewById(getMapViewId());
 		mapControl = mvSelectLocation.getController();
 	}
@@ -115,23 +115,29 @@ public abstract class BaseMapActivity extends MapActivity implements
 			mMeGeoPoint = new GeoPoint((int) (mCurrentLat * 1E6),
 					(int) (mCurrentLong * 1E6));
 		}
-
-		etAddress.setText(mCurrentAddress);
-		etAddress.setAdapter(mAutoCompleteAdapter);
-		etAddress.setOnItemClickListener(this);
+		
+		if (null != etAddress) {
+			etAddress.setText(mCurrentAddress);
+			etAddress.setAdapter(mAutoCompleteAdapter);
+			etAddress.setOnItemClickListener(this);
+			etAddress.setOnClickListener(this);
+		}
+		
 		List<Overlay> listOfOverlays = mvSelectLocation.getOverlays();
 		listOfOverlays.clear();
 		listOfOverlays.add(mapOverlay);
 		mvSelectLocation.invalidate();
-		etAddress.setOnClickListener(this);
+
 		watcherAddress();
 	}
-	
+
 	protected void initActions() {
-		
+		if(null != btnGetLoc){
+			btnGetLoc.setOnClickListener(this);
+		}
 	}
 
-	private void watcherAddress() {
+	protected void watcherAddress() {
 		etAddress.addTextChangedListener(new NgonTextWatcher() {
 			@Override
 			public void onTextRelease() {
@@ -180,11 +186,11 @@ public abstract class BaseMapActivity extends MapActivity implements
 				mapView.getProjection().toPixels(mMeGeoPoint, screenPts);
 
 				// ---add the marker---
-				// TODO: @DUYNT Sua anh Marker cho map
 				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-						R.drawable.pushpinme);
+						R.drawable.icon_picker_location);
 
-				canvas.drawBitmap(bmp, screenPts.x + 16, screenPts.y - 16, null);
+				canvas.drawBitmap(bmp, screenPts.x + ConfigSize.SIZE_PICKER,
+						screenPts.y - ConfigSize.SIZE_PICKER, null);
 			}
 
 			if (null != mCurrentGeoPoint) {
@@ -221,7 +227,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 			// dong
 			case MotionEvent.ACTION_UP:
 				if (!mCancelTabPoint) {
-					
+
 					GeoPoint p = mapView.getProjection().fromPixels(
 							(int) event.getX(), (int) event.getY());
 					mCurrentGeoPoint = p;
@@ -236,7 +242,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 					locationUtil.getAddress(getBaseContext(),
 							mCurrentGeoPoint.getLatitudeE6() / 1E6,
 							mCurrentGeoPoint.getLongitudeE6() / 1E6);
-					
+
 					return true;
 				}
 				break;
@@ -266,7 +272,8 @@ public abstract class BaseMapActivity extends MapActivity implements
 			}
 		});
 	}
-	//Call back khi go
+
+	// Call back khi go
 	@Override
 	public void onAddressSuggestRecever(final ArrayList<InfoAddress> address) {
 		mHandler.post(new Runnable() {
@@ -308,6 +315,9 @@ public abstract class BaseMapActivity extends MapActivity implements
 		}
 	}
 
+	/*
+	 * Layout id cua activity
+	 */
 	protected abstract int getLayoutId();
 
 	protected abstract int getEditAddressId();
@@ -321,7 +331,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 		bundle.putInt(BUNDLE_ERROR_CODE, errorCode);
 		showDialog(DIALOG_ERROR, bundle);
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id, Bundle args) {
 		switch (id) {

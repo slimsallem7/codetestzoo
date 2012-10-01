@@ -6,12 +6,12 @@ import android.graphics.Bitmap;
 public class LocalImage implements SmartImage {
 
 	private long idMedia;
-	public static LocalCacheImage localImageCache;
+	private static LocalCacheImage localImageCache;
 
 	public LocalImage(long idMedia) {
 		this.idMedia = idMedia;
 	}
-
+	
 	@Override
 	public Bitmap getBitmap(Context context) {
 		// Don't leak context

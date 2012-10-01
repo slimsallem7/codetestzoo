@@ -14,7 +14,7 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.utils.ConfigSize;
 
 public class ZooAvatarImageView extends SmartImageView {
-	protected Paint paint;
+	protected  Paint paint;
 	protected WebImage border;
 	private static Bitmap bitmapAvatarDefault;
 	private static Bitmap bitmapBgCircle;

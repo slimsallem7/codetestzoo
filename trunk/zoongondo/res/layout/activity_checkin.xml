@@ -62,7 +62,7 @@
         android:layout_marginBottom="@dimen/padding_medium"
         android:layout_marginRight="@dimen/padding_medium"
         android:layout_marginTop="5dp"
-        android:background="@drawable/btn_grey"
+        android:background="@drawable/bg_btn_take_camera_checkin"
         android:contentDescription="@string/content_description"
         android:src="@drawable/ic_btn_addphoto" />
 
