@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/NgonDoBlack"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/apiOutputLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:text="API Response"
+        android:textColor="#ffffff" />
+
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="3dp" >
+        <TextView
+            android:id="@+id/apiOutput"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/NgonDoDarkGrey"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:textColor="#ffffff" />
+    </ScrollView>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="@color/NgonDoDarkGrey"
+        android:paddingTop="3dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        <Button
+            android:id="@+id/view_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="View Photo" />
+        <Button
+            android:id="@+id/tag_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Tag Photo" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/uploadedPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp" />
+
+    <TextView
+        android:id="@+id/tip_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingTop="3dp"
+        android:text="Tip label"
+        android:textColor="#ffffff" />
+    <TextView
+        android:id="@+id/usefulTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingTop="5dp"
+        android:textColor="#ffffff" />
+
+</LinearLayout>
