@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NgonDoAndroid</string>
+    <string name="app_name">Ngon</string>
     <string name="login_type_username">Xin điền tên đăng nhập</string>
     <string name="login_type_password">Xin điền mật khẩu</string>
     <string name="login_username_not_valid">Tên đăng nhập không hợp lệ. 

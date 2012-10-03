@@ -116,7 +116,7 @@
                 android:drawablePadding="0dip"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/select_photo_all"
-                android:textColor="#fc8884" />
+                android:textColor="#ffffff" />
 
             <RadioButton
                 android:id="@+id/showSeletedMedia"
