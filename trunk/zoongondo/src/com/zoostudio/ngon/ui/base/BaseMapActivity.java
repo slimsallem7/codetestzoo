@@ -110,10 +110,12 @@ public abstract class BaseMapActivity extends MapActivity implements
 				.getString("CURRENT_ADDRESS");
 		mCurrentLat = this.getIntent().getExtras().getDouble("CURRENT_LAT");
 		mCurrentLong = this.getIntent().getExtras().getDouble("CURRENT_LONG");
-
+		
+		mCurrentLat = mCurrentLat * 1E6;
+		mCurrentLong = mCurrentLong * 1E6;
 		if (mCurrentLat != -1 && mCurrentLong != -1) {
-			mMeGeoPoint = new GeoPoint((int) (mCurrentLat * 1E6),
-					(int) (mCurrentLong * 1E6));
+			mMeGeoPoint = new GeoPoint((int) (mCurrentLat),
+					(int) (mCurrentLong));
 		}
 		
 		if (null != etAddress) {

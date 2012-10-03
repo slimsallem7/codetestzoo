@@ -2,7 +2,6 @@ package com.zoostudio.ngon.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -32,13 +31,12 @@ public class ZooRelativeAnimationView extends RelativeLayout {
 		this.item = item;
 
 		AlphaAnimation alphaAnimation = new AlphaAnimation(1.0F, 0.0F);
-		alphaAnimation.setDuration(400L);
+		alphaAnimation.setDuration(300L);
 		alphaAnimation.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation animation) {
-				Log.i("Zoo","Start anim");
 				ZooRelativeAnimationView.this.listener.onStart();
-			}	
+			}
 
 			@Override
 			public void onAnimationRepeat(Animation animation) {
@@ -46,17 +44,17 @@ public class ZooRelativeAnimationView extends RelativeLayout {
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				Log.i("Zoo","Anim end");
 				ZooRelativeAnimationView.this.listener
 						.onAnimationEnd(ZooRelativeAnimationView.this.item);
 			}
 		});
 		this.setAnimation(alphaAnimation);
-//		alphaAnimation.startNow();
+		// alphaAnimation.startNow();
 	}
 
 	public interface OnAnimationEnd {
 		public void onAnimationEnd(DishItem item);
+
 		public void onStart();
 	}
 }
