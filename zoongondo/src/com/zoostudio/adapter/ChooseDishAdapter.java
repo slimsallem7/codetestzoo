@@ -1,6 +1,5 @@
 package com.zoostudio.adapter;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -87,7 +86,7 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 				buttonView.setChecked(!isChecked);
 				return;
 			}
-			int postion = ChooseDishAdapter.this.getPosition(dishItem);
+//			int postion = ChooseDishAdapter.this.getPosition(dishItem);
 //			ChooseDishAdapter.this.getItem(postion).setSelected(isChecked);
 			if (isChecked) {
 				((ZooRelativeAnimationView) view).startAnimation(

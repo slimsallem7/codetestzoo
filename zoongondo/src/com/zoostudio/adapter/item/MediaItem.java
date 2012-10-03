@@ -9,8 +9,10 @@ public class MediaItem implements Serializable {
 	private static final long serialVersionUID = -2966177523387393551L;
 	private long idMedia;
 	private String pathMedia;
+	private int orient;
 
 	private boolean isSelected;
+	private String mineType;
 
 	public MediaItem() {
 		idMedia = -1;
@@ -21,9 +23,11 @@ public class MediaItem implements Serializable {
 		return idMedia;
 	}
 
-	public void setValue(String path, long mediaId) {
+	public void setValue(String path, long mediaId, int orient, String mineType) {
 		this.pathMedia = path;
 		this.idMedia = mediaId;
+		this.orient = orient;
+		this.mineType = mineType;
 	}
 
 	public void setValue(String path, long mediaId, boolean selected) {
@@ -32,7 +36,7 @@ public class MediaItem implements Serializable {
 		this.isSelected = selected;
 	}
 
-	public String getPath1() {
+	public String getPathMedia() {
 		return pathMedia;
 	}
 
@@ -48,4 +52,11 @@ public class MediaItem implements Serializable {
 		this.isSelected = !isSelected;
 	}
 
+	public int getOrient() {
+		return orient;
+	}
+
+	public String getMineType() {
+		return mineType;
+	}
 }

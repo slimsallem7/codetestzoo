@@ -1,16 +1,36 @@
 package com.zoostudio.ngon.ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.BaseRequestListener;
+import com.facebook.android.Facebook;
+import com.facebook.android.FacebookError;
+import com.facebook.android.SessionEvents;
+import com.facebook.android.SessionEvents.AuthListener;
+import com.facebook.android.SessionEvents.LogoutListener;
+import com.facebook.android.SessionStore;
+import com.facebook.android.SupportLoginFacebook;
+import com.facebook.android.Utility;
+import com.twitter.android.TwitterUtil;
 import com.zoostudio.adapter.item.DishItem;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.android.image.SmartImageView;
@@ -31,7 +51,11 @@ public class Checkin extends BaseMapActivity implements
 	private VerticalImageThumbView mImageThumbViews;
 	private static final int CHOOSE_DISH = 0;
 	private static final int REQUEST_MEDIA = 1;
-	
+	private final static int AUTHORIZE_ACTIVITY = 2;
+	public static final String APP_ID = "254841481305890";
+	private static final String[] PERMISSIONS = new String[] {
+			"publish_stream", "photo_upload", "offline_access",
+			"publish_checkins" };
 	private CheckBox mShareFacebook;
 	private CheckBox mShareTwitter;
 	private CheckBox mShareTumbler;
@@ -49,9 +73,23 @@ public class Checkin extends BaseMapActivity implements
 	private TextView pickImageFromGallery;
 	private TextView pickImageFromCamera;
 	private ArrayList<MediaItem> mMediaSelected;
+	private Button btnCheckIn;
+	private EditText mEditWriteReview;
+	private boolean checkFB;
+
+	private SupportLoginFacebook supportLoginFacebook;
+	private TwitterUtil twitterUtil;
+	private boolean checkTW;
+	private final static String CALL_BACK_URL = "zoocheckin://ngondo";
+
+	@Override
+	protected int getLayoutId() {
+		return R.layout.activity_checkin;
+	}
 
 	protected void initControls() {
 		super.initControls();
+		mEditWriteReview = (EditText) findViewById(R.id.write_review);
 		mAddressMap = (TextView) findViewById(R.id.maptitle);
 		pagerDish = (HorizontalPager) findViewById(R.id.dishPager);
 		btnTakePhoto = (ImageButton) findViewById(R.id.take_photo);
@@ -59,6 +97,7 @@ public class Checkin extends BaseMapActivity implements
 		mImageThumbViews.initViews();
 		lblDish = this.getResources().getString(R.string.comment_label_dish);
 		lblDishSelected = (TextView) this.findViewById(R.id.select_food);
+		btnCheckIn = (Button) findViewById(R.id.checkin);
 		mShareFacebook = (CheckBox) findViewById(R.id.share_facebook);
 		mShareTwitter = (CheckBox) findViewById(R.id.share_twitter);
 		mShareTumbler = (CheckBox) findViewById(R.id.share_tumblr);
@@ -67,6 +106,31 @@ public class Checkin extends BaseMapActivity implements
 		pagerDish.setOnScreenSwitchListener(this);
 		lblDishSelected.setOnClickListener(this);
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
+	}
+
+	private void initShare() {
+		twitterUtil = new TwitterUtil(getApplicationContext());
+		// Create the Facebook Object using the app id.
+		Utility.mFacebook = new Facebook(APP_ID);
+		// Instantiate the asynrunner object for asynchronous api calls.
+		Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
+		// restore session if one exists
+		SessionStore.restore(Utility.mFacebook, this);
+		SessionEvents.addAuthListener(new FbAPIsAuthListener());
+		SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
+
+		supportLoginFacebook = new SupportLoginFacebook();
+		supportLoginFacebook.init(this, AUTHORIZE_ACTIVITY, Utility.mFacebook,
+				PERMISSIONS);
+
+		if (Utility.mFacebook.isSessionValid()) {
+			checkFB = true;
+			mShareFacebook.setChecked(true);
+		}
+		if (twitterUtil.validSession()) {
+			mShareTwitter.setChecked(true);
+			checkTW = true;
+		}
 	}
 
 	protected void initVariables() {
@@ -78,11 +142,13 @@ public class Checkin extends BaseMapActivity implements
 				R.string.comment_dish_count);
 		lblDish = this.getResources().getString(R.string.comment_label_dish);
 		mAddressMap.setText(mCurrentAddress);
+
+		initShare();
 	}
 
 	protected void initActions() {
 		super.initActions();
-		
+
 		pagerDish.setOnItemClick(this);
 
 		mUp.setOnClickListener(new View.OnClickListener() {
@@ -100,17 +166,21 @@ public class Checkin extends BaseMapActivity implements
 				Checkin.this.startActivity(intent);
 			}
 		});
+		btnCheckIn.setOnClickListener(this);
+		mShareFacebook.setOnCheckedChangeListener(facebookCheckListener);
+		mShareTwitter.setOnCheckedChangeListener(twitterCheckListener);
 	}
-	
-	
+
 	/*
 	 * Khong duoc xoa(non-Javadoc)
+	 * 
 	 * @see com.zoostudio.ngon.ui.base.BaseMapActivity#watcherAddress()
 	 */
 	@Override
 	protected void watcherAddress() {
-		
+
 	}
+
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
@@ -119,7 +189,14 @@ public class Checkin extends BaseMapActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Log.i("Checkin", "OnResume");
+		twitterUtil.callbackUrl(getIntent());
+	}
 
+	@Override
+	public void onNewIntent(Intent newIntent) {
+		super.onNewIntent(newIntent);
+		Log.i("Checkin", "onNewIntent");
 	}
 
 	@Override
@@ -153,7 +230,10 @@ public class Checkin extends BaseMapActivity implements
 					.getSerializable(ChooseImageActivity.MEDIA_SELECTED);
 			mImageThumbViews.clearData();
 			mImageThumbViews.setData(mMediaSelected);
+		} else {
+			Utility.mFacebook.authorizeCallback(requestCode, resultCode, data);
 		}
+
 	}
 
 	@Override
@@ -212,6 +292,12 @@ public class Checkin extends BaseMapActivity implements
 
 		} else if (v == pickImageFromGallery) {
 
+		} else if (v == btnCheckIn) {
+			if (checkFB) {
+				postStatus();
+			} else if (checkTW) {
+
+			}
 		} else {
 			Intent intent = new Intent(this, ChooseDish.class);
 			intent.putExtra("LIST_DISH", mDishseOriginal);
@@ -248,11 +334,6 @@ public class Checkin extends BaseMapActivity implements
 	}
 
 	@Override
-	protected int getLayoutId() {
-		return R.layout.activity_checkin;
-	}
-
-	@Override
 	protected int getEditAddressId() {
 		return 0;
 	}
@@ -266,4 +347,130 @@ public class Checkin extends BaseMapActivity implements
 	protected int getMapViewId() {
 		return R.id.mapView;
 	}
+
+	private OnCheckedChangeListener facebookCheckListener = new OnCheckedChangeListener() {
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
+			if (isChecked && Utility.mFacebook.isSessionValid()) {
+				checkFB = true;
+			} else if (isChecked) {
+				supportLoginFacebook.logOnFacebook();
+			} else {
+				supportLoginFacebook.logOutFacebook();
+			}
+		}
+	};
+
+	private OnCheckedChangeListener twitterCheckListener = new OnCheckedChangeListener() {
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
+			if (isChecked && twitterUtil.validSession()) {
+				checkFB = true;
+			} else if (isChecked) {
+				twitterUtil.logonTwitter(CALL_BACK_URL, Checkin.this);
+			} else {
+				twitterUtil.logoutTwitter();
+			}
+		}
+	};
+
+	/*
+	 * The Callback for notifying the application when log out starts and
+	 * finishes.
+	 */
+	public class FbAPIsLogoutListener implements LogoutListener {
+		@Override
+		public void onLogoutBegin() {
+
+		}
+
+		@Override
+		public void onLogoutFinish() {
+			mShareFacebook.setChecked(false);
+		}
+	}
+
+	/*
+	 * The Callback for notifying the application when authorization succeeds or
+	 * fails.
+	 */
+
+	public class FbAPIsAuthListener implements AuthListener {
+		@Override
+		public void onAuthSucceed() {
+			checkFB = true;
+		}
+
+		@Override
+		public void onAuthFail(String error) {
+			mShareFacebook.setChecked(false);
+		}
+	}
+
+	/*
+	 * callback for the photo upload
+	 */
+	public class PhotoUploadListener extends BaseRequestListener {
+
+		@Override
+		public void onComplete(final String response, final Object state) {
+			mHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					// new UploadPhotoResultDialog(Checkin.this,
+					// "Upload Photo executed", response).show();
+					Toast.makeText(getApplicationContext(), "Post Done !!!",
+							Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
+
+		public void onFacebookError(FacebookError error) {
+			Toast.makeText(getApplicationContext(),
+					"Facebook Error: " + error.getMessage(), Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
+	private void postPhoto(MediaItem item) {
+		try {
+			Bundle params = new Bundle();
+			Uri photoUri = Uri.fromFile(new File(item.getPathMedia()));
+			params.putByteArray("photo",
+					Utility.scaleImage(getApplicationContext(), photoUri, item));
+			params.putString("caption", mEditWriteReview.getText().toString());
+			params.putString("place", "252812541444808");
+			// JSONObject coordinates = new JSONObject();
+			// coordinates.put("latitude", mCurrentLat);
+			// coordinates.put("longitude", mCurrentLong);
+			// params.putString("coordinates",coordinates.toString());
+			Utility.mAsyncRunner.request("me/photos", params, "POST",
+					new PhotoUploadListener(), null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void postStatus() {
+		Bundle params = new Bundle();
+		params.putString("name", "Chipa - Chipa");
+		params.putString("message", mEditWriteReview.getText().toString());
+		params.putString(
+				"picture",
+				"http://nr7.upanh.com/b3.s30.d2/8d82b2bf380bb202d65cbf224eeed4b3_49687847.untitled5.jpg");
+		params.putString("link", "http://ngon.do/spot/1");
+		String dish = "";
+		for (DishItem item : mDishseSelected) {
+			dish += item.getTitle();
+			dish += " \r\n";
+		}
+		params.putString("description", dish);
+		Utility.mAsyncRunner.request("me/feed", params, "POST",
+				new PhotoUploadListener(), null);
+
+		twitterUtil.postStatus();
+	}
+
 }

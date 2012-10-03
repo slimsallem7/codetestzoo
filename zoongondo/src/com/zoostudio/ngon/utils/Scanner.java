@@ -25,7 +25,8 @@ public class Scanner {
 	}
 
 	public void loadMedia() {
-		String[] projection = { Images.Media._ID, Images.ImageColumns.DATA };
+		String[] projection = { Images.Media._ID, Images.ImageColumns.DATA,
+				Images.ImageColumns.ORIENTATION, Images.ImageColumns.MIME_TYPE };
 		String selection = "";
 		String[] selectionArgs = null;
 		mediaIds.clear();
@@ -43,6 +44,8 @@ public class Scanner {
 							Cursor cursor) {
 						long mediaId;
 						String pathMedia;
+						int orient;
+						String mineType;
 						MediaItem item = null;
 						if (cursor.getCount() > 0) {
 
@@ -52,10 +55,15 @@ public class Scanner {
 										.getColumnIndex(Images.Media._ID));
 								pathMedia = cursor.getString(cursor
 										.getColumnIndex(Images.ImageColumns.DATA));
+								orient = cursor.getInt(cursor
+										.getColumnIndex(Images.ImageColumns.ORIENTATION));
+								mineType = cursor.getString(cursor
+										.getColumnIndex(Images.Media.MIME_TYPE));
+								
 								cursor.moveToPrevious();
 								item = new MediaItem();
-								item.setValue(pathMedia, mediaId);
-								 mediaIds.add(item);
+								item.setValue(pathMedia, mediaId, orient,mineType);
+								mediaIds.add(item);
 							}
 							Scanner.this.listener.onScanFinished(mediaIds);
 						}
