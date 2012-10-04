@@ -6,6 +6,7 @@
 
     <WebView
         android:id="@+id/webview"
+        android:padding="15dip"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 

@@ -104,11 +104,9 @@ public class NgonLocation extends Service {
 	}
 
 	public void unRegisterUpdateLocation() {
-
 		if (null != locationListenerGps) {
 			mLocationManager.removeUpdates(locationListenerGps);
 		}
-
 		if (null != locationListenerNetwork) {
 			mLocationManager.removeUpdates(locationListenerNetwork);
 		}

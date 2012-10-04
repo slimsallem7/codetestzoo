@@ -30,7 +30,8 @@ import com.facebook.android.SessionEvents.LogoutListener;
 import com.facebook.android.SessionStore;
 import com.facebook.android.SupportLoginFacebook;
 import com.facebook.android.Utility;
-import com.twitter.android.TwitterUtil;
+import com.twitter.android.OnTwitterListener;
+import com.twitter.android.TwitterSupport;
 import com.zoostudio.adapter.item.DishItem;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.android.image.SmartImageView;
@@ -46,12 +47,13 @@ import com.zoostudio.ngon.views.VerticalImageThumbView;
 public class Checkin extends BaseMapActivity implements
 		HorizontalPager.OnItemChangeListener,
 		HorizontalPager.OnScreenSwitchListener,
-		android.view.View.OnClickListener {
+		android.view.View.OnClickListener, OnTwitterListener {
 	private HorizontalPager pagerDish;
 	private VerticalImageThumbView mImageThumbViews;
 	private static final int CHOOSE_DISH = 0;
 	private static final int REQUEST_MEDIA = 1;
-	private final static int AUTHORIZE_ACTIVITY = 2;
+	private final static int AUTHORIZE_FACEBOOK = 2;
+
 	public static final String APP_ID = "254841481305890";
 	private static final String[] PERMISSIONS = new String[] {
 			"publish_stream", "photo_upload", "offline_access",
@@ -78,9 +80,10 @@ public class Checkin extends BaseMapActivity implements
 	private boolean checkFB;
 
 	private SupportLoginFacebook supportLoginFacebook;
-	private TwitterUtil twitterUtil;
+	private TwitterSupport twitterSupport;
 	private boolean checkTW;
-	private final static String CALL_BACK_URL = "zoocheckin://ngondo";
+	private final static String CALL_BACK_URL = "zoostudio-ngon-do-checkin://callback";
+	private final static String CALL_BACK_SCHEME = "zoostudio-ngon-do-checkin";
 
 	@Override
 	protected int getLayoutId() {
@@ -109,7 +112,7 @@ public class Checkin extends BaseMapActivity implements
 	}
 
 	private void initShare() {
-		twitterUtil = new TwitterUtil(getApplicationContext());
+		twitterSupport = new TwitterSupport(getApplicationContext(), this);
 		// Create the Facebook Object using the app id.
 		Utility.mFacebook = new Facebook(APP_ID);
 		// Instantiate the asynrunner object for asynchronous api calls.
@@ -118,16 +121,15 @@ public class Checkin extends BaseMapActivity implements
 		SessionStore.restore(Utility.mFacebook, this);
 		SessionEvents.addAuthListener(new FbAPIsAuthListener());
 		SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
-
 		supportLoginFacebook = new SupportLoginFacebook();
-		supportLoginFacebook.init(this, AUTHORIZE_ACTIVITY, Utility.mFacebook,
+		supportLoginFacebook.init(this, AUTHORIZE_FACEBOOK, Utility.mFacebook,
 				PERMISSIONS);
 
 		if (Utility.mFacebook.isSessionValid()) {
 			checkFB = true;
 			mShareFacebook.setChecked(true);
 		}
-		if (twitterUtil.validSession()) {
+		if (twitterSupport.validSession()) {
 			mShareTwitter.setChecked(true);
 			checkTW = true;
 		}
@@ -163,6 +165,7 @@ public class Checkin extends BaseMapActivity implements
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						ViewPhotoActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				Checkin.this.startActivity(intent);
 			}
 		});
@@ -190,13 +193,12 @@ public class Checkin extends BaseMapActivity implements
 	protected void onResume() {
 		super.onResume();
 		Log.i("Checkin", "OnResume");
-		twitterUtil.callbackUrl(getIntent());
 	}
 
 	@Override
 	public void onNewIntent(Intent newIntent) {
 		super.onNewIntent(newIntent);
-		Log.i("Checkin", "onNewIntent");
+		twitterSupport.authorizeCallBack(newIntent, CALL_BACK_SCHEME);
 	}
 
 	@Override
@@ -295,8 +297,9 @@ public class Checkin extends BaseMapActivity implements
 		} else if (v == btnCheckIn) {
 			if (checkFB) {
 				postStatus();
-			} else if (checkTW) {
-
+			}
+			if (checkTW) {
+				postTwitter();
 			}
 		} else {
 			Intent intent = new Intent(this, ChooseDish.class);
@@ -357,7 +360,8 @@ public class Checkin extends BaseMapActivity implements
 			} else if (isChecked) {
 				supportLoginFacebook.logOnFacebook();
 			} else {
-				supportLoginFacebook.logOutFacebook();
+				checkFB = false;
+//				supportLoginFacebook.logOutFacebook();
 			}
 		}
 	};
@@ -366,12 +370,13 @@ public class Checkin extends BaseMapActivity implements
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
-			if (isChecked && twitterUtil.validSession()) {
-				checkFB = true;
+			if (isChecked && twitterSupport.validSession()) {
+				checkTW = true;
 			} else if (isChecked) {
-				twitterUtil.logonTwitter(CALL_BACK_URL, Checkin.this);
+				twitterSupport.logonTwitter(CALL_BACK_URL, Checkin.this);
 			} else {
-				twitterUtil.logoutTwitter();
+				checkTW = false;
+//				twitterSupport.logoutTwitter(Checkin.this.getApplicationContext());
 			}
 		}
 	};
@@ -405,6 +410,7 @@ public class Checkin extends BaseMapActivity implements
 
 		@Override
 		public void onAuthFail(String error) {
+			checkFB = false;
 			mShareFacebook.setChecked(false);
 		}
 	}
@@ -434,6 +440,7 @@ public class Checkin extends BaseMapActivity implements
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void postPhoto(MediaItem item) {
 		try {
 			Bundle params = new Bundle();
@@ -454,9 +461,10 @@ public class Checkin extends BaseMapActivity implements
 	}
 
 	private void postStatus() {
+		String mess = mEditWriteReview.getText().toString();
 		Bundle params = new Bundle();
 		params.putString("name", "Chipa - Chipa");
-		params.putString("message", mEditWriteReview.getText().toString());
+		params.putString("message", mess);
 		params.putString(
 				"picture",
 				"http://nr7.upanh.com/b3.s30.d2/8d82b2bf380bb202d65cbf224eeed4b3_49687847.untitled5.jpg");
@@ -469,8 +477,47 @@ public class Checkin extends BaseMapActivity implements
 		params.putString("description", dish);
 		Utility.mAsyncRunner.request("me/feed", params, "POST",
 				new PhotoUploadListener(), null);
-
-		twitterUtil.postStatus();
 	}
 
+	@Override
+	public void onAuthTwitterSuccess() {
+		checkTW = true;
+	}
+
+	@Override
+	public void onErrorTwitter() {
+		mShareTwitter.setChecked(false);
+	}
+
+	@Override
+	public void onLogoutTwitter() {
+		mShareTwitter.setChecked(false);
+	}
+
+	@Override
+	public void onLogoutTwitterError() {
+
+	}
+
+	@Override
+	public void onUpdateTwitterFinish() {
+		Toast.makeText(getApplicationContext(), "Post Twitter Done",
+				Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onUpdateTwitterError() {
+		Toast.makeText(getApplicationContext(), "Post Twitter Error",
+				Toast.LENGTH_SHORT).show();
+	}
+
+	private void postTwitter() {
+		String mess = mEditWriteReview.getText().toString();
+		twitterSupport.postStatus(mess, null);
+	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.e("Checkin","Fackkkkkkkk");
+	}
 }
