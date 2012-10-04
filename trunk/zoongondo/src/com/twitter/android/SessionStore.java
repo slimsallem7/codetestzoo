@@ -1,6 +1,5 @@
 package com.twitter.android;
 
-import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,7 +19,7 @@ public class SessionStore {
 		return editor.commit();
 	}
 
-	public static AccessToken restore(Twitter session, Context context) {
+	public static AccessToken restore(Context context) {
 		SharedPreferences settings = context.getSharedPreferences(KEY,
 				Context.MODE_PRIVATE);
 		String token = settings.getString(ACCESS_TOKEN, "");
@@ -31,7 +30,7 @@ public class SessionStore {
 		}
 		return null;
 	}
-
+	
 	public static void clear(Context context) {
 		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE)
 				.edit();

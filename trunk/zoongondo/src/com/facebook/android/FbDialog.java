@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -194,5 +193,12 @@ public class FbDialog extends Dialog {
             mWebView.setVisibility(View.VISIBLE);
             mCrossImage.setVisibility(View.VISIBLE);
         }
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	Util.logd("Facebook-WebView", "Back press");
+    	super.onBackPressed();
+    	mListener.onCancel();
     }
 }

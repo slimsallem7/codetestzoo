@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 
+import com.twitter.android.TwitterSupport;
 import com.zoostudio.ngon.R;
 
 public class HostScreen extends TabActivity {
@@ -61,4 +62,5 @@ public class HostScreen extends TabActivity {
 		tabSpec.setIndicator(tabIndicator);
 		tabHost.addTab(tabSpec);
 	}
+	
 }

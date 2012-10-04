@@ -109,6 +109,7 @@ public class HorizontalPager extends ViewGroup implements
 	private ZooImageDishBorder mImageView4;
 	private View parent;
 	private int width;
+	private static Bitmap bitmapDefaultDish;
 
 	/**
 	 * Simple constructor to use when creating a view from code.
@@ -639,15 +640,17 @@ public class HorizontalPager extends ViewGroup implements
 		for (int i = 0; i < totalPage; i++) {
 			View view = inflate(getContext(), R.layout.item_dish, null);
 			this.addView(view);
-//			initListenerImageViews(i);
+			// initListenerImageViews(i);
 			scrollTo(0 * width, 0);
 		}
 		View pageView;
 		int index = 0;
 		int n = items.size();
 		String url;
-		Bitmap source = BitmapFactory.decodeResource(getResources(),
-				R.drawable.icon_default_dish_selected);
+		if (null == bitmapDefaultDish) {
+			bitmapDefaultDish = BitmapFactory.decodeResource(getResources(),
+					R.drawable.icon_default_dish_selected);
+		}
 
 		Bitmap sourceSample = BitmapFactory.decodeResource(getResources(),
 				R.drawable.spl_icon_dish_selected);
@@ -662,7 +665,7 @@ public class HorizontalPager extends ViewGroup implements
 					.findViewById(R.id.thumbDish1);
 			url = items.get(index).getImageUrl();
 			if (null == url || url.equals("")) {
-				dishBorder1.setImageBitmap(source,
+				dishBorder1.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
 				// dishBorder1.setImageUrl(url);
@@ -678,7 +681,7 @@ public class HorizontalPager extends ViewGroup implements
 					.findViewById(R.id.thumbDish2);
 			url = items.get(index).getImageUrl();
 			if (null == url || url.equals("")) {
-				dishBorder2.setImageBitmap(source,
+				dishBorder2.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
 				dishBorder2.setImageBitmap(sourceSample,
@@ -694,7 +697,7 @@ public class HorizontalPager extends ViewGroup implements
 					.findViewById(R.id.thumbDish3);
 			url = items.get(index).getImageUrl();
 			if (null == url || url.equals("")) {
-				dishBorder3.setImageBitmap(source,
+				dishBorder3.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
 				// dishBorder3.setImageUrl(url);
@@ -710,7 +713,7 @@ public class HorizontalPager extends ViewGroup implements
 					.findViewById(R.id.thumbDish4);
 			url = items.get(index).getImageUrl();
 			if (null == url || url.equals("")) {
-				dishBorder4.setImageBitmap(source,
+				dishBorder4.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
 				// dishBorder4.setImageUrl(url);
