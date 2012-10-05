@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_pressed_add_new_dish_footer">#CD4D3D</color>
+    <color name="color_normal_add_new_dish_footer">#ED7263</color>
+</resources>

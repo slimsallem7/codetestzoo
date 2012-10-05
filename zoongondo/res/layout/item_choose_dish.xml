@@ -20,15 +20,14 @@
         android:checked="false"
         android:focusable="false" />
 
-    <com.zoostudio.android.image.SmartImageView
+    <com.zoostudio.android.image.ZooImageDish
         android:id="@+id/imgDish"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtCost"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"      
         android:layout_marginLeft="10dip"
+        android:layout_centerVertical="true"
         android:src="@drawable/anh_comment" >
-    </com.zoostudio.android.image.SmartImageView>
+    </com.zoostudio.android.image.ZooImageDish>
 
     <TextView
         android:id="@+id/txtTitleDish"

@@ -2,6 +2,7 @@ package com.zoostudio.android.image;
 
 import com.zoostudio.adapter.item.DishItem;
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.utils.ConfigSize;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,6 +26,7 @@ public class ZooImageDishBorder extends SmartImageView {
 	
 	private OnUnSelectedListener listener;
 	private DishItem disItem;
+	private static Bitmap bg;
 	
 	public ZooImageDishBorder(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -49,22 +51,31 @@ public class ZooImageDishBorder extends SmartImageView {
 	
 	public void setImageUrl(String url,int type,DishItem dishItem) {
 		this.type = type;
-		this.mImageLargeUrl = dishItem.getImageUrl();
+		this.mImageLargeUrl = dishItem.getUrlImageThumb();
 		this.mTitleDish = dishItem.getTitle();
 		this.disItem = dishItem;
-		super.setImageUrl(url);
+		setImage(new ZooAvatarWebImage(url, ConfigSize.SIZE_THUMB));
 	}
 	
 	public void setImageBitmap(Bitmap source, int type,DishItem dishItem) {
 		this.type = type;
-		this.mImageLargeUrl = dishItem.getImageUrl();
+		this.mImageLargeUrl = dishItem.getUrlImageThumb();
 		this.mTitleDish = dishItem.getTitle();
 		this.disItem = dishItem;
-		Bitmap bg = BitmapFactory.decodeStream(getContext().getResources()
+		super.setImageBitmap(source);
+	}
+	@Override
+	public void setImageBitmap(Bitmap source) {
+		if(null == source){
+			super.setImageBitmap(null);
+			return;
+		}
+		if(null == bg){
+			bg = BitmapFactory.decodeStream(getContext().getResources()
 				.openRawResource(R.drawable.icon_bg_black_dish));
+		}
 		Bitmap result = Bitmap.createBitmap(bg.getWidth(), bg.getHeight(),
 				Config.ARGB_8888);
-
 		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		Canvas canvas = new Canvas(result);
 		canvas.drawBitmap(bg, 0, 0, paint);
@@ -73,7 +84,6 @@ public class ZooImageDishBorder extends SmartImageView {
 		paint.setXfermode(null);
 		super.setImageBitmap(result);
 	}
-
 	public int getType() {
 		return type;
 	}

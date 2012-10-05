@@ -3,29 +3,32 @@ package com.zoostudio.adapter.item;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class DishItem implements Serializable, Cloneable {
+public class DishItem implements Serializable {
 	private String dishId;
-	private String imageUrl;
+	private String urlImageThumb;
 	private String title;
 	private String cost;
-	private String largeImageUrl;
+	private String urlImageLarge;
 	
 	private boolean selected;
 	private boolean deleted;
 	
-	public DishItem(String imageUrl, String title, String cost,String url) {
-		super();
-		this.imageUrl = imageUrl;
-		this.title = title;
-		this.cost = cost;
-		this.imageUrl = url;
-	}
-	
-
 	public DishItem() {
 		selected = false;
 		deleted = false;
 	}
+	
+	public DishItem(String dishId, String imageThumbUrl, String title, String cost,String imageLargeUrl) {
+		super();
+		this.dishId = dishId;
+		this.urlImageThumb = imageThumbUrl;
+		this.title = title;
+		this.cost = cost;
+		this.urlImageLarge = imageLargeUrl;
+	}
+	
+
+	
 
 	public void setDishId(String dishId) {
 		this.dishId = dishId;
@@ -35,15 +38,16 @@ public class DishItem implements Serializable, Cloneable {
 		return dishId;
 	}
 
-	public DishItem(String id, String title,String url) {
+	public DishItem(String id, String title,String urlImageThumb,String urlImageLarge) {
 		this.title = title;
 		this.dishId = id;
-		this.imageUrl = url;
+		this.urlImageThumb = urlImageThumb;
+		this.urlImageLarge = urlImageLarge;
 		selected = false;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public String getUrlImageThumb() {
+		return urlImageThumb;
 	}
 
 	public String getTitle() {
@@ -54,8 +58,8 @@ public class DishItem implements Serializable, Cloneable {
 		return cost;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setUrlImageThumb(String imageUrl) {
+		this.urlImageThumb = imageUrl;
 	}
 
 	public void setCost(String cost) {
@@ -75,11 +79,11 @@ public class DishItem implements Serializable, Cloneable {
 	}
 
 	public String getLargeImageUrl() {
-		return largeImageUrl;
+		return urlImageLarge;
 	}
 	
 	public void setLargeImageUrl(String largeImageUrl) {
-		this.largeImageUrl = largeImageUrl;
+		this.urlImageLarge = largeImageUrl;
 	}
 	
 	public void setDeleted(boolean deleted) {

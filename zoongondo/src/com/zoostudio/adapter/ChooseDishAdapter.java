@@ -63,6 +63,7 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 
 		holder.menuName.setText(item.getTitle());
 		holder.mCheckBox.setChecked(item.isSelected());
+		holder.imgMenu.setImageUrl("http://nr6.upanh.com/b6.s32.d1/2fb07778f2ab297f7821ededa6cf8016_49769616.monan.jpg");
 		holder.mCheckBox.setOnCheckedChangeListener(new CheckDish(item,
 				convertView));
 
