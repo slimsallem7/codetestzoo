@@ -515,9 +515,4 @@ public class Checkin extends BaseMapActivity implements
 		String mess = mEditWriteReview.getText().toString();
 		twitterSupport.postStatus(mess, null);
 	}
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		Log.e("Checkin","Fackkkkkkkk");
-	}
 }

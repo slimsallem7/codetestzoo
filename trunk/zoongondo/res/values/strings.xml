@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setting_logout">Logout</string>
+    <string name="string_add_new_dish">THÊM MÓN MỚI</string>
 </resources>

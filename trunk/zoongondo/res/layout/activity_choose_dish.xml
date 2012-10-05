@@ -44,12 +44,14 @@
         android:cacheColorHint="#00000000"
         android:divider="@drawable/blank"
         android:dividerHeight="0dip"
+        android:footerDividersEnabled="false"
         android:fadingEdge="none" >
     </ListView>
 
     <RelativeLayout
         android:id="@+id/layoutDishSelected"
         android:layout_width="fill_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:background="#649FA7" >
 

@@ -31,7 +31,7 @@ public class ZooRelativeAnimationView extends RelativeLayout {
 		this.item = item;
 
 		AlphaAnimation alphaAnimation = new AlphaAnimation(1.0F, 0.0F);
-		alphaAnimation.setDuration(300L);
+		alphaAnimation.setDuration(250L);
 		alphaAnimation.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation animation) {

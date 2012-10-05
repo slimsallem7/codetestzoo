@@ -64,15 +64,8 @@ public class WebImage implements SmartImage {
 			conn.setConnectTimeout(CONNECT_TIMEOUT);
 			conn.setReadTimeout(READ_TIMEOUT);
 			InputStream is = conn.getInputStream();
-			BufferedInputStream buf = new BufferedInputStream(is);
-			
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			
-			bitmap = BitmapFactory.decodeStream(buf,null,options);
-			
-			int imageHeight = options.outHeight;
-			int imageWidth = options.outWidth;
+			BufferedInputStream buf = new BufferedInputStream(is);			
+			bitmap = BitmapFactory.decodeStream(buf);
 			is.close();
 			buf.close();
 		} catch (Exception e) {

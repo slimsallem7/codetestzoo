@@ -26,16 +26,7 @@ public class ZooAvatarWebImage extends WebImage {
 			conn.setReadTimeout(READ_TIMEOUT);
 			InputStream is = conn.getInputStream();
 			BufferedInputStream bif = new BufferedInputStream(is);
-			// ByteArrayOutputStream out = new ByteArrayOutputStream();
-			// BufferedOutputStream bof = new BufferedOutputStream(out);
-			// copy(bif, bof);
-			// bof.flush();
-			// final byte[] data = out.toByteArray();
-			// BitmapFactory.Options options = new BitmapFactory.Options();
-			// options.inJustDecodeBounds = false;
 			bitmap = BitmapFactory.decodeStream(bif);
-			// bitmap = BitmapFactory.decodeByteArray(data, 0, data.length,
-			// options);
 			bitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
 			is.close();
 			bif.close();

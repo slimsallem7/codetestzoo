@@ -663,13 +663,12 @@ public class HorizontalPager extends ViewGroup implements
 
 			ZooImageDishBorder dishBorder1 = (ZooImageDishBorder) pageView
 					.findViewById(R.id.thumbDish1);
-			url = items.get(index).getImageUrl();
+			url = items.get(index).getUrlImageThumb();
 			if (null == url || url.equals("")) {
 				dishBorder1.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
-				// dishBorder1.setImageUrl(url);
-				dishBorder1.setImageBitmap(sourceSample,
+				dishBorder1.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
 			index++;
@@ -679,14 +678,13 @@ public class HorizontalPager extends ViewGroup implements
 
 			ZooImageDishBorder dishBorder2 = (ZooImageDishBorder) pageView
 					.findViewById(R.id.thumbDish2);
-			url = items.get(index).getImageUrl();
+			url = items.get(index).getUrlImageThumb();
 			if (null == url || url.equals("")) {
 				dishBorder2.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
-				dishBorder2.setImageBitmap(sourceSample,
+				dishBorder2.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
-				// dishBorder2.setImageUrl(url);
 			}
 
 			index++;
@@ -695,13 +693,12 @@ public class HorizontalPager extends ViewGroup implements
 
 			ZooImageDishBorder dishBorder3 = (ZooImageDishBorder) pageView
 					.findViewById(R.id.thumbDish3);
-			url = items.get(index).getImageUrl();
+			url = items.get(index).getUrlImageThumb();
 			if (null == url || url.equals("")) {
 				dishBorder3.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
-				// dishBorder3.setImageUrl(url);
-				dishBorder3.setImageBitmap(sourceSample,
+				dishBorder3.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
 
@@ -711,13 +708,12 @@ public class HorizontalPager extends ViewGroup implements
 
 			ZooImageDishBorder dishBorder4 = (ZooImageDishBorder) pageView
 					.findViewById(R.id.thumbDish4);
-			url = items.get(index).getImageUrl();
+			url = items.get(index).getUrlImageThumb();
 			if (null == url || url.equals("")) {
 				dishBorder4.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
-				// dishBorder4.setImageUrl(url);
-				dishBorder4.setImageBitmap(sourceSample,
+				dishBorder4.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
 			index++;
