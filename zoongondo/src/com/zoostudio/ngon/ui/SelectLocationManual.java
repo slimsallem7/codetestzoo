@@ -62,7 +62,7 @@ public class SelectLocationManual extends BaseMapActivity implements
 
 	@Override
 	protected int getEditAddressId() {
-		return R.id.txt_real_address;
+		return R.id.txtSuggestAddress;
 	}
 
 	@Override
