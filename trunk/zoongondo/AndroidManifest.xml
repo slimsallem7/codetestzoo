@@ -49,7 +49,7 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.Checkin"
+            android:name=".ui.ActivityCheckin"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SelectLocationManual"
+            android:name=".ui.ActivitySelectLocationManual"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
         </activity>
@@ -134,7 +134,7 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.HostScreen"
+            android:name=".ui.ActivityHostScreen"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
         </activity>
