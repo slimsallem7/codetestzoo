@@ -5,6 +5,7 @@ import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
@@ -71,19 +72,9 @@ public class TwitterSupport {
 		final Uri uri = data.getData();
 		if (uri != null && uri.getScheme().equals(callbackScheme)) {
 			final String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-			try {
-				getConsummerProvider();
-				provider.retrieveAccessToken(consumer, verifier);
-				AccessToken accessToken = new AccessToken(consumer.getToken(),
-						consumer.getTokenSecret());
-				SessionStore.save(accessToken, context);
-				Twitter twitter = ((ZooNgonDo) context).getTwitter();
-				twitter.setOAuthAccessToken(accessToken);
-				listener.onAuthTwitterSuccess();
-			} catch (Exception e) {
-				e.printStackTrace();
-				listener.onErrorTwitter();
-			}
+			RetrieveAccessToken retrieveAccessToken = new RetrieveAccessToken(
+					verifier);
+			retrieveAccessToken.execute();
 		} else {
 			listener.onErrorTwitter();
 		}
@@ -150,6 +141,54 @@ public class TwitterSupport {
 		protected void onProgressUpdate(Void... values) {
 			progressDialog.dismiss();
 		}
+	}
+
+	/**
+	 * Retrieve Access Token task.
+	 */
+	private class RetrieveAccessToken extends AsyncTask<Void, String, Boolean> {
+		/**
+		 * The Twitter OAuth verifier.
+		 */
+		private String oauth_verifier;
+
+		/**
+		 * Default constructor.
+		 * 
+		 * @param oauth_verifier
+		 *            Twitter OAuth verifier
+		 */
+		public RetrieveAccessToken(String oauth_verifier) {
+			this.oauth_verifier = oauth_verifier;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			try {
+				getConsummerProvider();
+				// retrieve the access token from the consumer and the OAuth
+				// verifier returner by the Twitter Callback URL
+				provider.retrieveAccessToken(consumer, this.oauth_verifier);
+				return true;
+			} catch (OAuthException oae) {
+				return false;
+			}
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result) {
+				AccessToken accessToken = new AccessToken(consumer.getToken(),
+						consumer.getTokenSecret());
+				SessionStore.save(accessToken, context);
+				Twitter twitter = ((ZooNgonDo) context).getTwitter();
+				twitter.setOAuthAccessToken(accessToken);
+				listener.onAuthTwitterSuccess();
+			} else {
+				listener.onErrorTwitter();
+			}
+		}
+
 	}
 
 	public class AsynTwitterPostStatus extends Thread {
