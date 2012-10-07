@@ -14,7 +14,7 @@ public class CheckedInPager extends NgonUserPager {
 
 	@Override
 	protected int getLayoutId() {
-		return R.layout.pager_checked_in;
+		return R.layout.fragment_profile_checkedin;
 	}
 
 	@Override

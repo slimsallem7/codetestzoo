@@ -7,7 +7,7 @@ public class FriendPager extends NgonUserPager {
 
 	@Override
 	protected int getLayoutId() {
-		return R.layout.pager_friend;
+		return R.layout.fragment_profile_friendlist;
 	}
 
 	@Override

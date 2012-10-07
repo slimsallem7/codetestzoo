@@ -11,11 +11,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zoostudio.adapter.SpotAdapter;
@@ -25,23 +28,22 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.ngon.utils.ParserUtils;
+import com.zoostudio.ngon.views.NgonProgressView;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 
 public class NearByPager extends NgonHomePager implements OnClickListener,
 		OnPostExecuteDelegate {
 
+	private static final String TAG = "NearByPager";
 	private ListView lvSpot;
 	private SpotAdapter adapter;
-	private ProgressBar mProgressBar;
+	private NgonProgressView mProgressBar;
 	private Button mRetry;
 	private TextView mMessage;
 	private ProgressDialog progressDialog;
 
-	// private ButtonListitemAdd mFooterViewAddNew;
-	// private ProgressBar mFooterViewLoading;
-	//
-	// private RelativeLayout mFooterView;
+	private RelativeLayout mFooterView;
 
 	/**
 	 * Dùng để lưu trạng thái đã request more hay chưa. Được đặt true khi bắt
@@ -53,6 +55,10 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 
 	public NearByPager(Integer indexPager) {
 		super(indexPager);
+	}
+	
+	public NearByPager() {
+		super();
 	}
 
 	@Override
@@ -89,15 +95,28 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 		lvSpot.addHeaderView(header, null, false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
 
-		//
-		// mProgressBar = (ProgressBar)
-		// mView.findViewById(R.id.spotlist_progress);
-		// mMessage = (TextView) mView.findViewById(R.id.spotlist_message);
-		// mRetry = (Button) mView.findViewById(R.id.spotlist_retry);
-		//
-		// mFooterView = new RelativeLayout(getApplicationContext());
-		// mFooterView.setGravity(Gravity.CENTER);
-		//
+		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
+				 
+		mMessage = (TextView) findViewById(R.id.message);
+		mRetry = (Button) findViewById(R.id.retry);
+		
+		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(R.layout.item_loading_more, null);
+		mFooterView.setVisibility(View.GONE);
+		lvSpot.addFooterView(mFooterView);
+		
+		lvSpot.setOnScrollListener(new OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				
+			}
+		});
+		
 		// mFooterViewLoading = new ProgressBar(getApplicationContext());
 		// mFooterViewLoading.setLayoutParams(new LayoutParams(
 		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -136,8 +155,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 		// });
 		//
 		// lvSpot.addFooterView(mFooterView);
-		//
-		// // initUiLoading();
+		
 		lvSpot.setAdapter(adapter);
 	}
 
@@ -158,8 +176,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	// }
 
 	@Override
-	public void initVariables() {
-	}
+	public void initVariables() { }
 
 	@Override
 	public void onClick(View v) {
@@ -182,16 +199,16 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	public void actionPost(RestClientTask task, JSONObject result) {
 		if (task instanceof GetNearbySpotTask) {
 
+			setUiLoadDone();
+
 			try {
 				JSONArray spotData = result.getJSONArray("data");
 				int size = spotData.length();
 
 				if (size == 0) {
-					// initUiLoadEmpty();
+					setUiLoadEmpty();
 					return;
 				}
-
-				// initUiLoadDone();
 				// if(null!=mFooterViewAddNew.getParent()){
 				// mFooterView.addView(mFooterViewAddNew);
 				// }
@@ -209,8 +226,8 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 				// server
 				// (có kết nối, tuy nhiên lỗi xảy ra phía server khiến không có
 				// dữ liệu nào phù hợp trả về)
-				// Khi biết sẽ đặt hàm initUiError() vào đó.
-				// initUiError();
+				// Khi biết sẽ đặt hàm setUiLoadError() vào đó.
+				setUiLoadError();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -228,39 +245,37 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 				mParent.getCurrentPositionDistance() + 1);
 		spotTask.setOnPostExecuteDelegate(this);
 		spotTask.execute();
+		
+		setUiLoading();
 	}
 
-	private void initUiLoading() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_loading_message));
-		mMessage.setVisibility(View.VISIBLE);
+	private void setUiLoading() {
+		mMessage.setVisibility(View.GONE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
+		Log.e(TAG, "SetUiLoading");
 	}
 
-	private void initUiError() {
+	private void setUiLoadError() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
-		mProgressBar.setVisibility(View.GONE);
 	}
 
-	private void initUiLoadEmpty() {
+	private void setUiLoadEmpty() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.GONE);
 	}
 
-	private void initUiLoadDone() {
-		mMessage.setText("");
-		mMessage.setVisibility(View.GONE);
-		mRetry.setVisibility(View.GONE);
+	private void setUiLoadDone() {
+		if (mFooterView.getVisibility() == View.GONE) {
+			mFooterView.setVisibility(View.VISIBLE);
+		}
 		mProgressBar.setVisibility(View.GONE);
 	}
 
 	@Override
-	protected void initActions() {
-	}
+	protected void initActions() { }
 
 	@Override
 	public void onLocationChanged(Location location) {
