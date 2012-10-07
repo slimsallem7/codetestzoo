@@ -27,6 +27,7 @@ import com.zoostudio.ngon.RequestCode;
 import com.zoostudio.ngon.task.GetAddressFromGeoTask;
 import com.zoostudio.ngon.task.GetSearchSpotTask;
 import com.zoostudio.ngon.ui.base.BaseFragmentActivity;
+import com.zoostudio.ngon.ui.base.BaseMapActivity;
 import com.zoostudio.ngon.ui.pager.NgonHomePager;
 import com.zoostudio.ngon.utils.OnAddressChanged;
 import com.zoostudio.restclient.RestClientTask;
@@ -199,16 +200,16 @@ public class TabHome extends BaseFragmentActivity implements
 //	}
 
 	public void locationEdit() {
-		Intent intent = new Intent(this, SelectLocationManual.class);
-		intent.putExtra("CURRENT_ADDRESS", mLocationAddress.getText());
+		Intent intent = new Intent(getApplicationContext(), ActivitySelectLocationManual.class);
+		intent.putExtra(BaseMapActivity.EXTRA_CURRENT_ADDRESS, mLocationAddress.getText());
 		double currentLat = -1, currentLong = -1;
 		try {
 			currentLat = NgonLocationManager.getInstance(null)
 					.getCurrentLocation().getLatitude();
 			currentLong = NgonLocationManager.getInstance(null)
 					.getCurrentLocation().getLongitude();
-			intent.putExtra("CURRENT_LAT", currentLat);
-			intent.putExtra("CURRENT_LONG", currentLong);
+			intent.putExtra(BaseMapActivity.EXTRA_CURRENT_LAT, currentLat);
+			intent.putExtra(BaseMapActivity.EXTRA_CURRENT_LONG, currentLong);
 
 			overridePendingTransition(R.anim.fade_out,
 					R.anim.activity_slide_in_from_bottom);
@@ -249,7 +250,7 @@ public class TabHome extends BaseFragmentActivity implements
 	}
 
 	private void updateNewAddress(Intent intent) {
-		String address = intent.getExtras().getString("NEW_ADDRESS");
+		String address = intent.getExtras().getString(ActivitySelectLocationManual.RESULT_NEW_ADDRESS);
 		this.mLocationAddress.setText(address);
 	}
 

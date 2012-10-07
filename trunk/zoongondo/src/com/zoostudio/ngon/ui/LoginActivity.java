@@ -221,7 +221,7 @@ public class LoginActivity extends NgonActivity implements OnClickListener,
 				saveLoginInfo();
 				
 				startActivity(new Intent(getApplicationContext(),
-						HostScreen.class));
+						ActivityHostScreen.class));
 				finish();
 			} else {
 				String message = "";
@@ -314,7 +314,7 @@ public class LoginActivity extends NgonActivity implements OnClickListener,
 	
 	private void gotoHomeScreen() {
 		startActivity(new Intent(getApplicationContext(),
-				HostScreen.class));
+				ActivityHostScreen.class));
 		finish();
 	}
 }

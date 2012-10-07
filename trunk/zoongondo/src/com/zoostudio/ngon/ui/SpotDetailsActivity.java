@@ -165,7 +165,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.checkin:
-			Intent intent = new Intent(this, Checkin.class);
+			Intent intent = new Intent(this, ActivityCheckin.class);
 			intent.putExtra("CURRENT_ADDRESS", "83B ly thuong kiet");
 			intent.putExtra("CURRENT_LAT", 21.025347);
 			intent.putExtra("CURRENT_LONG", 105.843755);
