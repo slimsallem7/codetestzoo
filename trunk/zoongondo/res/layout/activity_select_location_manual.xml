@@ -54,7 +54,7 @@
     </RelativeLayout>
 
     <AutoCompleteTextView
-        android:id="@+id/txt_real_address"
+        android:id="@+id/txtSuggestAddress"
         style="@style/NgonDoEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,9 +72,9 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txt_real_address"
-        android:layout_alignLeft="@+id/txt_real_address"
-        android:layout_alignTop="@+id/txt_real_address"
+        android:layout_alignBottom="@+id/txtSuggestAddress"
+        android:layout_alignLeft="@+id/txtSuggestAddress"
+        android:layout_alignTop="@+id/txtSuggestAddress"
         android:layout_marginLeft="4dp"
         android:contentDescription="@string/content_description"
         android:src="@drawable/ic_search" />
@@ -83,13 +83,13 @@
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_below="@+id/txt_real_address"
+        android:layout_below="@+id/txtSuggestAddress"
         android:paddingLeft="@dimen/padding_medium"
         android:paddingRight="@dimen/padding_medium" >
 
         <Button
-            android:id="@+id/suggest_list"
-            style="@style/LocationTab.UnSelected"
+            android:id="@+id/suggest"
+            style="@style/LocationTab.Selected"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -98,7 +98,7 @@
 
         <Button
             android:id="@+id/map"
-            style="@style/LocationTab.Selected"
+            style="@style/LocationTab.UnSelected"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -112,26 +112,32 @@
         android:layout_height="4dp"
         android:layout_below="@+id/relativeLayout1"
         android:background="@color/NgonDoBlue" />
-
+    <!--
     <android.support.v4.view.ViewPager
         android:id="@+id/content_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/divider" >
-    </android.support.v4.view.ViewPager>
+    </android.support.v4.view.ViewPager>    -->
 
-    <!--
     <com.google.android.maps.MapView
         android:id="@+id/mapView"
-        android:layout_width="fill_parent"
-        android:layout_height="600dip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/relativeLayout1"
-        android:layout_below="@+id/relativeLayout1"
-        android:apiKey="@string/google_key_macos_vietbq"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        android:apiKey="0_EiDNtkUUkGuyy7_IfKBs-lMKcw8aWA6sYE8tA"
         android:clickable="true"
-        android:enabled="true" />
-    -->
+        android:enabled="true" >
+    </com.google.android.maps.MapView>
+
+    <ListView
+        android:id="@+id/suggest_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/divider"
+        android:background="#FFFFFF" >
+    </ListView>
+
     <!-- 0_EiDNtkUUkEp4L0iaoiRdahtcLvdaSBbQXVEzw -->
 
 </RelativeLayout>
