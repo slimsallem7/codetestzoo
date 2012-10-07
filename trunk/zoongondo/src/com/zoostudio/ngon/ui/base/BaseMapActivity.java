@@ -47,6 +47,10 @@ public abstract class BaseMapActivity extends MapActivity implements
 
 	private static final String BUNDLE_ERROR_CODE = null;
 
+	public static final String EXTRA_CURRENT_ADDRESS = "com.zoostudio.ngon.ui.base.BaseMapActivity.EXTRA_CURRENT_ADDRESS";
+	public static final String EXTRA_CURRENT_LONG = "com.zoostudio.ngon.ui.base.BaseMapActivity.EXTRA_CURRENT_LONG";
+	public static final String EXTRA_CURRENT_LAT = "com.zoostudio.ngon.ui.base.BaseMapActivity.EXTRA_CURRENT_LAT";
+	
 	protected MapView mvSelectLocation;
 	protected MapController mapControl;
 	protected GeoPoint mCurrentGeoPoint;
@@ -107,9 +111,9 @@ public abstract class BaseMapActivity extends MapActivity implements
 		mIsFirstTime = true;
 
 		mCurrentAddress = this.getIntent().getExtras()
-				.getString("CURRENT_ADDRESS");
-		mCurrentLat = this.getIntent().getExtras().getDouble("CURRENT_LAT");
-		mCurrentLong = this.getIntent().getExtras().getDouble("CURRENT_LONG");
+				.getString(EXTRA_CURRENT_ADDRESS);
+		mCurrentLat = this.getIntent().getExtras().getDouble(EXTRA_CURRENT_LAT);
+		mCurrentLong = this.getIntent().getExtras().getDouble(EXTRA_CURRENT_LONG);
 		
 		mCurrentLat = mCurrentLat * 1E6;
 		mCurrentLong = mCurrentLong * 1E6;

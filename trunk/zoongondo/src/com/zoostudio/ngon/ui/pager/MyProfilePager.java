@@ -28,7 +28,7 @@ public class MyProfilePager extends NgonUserPager {
 	
 	@Override
 	protected int getLayoutId() {
-		return R.layout.pager_user_profile;
+		return R.layout.fragment_profile_userprofile;
 	}
 
 	@Override
