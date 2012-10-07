@@ -64,6 +64,7 @@ public class ZooImageDishBorder extends SmartImageView {
 		this.disItem = dishItem;
 		super.setImageBitmap(source);
 	}
+	
 	@Override
 	public void setImageBitmap(Bitmap source) {
 		if(null == source){
