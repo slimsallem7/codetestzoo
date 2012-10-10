@@ -97,7 +97,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 	protected void initControls() {
 		mSlideImageView = (ZooSlideView) this
 				.findViewById(R.id.spot_details_slideImageDish);
-
 		mLikerView = (ZooLikerView) this.findViewById(R.id.zooLikerView);
 		btnCheckin = (ImageButton) findViewById(R.id.checkin);
 		mListCommentView = (ListCommentView) this
@@ -156,7 +155,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private void loadSpotInfo(JSONObject result) throws JSONException {
 		mSpot.setName(result.getString("name"));
 		mSpot.setAddress(result.getString("address"));
-
 		tvSpotName.setText(mSpot.getName());
 		tvSpotAddress.setText(mSpot.getAddress());
 	}
@@ -340,6 +338,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	protected void initActions() {
+		mSlideImageView.setImageMainSpot(mSpot.getUrlImageSpot());
+		
 		btnCheckin.setOnClickListener(this);
 		mLikerView.setOnClickListener(new OnClickListener() {
 			@Override

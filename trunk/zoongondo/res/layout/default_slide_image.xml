@@ -7,10 +7,11 @@
 
     <com.zoostudio.android.image.SmartImageView
         android:id="@+id/imageViewPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/height_main_image_in_spotdetail_screen"
         android:layout_centerInParent="true"
         android:contentDescription="@string/app_name"
+        android:background="@drawable/icon_default_main_spot"
         android:scaleType="centerCrop" >
     </com.zoostudio.android.image.SmartImageView>
 

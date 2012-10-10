@@ -48,12 +48,14 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 	private void initViews(Context context) {
 		mUrlsImage = new ArrayList<String>();
 		setUpDefaultImage();
-
 		mTakePhoto = (ImageButton) findViewById(R.id.addphoto);
 		mLayoutThumb = (LinearLayout) findViewById(R.id.thumbnail_list);
 		mMainPhoto = (SmartImageView) findViewById(R.id.imageViewPhoto);
-		mMainPhoto.setImageResource(R.drawable.icon_default_camera);
 
+	}
+
+	public void setImageMainSpot(String urlImage) {
+		mMainPhoto.setImageUrl(urlImage);
 	}
 
 	private void setUpDefaultImage() {
@@ -70,19 +72,9 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 	}
 
 	private void setUpImages() {
-		// TODO Comment vì đang test
-		// if(mUrlsImage.size() == 0){
-		// setUpDefaultImage();
-		//
-		// mTakePhoto.setVisibility(View.GONE);
-		// mLayoutThumb.setVisibility(View.GONE);
-		// return;
-		// }
-		mMainPhoto.setSizeImage(width, height);
-		mMainPhoto.setImageResource(R.drawable.main_dish_image, true);
+		// mMainPhoto.setImageResource(R.drawable.main_dish_image);
 
 		findViewById(R.id.addphotohint).setVisibility(View.GONE);
-
 		int thumbSize = getResources().getDimensionPixelOffset(
 				R.dimen.thumbSize);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

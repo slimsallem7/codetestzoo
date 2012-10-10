@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"      
         android:layout_marginLeft="10dip"
         android:layout_centerVertical="true"
-        android:src="@drawable/anh_comment" >
+        android:src="@drawable/icon_default_dish_selected" >
     </com.zoostudio.android.image.ZooImageDish>
 
     <TextView

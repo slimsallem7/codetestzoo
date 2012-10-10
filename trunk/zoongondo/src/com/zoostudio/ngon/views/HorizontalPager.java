@@ -640,7 +640,6 @@ public class HorizontalPager extends ViewGroup implements
 		for (int i = 0; i < totalPage; i++) {
 			View view = inflate(getContext(), R.layout.item_dish, null);
 			this.addView(view);
-			// initListenerImageViews(i);
 			scrollTo(0 * width, 0);
 		}
 		View pageView;
@@ -651,9 +650,6 @@ public class HorizontalPager extends ViewGroup implements
 			bitmapDefaultDish = BitmapFactory.decodeResource(getResources(),
 					R.drawable.icon_default_dish_selected);
 		}
-
-		Bitmap sourceSample = BitmapFactory.decodeResource(getResources(),
-				R.drawable.spl_icon_dish_selected);
 
 		for (int i = 0; i <= totalPage; i++) {
 			pageView = this.getChildAt(i);
@@ -668,6 +664,7 @@ public class HorizontalPager extends ViewGroup implements
 				dishBorder1.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
+				dishBorder1.setImageBitmap(bitmapDefaultDish);
 				dishBorder1.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
@@ -683,6 +680,7 @@ public class HorizontalPager extends ViewGroup implements
 				dishBorder2.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
+				dishBorder2.setImageBitmap(bitmapDefaultDish);
 				dishBorder2.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
@@ -698,6 +696,7 @@ public class HorizontalPager extends ViewGroup implements
 				dishBorder3.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
+				dishBorder3.setImageBitmap(bitmapDefaultDish);
 				dishBorder3.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
@@ -713,6 +712,7 @@ public class HorizontalPager extends ViewGroup implements
 				dishBorder4.setImageBitmap(bitmapDefaultDish,
 						ZooImageDishBorder.TYPE_NO_IMAGE, items.get(index));
 			} else {
+				dishBorder4.setImageBitmap(bitmapDefaultDish);
 				dishBorder4.setImageUrl(url,
 						ZooImageDishBorder.TYPE_IMAGE, items.get(index));
 			}
