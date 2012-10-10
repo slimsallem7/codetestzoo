@@ -71,7 +71,14 @@ public class ChooseDish extends NgonActivity implements OnPreExecuteDelegate,
 	private View incPopUp;
 	private ButtonUp btnUp;
 	private View footer;
-	private final String URL = "http://nr6.upanh.com/b6.s32.d1/2fb07778f2ab297f7821ededa6cf8016_49769616.monan.jpg";
+	private final String URL1 = "http://i366.photobucket.com/albums/oo105/AvonB7/Food/Rovellones.jpg";
+	private final String URL2 = "http://i284.photobucket.com/albums/ll26/msbowjangles16/Chinese-food.jpg";
+	private final String URL3 = "http://i870.photobucket.com/albums/ab270/moonbeambouvier/Food/20121008Dessert.jpg";
+	private final String URL4 = "http://i1245.photobucket.com/albums/gg587/PB_Loves/Scratch%20n%20Sniff/f2d9c76b.jpg";
+	private final String URL5 = "http://i1245.photobucket.com/albums/gg587/PB_Loves/Scratch%20n%20Sniff/0664ca87.jpg";
+	private final String URL6 = "http://i255.photobucket.com/albums/hh149/MargieHaire/Animals/food_02.jpg";
+	private final String URL7 = "http://i1092.photobucket.com/albums/i414/herrysusanto1/food.jpg";
+
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_choose_dish;
@@ -83,7 +90,6 @@ public class ChooseDish extends NgonActivity implements OnPreExecuteDelegate,
 		// mSpot = getSpot();
 		lvMenu = (ListView) findViewById(R.id.list_menu);
 		mDishChoiced = (TextView) findViewById(R.id.txtDishchoices);
-		// btnAddDish = (ButtonListitemAdd) findViewById(R.id.btn_add_dish);
 		btnDone = (Button) findViewById(R.id.checkin);
 		// mMenuTask = new GetMenuTask(this, mSpot.getId());
 		mDishSelected = findViewById(R.id.layoutDishSelected);
@@ -120,15 +126,13 @@ public class ChooseDish extends NgonActivity implements OnPreExecuteDelegate,
 		mCount = 0;
 		if (listSelected.isEmpty()) {
 			ArrayList<DishItem> arrayList = new ArrayList<DishItem>();
-			arrayList.add(new DishItem("0", "Lau thap cam", URL,URL));
-			arrayList.add(new DishItem("1", "Lau ga", URL,URL));
-			arrayList.add(new DishItem("2", "Lau nam", URL,URL));
-			arrayList.add(new DishItem("3", "Suon xao chua ngot", URL,URL));
-			arrayList.add(new DishItem("4", "Ga quay ngu vi", URL,URL));
-			arrayList.add(new DishItem("5", "Vi xao xa ot", URL,URL));
-			arrayList.add(new DishItem("6", "Lau mang", URL,URL));
-			arrayList.add(new DishItem("7", "Lau ech", URL,URL));
-			arrayList.add(new DishItem("8", "Lau ca", URL,URL));
+			arrayList.add(new DishItem("0", "Lau thap cam", URL1, URL1));
+			arrayList.add(new DishItem("1", "Lau ga", URL2, URL2));
+			arrayList.add(new DishItem("2", "Lau nam", URL3, URL3));
+			arrayList.add(new DishItem("3", "Suon xao chua ngot", URL4, URL4));
+			arrayList.add(new DishItem("4", "Ga quay ngu vi", URL5, URL5));
+			arrayList.add(new DishItem("5", "Vi xao xa ot", URL6, URL6));
+			arrayList.add(new DishItem("6", "Lau mang", URL7, URL7));
 			mMenuAdapter = new ChooseDishAdapter(this, 0, arrayList, this);
 			copyToOriginal(arrayList);
 		} else {
@@ -276,7 +280,7 @@ public class ChooseDish extends NgonActivity implements OnPreExecuteDelegate,
 
 	@Override
 	public void onDishChoiceListener(int count, DishItem dishItem) {
-		if(mCount == 0){
+		if (mCount == 0) {
 			showLayoutCount();
 		}
 		mCount++;
@@ -354,32 +358,38 @@ public class ChooseDish extends NgonActivity implements OnPreExecuteDelegate,
 		}
 		if (hasChange) {
 			mMenuAdapter.notifyDataSetChanged();
-			if(mCount == 0){
+			if (mCount == 0) {
 				hideLayoutCount();
 			}
 			mDishChoiced.setText("" + mCount + " " + strDish + "    ");
 		}
 	}
+
 	/**
 	 * Hien thi so luong mon an
 	 */
 	private void showLayoutCount() {
 		mDishSelected.setVisibility(View.VISIBLE);
-		Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
+		Animation animation = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.slide_up);
 		mDishSelected.startAnimation(animation);
 	}
+
 	/**
 	 * Hide layout dem so luong mon an
 	 */
 	private void hideLayoutCount() {
-		Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+		Animation animation = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.slide_down);
 		animation.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationStart(Animation animation) {
 			}
+
 			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
+
 			@Override
 			public void onAnimationEnd(Animation arg0) {
 				mDishSelected.setVisibility(View.GONE);

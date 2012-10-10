@@ -13,7 +13,7 @@ public class WebImage implements SmartImage {
 	protected static final int CONNECT_TIMEOUT = 20000;
 	protected static final int READ_TIMEOUT = 10000;
 
-	private static WebImageCache webImageCache;
+	protected static WebImageCache webImageCache;
 
 	protected String url;
 
@@ -57,7 +57,7 @@ public class WebImage implements SmartImage {
 		return bitmap;
 	}
 
-	private Bitmap getBitmapFromUrl(String url) {
+	protected Bitmap getBitmapFromUrl(String url) {
 		Bitmap bitmap = null;
 		try {
 			URLConnection conn = new URL(url).openConnection();

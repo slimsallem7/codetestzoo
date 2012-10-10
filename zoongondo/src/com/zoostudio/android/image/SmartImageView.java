@@ -19,6 +19,7 @@ public class SmartImageView extends ImageView {
 	private SmartImageTask currentTask;
 	private int reqWidth;
 	private int reqHeight;
+	private boolean resize;
 
 	public SmartImageView(Context context) {
 		super(context);
@@ -31,7 +32,6 @@ public class SmartImageView extends ImageView {
 	public SmartImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
-
 
 	// Helpers to set image by URL
 	public void setImageUrl(String url) {
@@ -104,23 +104,25 @@ public class SmartImageView extends ImageView {
 		threadPool.execute(currentTask);
 	}
 
-
 	public static void cancelAllTasks() {
 		threadPool.shutdownNow();
 		threadPool = Executors.newFixedThreadPool(LOADING_THREADS);
 	}
-	
+
 	/**
 	 * Nen su dung ham nay khi anh qua to
+	 * 
 	 * @param resId
 	 * @param resize
 	 */
-	public void setImageResource(int resId,boolean resize) {
-		if(!resize){
+	public void setImageResource(int resId) {
+		if (!resize) {
 			super.setImageResource(resId);
-		}else{
-			Bitmap bitmap = ImageUtil.decodeSampledBitmapFromResource(getResources(), resId, reqWidth, reqHeight);
-			Log.i("Bitmap","Width = " + bitmap.getWidth() + " | height = " + bitmap.getHeight());
+		} else {
+			Bitmap bitmap = ImageUtil.decodeSampledBitmapFromResource(
+					getResources(), resId, reqWidth, reqHeight);
+			Log.i("Bitmap", "Width = " + bitmap.getWidth() + " | height = "
+					+ bitmap.getHeight());
 			this.setImageBitmap(bitmap);
 		}
 	}
@@ -128,6 +130,7 @@ public class SmartImageView extends ImageView {
 	public void setSizeImage(int width, int height) {
 		this.reqWidth = width;
 		this.reqHeight = height;
+		this.resize = true;
 	}
 
 }

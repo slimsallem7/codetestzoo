@@ -9,6 +9,7 @@ public class SpotItem implements Parcelable {
     private String name;
     private String address;
     private String id;
+    private String urlImageSpot;
     private LocationItem location;
     
     public SpotItem(Parcel in) {
@@ -20,6 +21,7 @@ public class SpotItem implements Parcelable {
 		this.name = builder.name;
 		this.address = builder.address;
 		this.location = builder.location;
+		this.urlImageSpot = builder.urlImageSpot;
 	}
 
 	private void readFromParcel(Parcel in) {
@@ -27,6 +29,7 @@ public class SpotItem implements Parcelable {
 		address = in.readString();
 		id = in.readString();
 		location = in.readParcelable(LocationItem.class.getClassLoader());
+		urlImageSpot = in.readString();
 	}
 
 	@Override
@@ -35,6 +38,7 @@ public class SpotItem implements Parcelable {
 		dest.writeString(address);
 		dest.writeString(id);
 		dest.writeParcelable(location, PARCELABLE_WRITE_RETURN_VALUE);
+		dest.writeString(urlImageSpot);
 	}
     
 	public String getName() {
@@ -90,6 +94,7 @@ public class SpotItem implements Parcelable {
 	    private String address;
 	    private String id;
 	    private LocationItem location;
+	    private String urlImageSpot;
 	    
 	    public Builder() {
 	    	
@@ -115,8 +120,19 @@ public class SpotItem implements Parcelable {
 	    	return this;
 	    }
 	    
+	    public Builder setUrlImage(String urlImage){
+	    	this.urlImageSpot = urlImage;
+	    	return this;
+	    }
 	    public SpotItem create() {
 	    	return new SpotItem(this);
 	    }
+	}
+	
+	public void setUrlImageSpot(String urlImageSpot) {
+		this.urlImageSpot = urlImageSpot;
+	}
+	public String getUrlImageSpot() {
+		return urlImageSpot;
 	}
 }

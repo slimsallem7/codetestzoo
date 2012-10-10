@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -18,7 +17,7 @@ public class ZooAvatarWebImage extends WebImage {
 	}
 
 	@Override
-	public Bitmap getBitmap(Context context) {
+	protected Bitmap getBitmapFromUrl(String url) {
 		Bitmap bitmap = null;
 		try {
 			URLConnection conn = new URL(url).openConnection();
@@ -33,16 +32,6 @@ public class ZooAvatarWebImage extends WebImage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return bitmap;
 	}
-
-	// private static void copy(InputStream in, OutputStream out)
-	// throws IOException {
-	// byte[] b = new byte[IO_BUFFER_SIZE];
-	// int read;
-	// while ((read = in.read(b)) != -1) {
-	// out.write(b, 0, read);
-	// }
-	// }
 }

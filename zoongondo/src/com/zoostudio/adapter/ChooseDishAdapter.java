@@ -58,12 +58,13 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 			holder.mCheckBox.setOnCheckedChangeListener(null);
+			holder.imgMenu.setImageResource(R.drawable.icon_default_dish_selected);
 			holder.mCheckBox.setChecked(false);
 		}
 
 		holder.menuName.setText(item.getTitle());
 		holder.mCheckBox.setChecked(item.isSelected());
-		holder.imgMenu.setImageUrl("http://nr6.upanh.com/b6.s32.d1/2fb07778f2ab297f7821ededa6cf8016_49769616.monan.jpg");
+		holder.imgMenu.setImageUrl(item.getUrlImageThumb());
 		holder.mCheckBox.setOnCheckedChangeListener(new CheckDish(item,
 				convertView));
 
@@ -87,8 +88,7 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 				buttonView.setChecked(!isChecked);
 				return;
 			}
-//			int postion = ChooseDishAdapter.this.getPosition(dishItem);
-//			ChooseDishAdapter.this.getItem(postion).setSelected(isChecked);
+
 			if (isChecked) {
 				((ZooRelativeAnimationView) view).startAnimation(
 						dishItem, ChooseDishAdapter.this);
@@ -105,7 +105,6 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 
 	@Override
 	public void onAnimationEnd(DishItem item) {
-		Log.i("Zoo", "Remove item");
 		handler.post(new RemoveItem(item));
 	}
 

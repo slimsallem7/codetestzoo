@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.zoostudio.adapter.item.SpotItem;
+import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.ngon.R;
 
 public class SpotAdapter extends ArrayAdapter<SpotItem> {
@@ -57,8 +58,10 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 					.findViewById(R.id.spot_address);
 			viewHolder.tvDistance = (TextView) convertView
 					.findViewById(R.id.spot_distance);
-//			viewHolder.tvDistanceUnit = (TextView) convertView
-//					.findViewById(R.id.distance_unit);
+			viewHolder.imageSpot = (SmartImageView) convertView
+					.findViewById(R.id.imageSpot);
+			// viewHolder.tvDistanceUnit = (TextView) convertView
+			// .findViewById(R.id.distance_unit);
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -67,25 +70,28 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 
 		viewHolder.tvName.setText(item.getName());
 		viewHolder.tvAddress.setText(item.getAddress());
-		
+
 		try {
-			Log.i("SpotAdatper", "Position = " + position + "| " + item.getLocation());
+			Log.i("SpotAdatper",
+					"Position = " + position + "| " + item.getLocation());
 			double distance = Math.round(item.getLocation().distanceTo(
 					mLongtitude, mLatitude) * 100) / 100;
 			viewHolder.tvDistance.setText(FormatterCore.numberFormat(distance));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		if ((position == getCount() - 1) && listener != null) {
 			listener.request();
 		}
-
+		viewHolder.imageSpot
+				.setImageUrl(item.getUrlImageSpot());
 		return convertView;
 	}
 
 	private static class ViewHolder {
 		private TextView tvName, tvAddress, tvDistance, tvDistanceUnit;
+		private SmartImageView imageSpot;
 	}
 
 	public interface IOnRequestMoreListener {

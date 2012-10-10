@@ -8,11 +8,12 @@
 
     <com.zoostudio.android.image.SmartImageView
         android:id="@+id/imgLargeDish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="256dip"
+        android:layout_height="256dip"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:layout_marginTop="10dip"
+        android:scaleType="centerCrop"
         android:background="@drawable/bg_edit_text"
         android:src="@drawable/img_default_larg_dish" />
 
@@ -22,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dip"
         android:layout_marginTop="15dip"
-        android:text="OC XAO CHUA NGOT"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#2e8193"
         android:textSize="14sp"

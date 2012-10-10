@@ -11,31 +11,10 @@ public class ImageUtil {
 		// Raw height and width of image
 		final int height = options.outHeight;
 		final int width = options.outWidth;
-		int inSampleSize = 1;
 
 		int scale = 1;
 		while (width / scale / 2 >= reqWidth && height / scale / 2 >= reqHeight)
 			scale *= 2;
-		// Decode with inSampleSize
-		//
-		// if (height > reqHeight || width > reqWidth) {
-		// if (width > height) {
-		// inSampleSize = Math.round((float) height / (float) reqHeight);
-		// } else {
-		// inSampleSize = Math.round((float) width / (float) reqWidth);
-		// }
-		// }
-		//
-		// final float totalPixels = width * height;
-		//
-		// // Anything more than 2x the requested pixels we'll sample down
-		// // further.
-		// final float totalReqPixelsCap = reqWidth * reqHeight * 2;
-		//
-		// while (totalPixels / (inSampleSize * inSampleSize) >
-		// totalReqPixelsCap) {
-		// inSampleSize++;
-		// }
 
 		return scale;
 	}

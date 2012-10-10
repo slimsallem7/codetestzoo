@@ -44,7 +44,17 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	private ProgressDialog progressDialog;
 
 	private RelativeLayout mFooterView;
-
+	private String[] imageDumps = {
+			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_10_09-ProsciuttoArugulaPizza01.jpg",
+			"http://i136.photobucket.com/albums/q197/bermuda2810/main_dish_image-1.jpg",
+			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012-10-09-ThinCrustPizza-2.jpg",
+			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/brownie%20pie.jpeg",
+			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_09_26-bakewell4.jpg",
+			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_06_04-Berries.jpeg",
+			"http://www.thekitchn.com/dessert-recipe-baked-nutella-cream-cheese-sandwich-recipes-from-the-kitchn-177279",
+			"http://img.foodnetwork.com/FOOD/2010/03/25/FNM_050110-Weeknight-Dinners-032_s4x3_lg.jpg",
+			"http://img.foodnetwork.com/FOOD/2011/11/14/FNM_120111-WN-Dinners-009_s4x3_lg.jpg",
+			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
 	/**
 	 * Dùng để lưu trạng thái đã request more hay chưa. Được đặt true khi bắt
 	 * đầu request more; Đặt false khi có dữ liệu trả về. Khi có thêm request
@@ -56,7 +66,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	public NearByPager(Integer indexPager) {
 		super(indexPager);
 	}
-	
+
 	public NearByPager() {
 		super();
 	}
@@ -96,27 +106,28 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
 
 		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
-				 
+
 		mMessage = (TextView) findViewById(R.id.message);
 		mRetry = (Button) findViewById(R.id.retry);
-		
-		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(R.layout.item_loading_more, null);
+
+		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(
+				R.layout.item_loading_more, null);
 		mFooterView.setVisibility(View.GONE);
 		lvSpot.addFooterView(mFooterView);
-		
+
 		lvSpot.setOnScrollListener(new OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				
+
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				
+
 			}
 		});
-		
+
 		// mFooterViewLoading = new ProgressBar(getApplicationContext());
 		// mFooterViewLoading.setLayoutParams(new LayoutParams(
 		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -155,7 +166,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 		// });
 		//
 		// lvSpot.addFooterView(mFooterView);
-		
+
 		lvSpot.setAdapter(adapter);
 	}
 
@@ -176,7 +187,8 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	// }
 
 	@Override
-	public void initVariables() { }
+	public void initVariables() {
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -216,17 +228,12 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 				for (int i = 0; i < size; i++) {
 					JSONObject item = spotData.getJSONObject(i);
 					SpotItem spotItem = ParserUtils.parseSpot(item);
+					spotItem.setUrlImageSpot(imageDumps[i]);
 					adapter.add(spotItem);
 				}
 
 			} catch (JSONException e) {
 				e.printStackTrace();
-				// TODO @duynt
-				// Hiện tại chưa biết tình huống không lấy được dữ liệu từ phía
-				// server
-				// (có kết nối, tuy nhiên lỗi xảy ra phía server khiến không có
-				// dữ liệu nào phù hợp trả về)
-				// Khi biết sẽ đặt hàm setUiLoadError() vào đó.
 				setUiLoadError();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -245,7 +252,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 				mParent.getCurrentPositionDistance() + 1);
 		spotTask.setOnPostExecuteDelegate(this);
 		spotTask.execute();
-		
 		setUiLoading();
 	}
 
@@ -275,7 +281,8 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	}
 
 	@Override
-	protected void initActions() { }
+	protected void initActions() {
+	}
 
 	@Override
 	public void onLocationChanged(Location location) {

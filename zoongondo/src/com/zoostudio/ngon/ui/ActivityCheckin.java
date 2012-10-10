@@ -104,6 +104,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 		mShareFacebook = (CheckBox) findViewById(R.id.share_facebook);
 		mShareTwitter = (CheckBox) findViewById(R.id.share_twitter);
 		mShareTumbler = (CheckBox) findViewById(R.id.share_tumblr);
+		mShareTumbler.setVisibility(View.GONE);
 		pagerDish.setOnItemClick(this);
 		btnTakePhoto.setOnClickListener(this);
 		pagerDish.setOnScreenSwitchListener(this);
@@ -150,9 +151,6 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	protected void initActions() {
 		super.initActions();
-
-		pagerDish.setOnItemClick(this);
-
 		mUp.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -251,8 +249,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 		if (null != urlImage && !urlImage.equals("")) {
 			SmartImageView imageView = (SmartImageView) incView
 					.findViewById(R.id.imgLargeDish);
-			// imageView.setImageUrl(urlImage);
-			imageView.setImageResource(R.drawable.sampe_larg_image_dish);
+			imageView.setImageUrl(urlImage);
 		}
 		Builder dialog = new NgonDialog.Builder(this);
 		dialog.setCancelable(true);
@@ -361,7 +358,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 				supportLoginFacebook.logOnFacebook();
 			} else {
 				checkFB = false;
-//				supportLoginFacebook.logOutFacebook();
+				// supportLoginFacebook.logOutFacebook();
 			}
 		}
 	};
@@ -373,10 +370,11 @@ public class ActivityCheckin extends BaseMapActivity implements
 			if (isChecked && twitterSupport.validSession()) {
 				checkTW = true;
 			} else if (isChecked) {
-				twitterSupport.logonTwitter(CALL_BACK_URL, ActivityCheckin.this);
+				twitterSupport
+						.logonTwitter(CALL_BACK_URL, ActivityCheckin.this);
 			} else {
 				checkTW = false;
-//				twitterSupport.logoutTwitter(Checkin.this.getApplicationContext());
+				// twitterSupport.logoutTwitter(Checkin.this.getApplicationContext());
 			}
 		}
 	};

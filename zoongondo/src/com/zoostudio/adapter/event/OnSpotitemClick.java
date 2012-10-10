@@ -21,10 +21,8 @@ public class OnSpotitemClick implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> adapterView, View view, int pos,
 			long id) {
 		SpotItem item = (SpotItem) adapterView.getItemAtPosition(pos);
-
 		Intent intent = new Intent(mActivity, SpotDetailsActivity.class);
 		intent.putExtra(SpotDetailsActivity.EXTRA_SPOT, item);
-		
 		mActivity.startActivity(intent);
 	}
 }
