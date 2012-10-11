@@ -1,7 +1,6 @@
 package com.zoostudio.ngon.task;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,9 +38,7 @@ public class RequestTokenTask extends RestClientTask {
     }
 
     @Override
-    protected void onPostExecute(JSONObject result) {
-        super.onPostExecute(result);
-
+    protected void onPostExecute(Integer statusRequest) {
         try {
             waitingDialog.dismiss();
             boolean status = result.getBoolean("status");

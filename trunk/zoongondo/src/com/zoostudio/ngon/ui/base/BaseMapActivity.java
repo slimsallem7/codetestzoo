@@ -110,17 +110,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 				R.id.txtSuggestAddress, new ArrayList<InfoAddress>());
 		mIsFirstTime = true;
 
-		mCurrentAddress = this.getIntent().getExtras()
-				.getString(EXTRA_CURRENT_ADDRESS);
-		mCurrentLat = this.getIntent().getExtras().getDouble(EXTRA_CURRENT_LAT);
-		mCurrentLong = this.getIntent().getExtras().getDouble(EXTRA_CURRENT_LONG);
-		
-		mCurrentLat = mCurrentLat * 1E6;
-		mCurrentLong = mCurrentLong * 1E6;
-		if (mCurrentLat != -1 && mCurrentLong != -1) {
-			mMeGeoPoint = new GeoPoint((int) (mCurrentLat),
-					(int) (mCurrentLong));
-		}
+		loadLocation();
 		
 		if (null != etAddress) {
 			etAddress.setText(mCurrentAddress);
@@ -135,6 +125,22 @@ public abstract class BaseMapActivity extends MapActivity implements
 		mvSelectLocation.invalidate();
 
 		watcherAddress();
+	}
+
+	protected void loadLocation() {
+		mCurrentAddress = this.getIntent().getExtras()
+				.getString(EXTRA_CURRENT_ADDRESS);
+		
+		mCurrentLat = this.getIntent().getExtras().getDouble(EXTRA_CURRENT_LAT);
+		mCurrentLong = this.getIntent().getExtras().getDouble(EXTRA_CURRENT_LONG);
+		
+		mCurrentLat = mCurrentLat * 1E6;
+		mCurrentLong = mCurrentLong * 1E6;
+		
+		if (mCurrentLat != -1 && mCurrentLong != -1) {
+			mMeGeoPoint = new GeoPoint((int) (mCurrentLat),
+					(int) (mCurrentLong));
+		}
 	}
 
 	protected void initActions() {

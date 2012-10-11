@@ -164,17 +164,11 @@ public class SpotDetailsActivity extends NgonActivity implements
 		switch (v.getId()) {
 		case R.id.checkin:
 			Intent intent = new Intent(this, ActivityCheckin.class);
-			intent.putExtra("CURRENT_ADDRESS", "83B ly thuong kiet");
-			intent.putExtra("CURRENT_LAT", 21.025347);
-			intent.putExtra("CURRENT_LONG", 105.843755);
+			intent.putExtra(EXTRA_SPOT, mSpot);
 			startActivity(intent);
 			break;
 
 		case R.id.addreview:
-			// Intent intentComment = new Intent(this, Checkin.class);
-			// startActivity(intentComment);
-			// intentComment.putExtra(Checkin.EXTRA_SPOT, mSpot);
-			// startActivityForResult(intentComment, RequestCode.CHECKIN);
 			break;
 
 		case R.id.share:

@@ -85,6 +85,10 @@ public class ChooseImageActivity extends NgonActivity implements
 		mRbtShowSeletedMedia
 				.setOnCheckedChangeListener(changeDataToSelectedMedia);
 		btnBackToGallery.setOnClickListener(this);
+		galleryPagerAdapter = new GalleryPagerAdapter(
+				ChooseImageActivity.this, allMedia);
+		imagePager.setAdapter(galleryPagerAdapter);
+		galleryPagerAdapter.setOnItemSelectListener(this);
 		scanner.loadMedia();
 	}
 
@@ -108,14 +112,6 @@ public class ChooseImageActivity extends NgonActivity implements
 		seletedMedia.clear();
 		allMedia = ids;
 
-		if (null == galleryPagerAdapter) {
-			galleryPagerAdapter = new GalleryPagerAdapter(
-					ChooseImageActivity.this, allMedia);
-			imagePager.setAdapter(galleryPagerAdapter);
-			galleryPagerAdapter.setOnItemSelectListener(this);
-		} else {
-
-		}
 		if (!adapter.isEmpty()) {
 			adapter.clear();
 			adapter.notifyDataSetChanged();
