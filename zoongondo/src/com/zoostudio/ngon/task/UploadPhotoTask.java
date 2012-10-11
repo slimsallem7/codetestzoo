@@ -23,7 +23,8 @@ public class UploadPhotoTask extends RestClientTask {
 		this(activity, spot_id, photo, new int[] {});
 	}
 
-	public UploadPhotoTask(Activity activity, String spot_id, File photo, int[] dishes) {
+	public UploadPhotoTask(Activity activity, String spot_id, File photo,
+			int[] dishes) {
 		this(activity, spot_id, new FileBody(photo, "image/png"), dishes);
 	}
 
@@ -31,12 +32,18 @@ public class UploadPhotoTask extends RestClientTask {
 		this(activity, spot_id, photo, new int[] {});
 	}
 
-	public UploadPhotoTask(Activity activity, String spot_id, Bitmap photo, int[] dishes) {
-		this(activity, spot_id, convertBitmapToByteArray(spot_id, photo), dishes);
+	public UploadPhotoTask(Activity activity, String spot_id, byte[] photoData) {
+		this(activity, spot_id, convertByteToByteArrayBody(spot_id, photoData), new int[] {});
 	}
 
-	public UploadPhotoTask(Activity activity, String spot_id, ContentBody photo,
+	public UploadPhotoTask(Activity activity, String spot_id, Bitmap photo,
 			int[] dishes) {
+		this(activity, spot_id, convertBitmapToByteArray(spot_id, photo),
+				dishes);
+	}
+
+	public UploadPhotoTask(Activity activity, String spot_id,
+			ContentBody photo, int[] dishes) {
 		super(activity);
 		mSpotId = spot_id;
 		mPhoto = photo;
@@ -71,4 +78,10 @@ public class UploadPhotoTask extends RestClientTask {
 		return bab;
 	}
 
+	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,
+			byte[] data) {
+		ByteArrayBody bab = new ByteArrayBody(data, "image/png", "photo_spot_"
+				+ spot_id + ".png");
+		return bab;
+	}
 }

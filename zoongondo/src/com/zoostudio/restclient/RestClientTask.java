@@ -6,18 +6,14 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.zoostudio.exception.ZooException;
-import com.zoostudio.ngon.RequestCode;
 import com.zoostudio.ngon.dialog.WaitingDialog;
-import com.zoostudio.ngon.ui.LoginActivity;
 
-public abstract class RestClientTask extends AsyncTask<Void, Void, JSONObject> {
+public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 
 	private Activity mActivity;
 	protected NgonRestClient restClient;
@@ -30,6 +26,8 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, JSONObject> {
 	private OnDataErrorDelegate onDataErrorDelegate;
 	private WaitingDialog mWaitingDialog;
 	private boolean mWaitingStatus;
+	protected JSONObject result;
+	private int mErrorCode = -1;
 
 	public RestClientTask(Activity activity) {
 		this(activity, true);
@@ -61,8 +59,6 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, JSONObject> {
 
 	@Override
 	protected void onPreExecute() {
-		super.onPreExecute();
-
 		if (mWaitingStatus) {
 			mWaitingDialog = new WaitingDialog(mActivity);
 			mWaitingDialog.show();
@@ -74,71 +70,72 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, JSONObject> {
 	}
 
 	@Override
-	protected void onPostExecute(JSONObject result) {
-		super.onPostExecute(result);
+	protected void onPostExecute(Integer status) {
 
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
 
-		if (null != onPostExecuteDelegate) {
-			onPostExecuteDelegate.actionPost(this, result);
+		if (null != onPostExecuteDelegate
+				&& status == RestClientNotification.OK) {
+			onPostExecuteDelegate.actionPost(this, this.result);
+
+		} else if (status == RestClientNotification.ERROR
+				&& null != onDataErrorDelegate) {
+
+			onDataErrorDelegate.actionDataError(this, mErrorCode);
 		}
 	}
 
-	public JSONObject getResult() {
-		if (null == restClient)
-			return new JSONObject();
+	public Integer getResult() {
+		if (null == restClient) {
+			mErrorCode = ZooException.NETWORK.NETWORK_ERROR;
+			return RestClientNotification.ERROR;
+		}
 		try {
-			Log.e("JSON " + getClass().getName(),
-					"JSON data: " + restClient.getResponse());
-			JSONObject data = new JSONObject(restClient.getResponse());
-
-			return data;
+			result = new JSONObject(restClient.getResponse());
+			return RestClientNotification.OK;
 		} catch (JSONException e) {
 			e.fillInStackTrace();
-
-			if (null != onDataErrorDelegate) {
-				onDataErrorDelegate.actionDataError(this,
-						ZooException.JSON.JSON_PARSE_ERROR);
-			}
-			return new JSONObject();
+			mErrorCode = ZooException.JSON.JSON_PARSE_ERROR;
+			return RestClientNotification.ERROR;
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			if (null != onDataErrorDelegate) {
-				onDataErrorDelegate.actionDataError(this,
-						ZooException.NETWORK.NETWORK_ERROR);
-			}
-			return new JSONObject();
+			mErrorCode = ZooException.NETWORK.NETWORK_ERROR;
+			return RestClientNotification.ERROR;
 		}
 	}
 
 	protected abstract void doExecute();
 
 	@Override
-	protected JSONObject doInBackground(Void... params) {
+	protected Integer doInBackground(Void... params) {
 		if (DeviceCore.checkInternetConnect(mActivity)) {
 			doExecute();
 			if (restClient.getResponseCode() != 401 || mIsNeedAuth == false) {
 				return getResult();
 			} else if (null != onUnauthorizedDelegate) {
-				onUnauthorizedDelegate.actionUnauthorized(this);
+				mErrorCode = ZooException.NETWORK.UN_AUTH;
+				return RestClientNotification.ERROR;
 			} else {
 				Editor editor = mActivity.getSharedPreferences("account",
 						Context.MODE_PRIVATE).edit();
 				editor.remove("token_key");
 				editor.remove("token_key");
 				editor.commit();
-
 				// request re-login
-				Intent i = new Intent(mActivity, LoginActivity.class);
-				i.putExtra("relogin", true);
-				mActivity.startActivityForResult(i, RequestCode.RELOGIN);
+				// Intent i = new Intent(mActivity, LoginActivity.class);
+				// i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				// i.putExtra("relogin", true);
+				// mActivity.startActivityForResult(i, RequestCode.RELOGIN);
+				mErrorCode = ZooException.NETWORK.RELOGIN;
+				return RestClientNotification.ERROR;
 			}
 		} else if (null != noInternetDelegate) {
-			noInternetDelegate.actionNoInternet(this);
+			mErrorCode = ZooException.NETWORK.NO_INTERNET;
+			return RestClientNotification.ERROR;
 		}
-		return null;
+		return RestClientNotification.ERROR;
 	}
 
 	public void setOnPostExecuteDelegate(OnPostExecuteDelegate delegate) {

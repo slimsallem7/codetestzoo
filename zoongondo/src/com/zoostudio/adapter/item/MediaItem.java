@@ -1,6 +1,7 @@
 package com.zoostudio.adapter.item;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MediaItem implements Serializable {
 	/**
@@ -13,6 +14,7 @@ public class MediaItem implements Serializable {
 
 	private boolean isSelected;
 	private String mineType;
+	private ArrayList<DishItem> dishTagged = new ArrayList<DishItem>();
 
 	public MediaItem() {
 		idMedia = -1;
@@ -28,6 +30,7 @@ public class MediaItem implements Serializable {
 		this.idMedia = mediaId;
 		this.orient = orient;
 		this.mineType = mineType;
+		dishTagged = new ArrayList<DishItem>();
 	}
 
 	public void setValue(String path, long mediaId, boolean selected) {
@@ -58,5 +61,13 @@ public class MediaItem implements Serializable {
 
 	public String getMineType() {
 		return mineType;
+	}
+
+	public void setDishTagged(ArrayList<DishItem> dishTagged) {
+		this.dishTagged = dishTagged;
+	}
+
+	public ArrayList<DishItem> getDishTagged() {
+		return dishTagged;
 	}
 }

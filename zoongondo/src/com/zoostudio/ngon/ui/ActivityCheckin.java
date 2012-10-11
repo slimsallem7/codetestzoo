@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -30,19 +34,25 @@ import com.facebook.android.SessionEvents.LogoutListener;
 import com.facebook.android.SessionStore;
 import com.facebook.android.SupportLoginFacebook;
 import com.facebook.android.Utility;
+import com.google.android.maps.GeoPoint;
 import com.twitter.android.OnTwitterListener;
 import com.twitter.android.TwitterSupport;
 import com.zoostudio.adapter.item.DishItem;
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.ZooImageDishBorder;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonDialog;
 import com.zoostudio.ngon.dialog.NgonDialog.Builder;
+import com.zoostudio.ngon.task.CheckinTask;
+import com.zoostudio.ngon.task.SupportCheckInUploadPhoto;
 import com.zoostudio.ngon.ui.base.BaseMapActivity;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.HorizontalPager;
 import com.zoostudio.ngon.views.VerticalImageThumbView;
+import com.zoostudio.restclient.RestClientTask;
+import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 
 public class ActivityCheckin extends BaseMapActivity implements
 		HorizontalPager.OnItemChangeListener,
@@ -82,6 +92,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 	private SupportLoginFacebook supportLoginFacebook;
 	private TwitterSupport twitterSupport;
 	private boolean checkTW;
+	private String mSpotId;
 	private final static String CALL_BACK_URL = "zoostudio-ngon-do-checkin://callback";
 	private final static String CALL_BACK_SCHEME = "zoostudio-ngon-do-checkin";
 
@@ -110,6 +121,20 @@ public class ActivityCheckin extends BaseMapActivity implements
 		pagerDish.setOnScreenSwitchListener(this);
 		lblDishSelected.setOnClickListener(this);
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
+	}
+
+	@Override
+	protected void loadLocation() {
+		SpotItem item = this.getIntent().getExtras()
+				.getParcelable(SpotDetailsActivity.EXTRA_SPOT);
+		mCurrentAddress = item.getAddress();
+		mCurrentLat = item.getLocation().getLatitude();
+		mCurrentLong = item.getLocation().getLongtitude();
+		mSpotId = item.getId();
+		if (mCurrentLat != -1 && mCurrentLong != -1) {
+			mMeGeoPoint = new GeoPoint((int) (mCurrentLat),
+					(int) (mCurrentLong));
+		}
 	}
 
 	private void initShare() {
@@ -151,6 +176,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	protected void initActions() {
 		super.initActions();
+		loadLocation();
 		mUp.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -292,12 +318,13 @@ public class ActivityCheckin extends BaseMapActivity implements
 		} else if (v == pickImageFromGallery) {
 
 		} else if (v == btnCheckIn) {
-			if (checkFB) {
-				postStatus();
-			}
-			if (checkTW) {
-				postTwitter();
-			}
+			postCheckIn();
+			// if (checkFB) {
+			// postStatus();
+			// }
+			// if (checkTW) {
+			// postTwitter();
+			// }
 		} else {
 			Intent intent = new Intent(this, ChooseDish.class);
 			intent.putExtra("LIST_DISH", mDishseOriginal);
@@ -463,9 +490,6 @@ public class ActivityCheckin extends BaseMapActivity implements
 		Bundle params = new Bundle();
 		params.putString("name", "Chipa - Chipa");
 		params.putString("message", mess);
-		params.putString(
-				"picture",
-				"http://nr7.upanh.com/b3.s30.d2/8d82b2bf380bb202d65cbf224eeed4b3_49687847.untitled5.jpg");
 		params.putString("link", "http://ngon.do/spot/1");
 		String dish = "";
 		for (DishItem item : mDishseSelected) {
@@ -512,5 +536,42 @@ public class ActivityCheckin extends BaseMapActivity implements
 	private void postTwitter() {
 		String mess = mEditWriteReview.getText().toString();
 		twitterSupport.postStatus(mess, null);
+	}
+
+	private void postCheckIn() {
+		ArrayList<String> dishList = new ArrayList<String>();
+		if (mDishseSelected.size() > 0) {
+			for (DishItem item : mDishseSelected) {
+				dishList.add(item.getDishId());
+			}
+		}
+		final String mess = mEditWriteReview.getText().toString();
+		CheckinTask checkinTask = new CheckinTask(ActivityCheckin.this, mSpotId, mess,
+				dishList);
+		checkinTask.setOnPostExecuteDelegate(new OnPostExecuteDelegate() {
+			@Override
+			public void actionPost(RestClientTask task, JSONObject result) {
+				try {
+					if (result.getBoolean("status")) {
+						Toast.makeText(getApplicationContext(), "Check in Zoo Done", Toast.LENGTH_SHORT).show();
+//						String checkinId = result.getString("checkin_id");
+						String checkinId = "010101";
+						if (!mMediaSelected.isEmpty()) {
+							SupportCheckInUploadPhoto uploadPhoto = new SupportCheckInUploadPhoto(
+									ActivityCheckin.this, mMediaSelected, mess,
+									mSpotId, checkinId);
+							uploadPhoto.execute();
+						}
+					} else {
+						Toast.makeText(getApplicationContext(), "Thu lai",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		checkinTask.execute();
+
 	}
 }
