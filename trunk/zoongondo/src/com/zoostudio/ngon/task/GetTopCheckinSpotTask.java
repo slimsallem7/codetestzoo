@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.location.Location;
 
@@ -53,5 +55,11 @@ public class GetTopCheckinSpotTask extends RestClientTask {
 
         restClient.get("/spot/topcheckin");
     }
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

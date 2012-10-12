@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -17,6 +19,11 @@ public class DeleteHistoryTask extends RestClientTask {
 	public void doExecute() {
 		restClient.addParam("history_id", mHistoryId);
 		restClient.delete("/history");
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		
 	}
 
 }

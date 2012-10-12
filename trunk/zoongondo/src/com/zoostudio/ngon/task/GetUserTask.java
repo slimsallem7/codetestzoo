@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -17,6 +19,12 @@ public class GetUserTask extends RestClientTask {
 	public void doExecute() {
 		restClient.addParam("user_id", mUserId);
 		restClient.get("/user");
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

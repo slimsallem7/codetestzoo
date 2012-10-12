@@ -24,10 +24,8 @@ import com.zoostudio.ngon.utils.LocationItem;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 
-public class TopLikePager extends NgonHomePager implements
-		OnPostExecuteDelegate {
+public class TopLikePager extends NgonHomePager {
 	private ListView lvSpot;
-	private SpotAdapter adapter;
 	private ProgressBar mProgressBar;
 	private TextView mMessage;
 	private Button mRetry;
@@ -39,10 +37,10 @@ public class TopLikePager extends NgonHomePager implements
 	@Override
 	protected void onTabSelected(int position) {
 		super.onTabSelected(position);
-		if (adapter.isEmpty()) {
+		if (mAdapter.isEmpty()) {
 			GetTopLikeSpotTask task = new GetTopLikeSpotTask(
 					this.getActivity(), 20);
-			task.setOnPostExecuteDelegate(this);
+			task.setOnSpotItemReceiver(this);
 			task.execute();
 		}
 	}
@@ -52,8 +50,8 @@ public class TopLikePager extends NgonHomePager implements
 //		mProgressBar = (ProgressBar) findViewById(R.id.spotlist_progress);
 //		mMessage = (TextView) findViewById(R.id.spotlist_message);
 //		mRetry = (Button) findViewById(R.id.spotlist_retry);
-		if (null == adapter) {
-			adapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
+		if (null == mAdapter) {
+			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
 					null);
 //			mMessage.setText(getString(R.string.lang_vi_spotlist_loading_message));
 		}
@@ -69,7 +67,7 @@ public class TopLikePager extends NgonHomePager implements
 		
 		lvSpot.addHeaderView(header,null,false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
-		lvSpot.setAdapter(adapter);
+		lvSpot.setAdapter(mAdapter);
 //		initUiLoading();
 	}
 
@@ -86,60 +84,28 @@ public class TopLikePager extends NgonHomePager implements
 	protected void initActions() {
 	}
 
-	@Override
-	public void actionPost(RestClientTask task, JSONObject result) {
-		if (task instanceof GetTopLikeSpotTask) {
-			try {
-				JSONArray spotData = result.getJSONArray("data");
-				int size = spotData.length();
 
-				if (size == 0) {
-//					initUiLoadEmpty();
-					return;
-				}
-
-//				initUiLoadDone();
-
-				for (int i = 0; i < size; i++) {
-					JSONObject item = spotData.getJSONObject(i);
-
-					SpotItem spotItem = new SpotItem.Builder()
-							.setId(item.getString("id"))
-							.setName(item.getString("name"))
-							.setLocation(
-									new LocationItem(item.getDouble("lon"),
-											item.getDouble("lat"))).create();
-					adapter.add(spotItem);
-				}
-
-			} catch (JSONException e) {
-				e.printStackTrace();
-//				initUiError();
-			}
-			adapter.notifyDataSetChanged();
-		}
-	}
-
+	@SuppressWarnings("unused")
 	private void initUiLoading() {
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
 	}
-
+	@SuppressWarnings("unused")
 	private void initUiError() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
 		mProgressBar.setVisibility(View.GONE);
 	}
-
+	@SuppressWarnings("unused")
 	private void initUiLoadEmpty() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.GONE);
 	}
-
+	@SuppressWarnings("unused")
 	private void initUiLoadDone() {
 		mMessage.setText("");
 		mMessage.setVisibility(View.GONE);

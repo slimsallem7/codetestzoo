@@ -1,6 +1,7 @@
 package com.zoostudio.ngon.ui.pager;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -9,16 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zoostudio.adapter.SpotAdapter;
+import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.task.callback.OnSpotItemReceiver;
 import com.zoostudio.ngon.ui.base.BaseFragmentScreen;
 import com.zoostudio.service.impl.NgonLocationListener;
 import com.zoostudio.service.impl.NgonLocationManager;
 
 public abstract class NgonHomePager extends BaseFragmentScreen implements
-		NgonLocationListener {
-
+		NgonLocationListener , OnSpotItemReceiver{
+	protected SpotAdapter mAdapter;
 	public abstract void initControls();
-
 	public abstract void initVariables();
 
 	protected int mIndexPager;
@@ -111,5 +114,21 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		}
 		return fragment;
 	}
+	
+	@Override
+	public void onDataReceiver(ArrayList<SpotItem> data) {
+		if (data.isEmpty()) {
+			return;
+		}
+		mAdapter.clear();
+		for(SpotItem spotItem : data){
+			mAdapter.add(spotItem);
+		}
+		mAdapter.notifyDataSetChanged();
+	}
 
+	@Override
+	public void onError(int errorCode) {
+		
+	}
 }

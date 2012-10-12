@@ -6,6 +6,7 @@ import java.io.File;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -83,5 +84,11 @@ public class UploadPhotoTask extends RestClientTask {
 		ByteArrayBody bab = new ByteArrayBody(data, "image/png", "photo_spot_"
 				+ spot_id + ".png");
 		return bab;
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
 	}
 }

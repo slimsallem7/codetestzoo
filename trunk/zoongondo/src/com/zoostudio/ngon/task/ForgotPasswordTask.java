@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -13,6 +15,11 @@ public class ForgotPasswordTask extends RestClientTask {
 	@Override
 	public void doExecute() {
 
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		
 	}
 
 }

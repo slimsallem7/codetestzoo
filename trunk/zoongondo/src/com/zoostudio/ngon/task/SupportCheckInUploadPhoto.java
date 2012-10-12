@@ -55,7 +55,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 
 	}
 	public SupportCheckInUploadPhoto(Activity activity,
-			ArrayList<MediaItem> medias, String comment, String spotId,
+			ArrayList<MediaItem> medias, String spotId,
 			String checkinId) {
 		this.medias = medias;
 		this.mSpotId = spotId;
@@ -148,6 +148,4 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 				+ spot_id + ".jpg");
 		return bab;
 	}
-
-
 }

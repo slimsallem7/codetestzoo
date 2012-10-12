@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 
@@ -31,4 +33,10 @@ public class LoginTask extends RestClientTask {
         mDumpData = "{\"status\":true,\"username\":\"vietbq\",\"userid\":\"6\"}";
         return mDumpData;
     }
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
+	}
 }

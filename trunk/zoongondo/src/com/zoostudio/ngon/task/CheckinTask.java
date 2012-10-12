@@ -2,8 +2,11 @@ package com.zoostudio.ngon.task;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
+import com.zoostudio.adapter.item.CheckInItem;
 import com.zoostudio.restclient.RestClientTask;
 
 public class CheckinTask extends RestClientTask {
@@ -45,6 +48,11 @@ public class CheckinTask extends RestClientTask {
 			restClient.addParam("comment", mComment);
 		}
 		restClient.put("/spot/checkin");
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		
 	}
 
 }
