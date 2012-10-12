@@ -1,6 +1,7 @@
 package com.zoostudio.ngon.task;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,9 +18,9 @@ import com.zoostudio.restclient.RestClientTask;
 
 public class GetTopNewSpotTask extends RestClientTask {
 
-    private int mLimit;
-    private int mOffset;
-    private Location mLocation;
+	private int mLimit;
+	private int mOffset;
+	private Location mLocation;
 	private ArrayList<SpotItem> mData;
 	private String[] imageDumps = {
 			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_10_09-ProsciuttoArugulaPizza01.jpg",
@@ -31,54 +32,60 @@ public class GetTopNewSpotTask extends RestClientTask {
 			"http://www.thekitchn.com/dessert-recipe-baked-nutella-cream-cheese-sandwich-recipes-from-the-kitchn-177279",
 			"http://img.foodnetwork.com/FOOD/2010/03/25/FNM_050110-Weeknight-Dinners-032_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2011/11/14/FNM_120111-WN-Dinners-009_s4x3_lg.jpg",
-			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
+			"http://img.foonetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
 	private OnSpotItemListener mListener;
-    public GetTopNewSpotTask(Activity activity, Location loc, int limit, int offset) {
-        super(activity);
 
-        mLimit = limit;
-        mOffset = offset;
-        mLocation = loc;
-    }
+	public GetTopNewSpotTask(Activity activity, Location loc, int limit,
+			int offset) {
+		super(activity);
 
-    public GetTopNewSpotTask(Activity activity) {
-        this(activity, 0);
-    }
+		mLimit = limit;
+		mOffset = offset;
+		mLocation = loc;
+	}
 
-    public GetTopNewSpotTask(Activity activity, int limit) {
-        this(activity, limit, 0);
-    }
+	public GetTopNewSpotTask(Activity activity) {
+		this(activity, 0);
+	}
 
-    public GetTopNewSpotTask(Activity activity, int limit, int offset) {
-        this(activity, null, limit, offset);
-    }
+	public GetTopNewSpotTask(Activity activity, int limit) {
+		this(activity, limit, 0);
+	}
 
-    public GetTopNewSpotTask(Activity activity, Location loc, int limit) {
-        this(activity, loc, limit, 0);
-    }
+	public GetTopNewSpotTask(Activity activity, int limit, int offset) {
+		this(activity, null, limit, offset);
+	}
 
-    public GetTopNewSpotTask(Activity activity, Location loc) {
-        this(activity, loc, 0);
-    }
+	public GetTopNewSpotTask(Activity activity, Location loc, int limit) {
+		this(activity, loc, limit, 0);
+	}
 
-    @Override
-    public void doExecute() {
-        if (mLimit > 0) {
-            restClient.addParam("limit", mLimit);
-            restClient.addParam("offset", mOffset);
-        }
+	public GetTopNewSpotTask(Activity activity, Location loc) {
+		this(activity, loc, 0);
+	}
 
-        if (null != mLocation) {
-            restClient.addParam("lon", mLocation.getLongitude());
-            restClient.addParam("lat", mLocation.getLatitude());
-        }
+	@Override
+	public void doExecute() {
+		if (mLimit > 0) {
+			restClient.addParam("limit", mLimit);
+			restClient.addParam("offset", mOffset);
+		}
 
-        restClient.get("/spot/topnew");
-    }
-    
-    @Override
-    protected void onPreExecute() {
-    }
+		if (null != mLocation) {
+			restClient.addParam("lon", mLocation.getLongitude());
+			restClient.addParam("lat", mLocation.getLatitude());
+		}
+
+		restClient.get("/spot/topnew");
+	}
+
+	@Override
+	protected void onPreExecute() {
+		if (null != onPreExecuteDelegate) {
+			onPreExecuteDelegate.actionPre(this);
+		}
+	}
+
 	@Override
 	protected int parseJSONToObject(JSONObject jsonObject) {
 		JSONArray spotData;
@@ -92,7 +99,7 @@ public class GetTopNewSpotTask extends RestClientTask {
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
 				SpotItem spotItem = ParserUtils.parseSpot(item);
-				spotItem.setUrlImageSpot(imageDumps[i]);
+				spotItem.setUrlImageSpot(imageDumps[getRandom()]);
 				mData.add(spotItem);
 			}
 			return RestClientNotification.OK;
@@ -101,30 +108,33 @@ public class GetTopNewSpotTask extends RestClientTask {
 		}
 		return RestClientNotification.ERROR_DATA;
 	}
+
+	private int getRandom() {
+		Random random = new Random();
+		return random.nextInt(9);
+	}
+
 	protected void onPostExecute(Integer status) {
 
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
 
-		if (null != mListener
-				&& status == RestClientNotification.OK) {
+		if (null != mListener && status == RestClientNotification.OK) {
 			mListener.onSpotItemListener(mData);
 
-		} else if (status == RestClientNotification.ERROR
-				&& null != mListener) {
-			onDataErrorDelegate.actionDataError(this,mErrorCode);
+		} else if (status == RestClientNotification.ERROR && null != mListener) {
+			onDataErrorDelegate.actionDataError(this, mErrorCode);
 		}
 	}
 
-    @Override
-    public String getDumpData() {
-        return "{\"data\":[{\"name\":\"Test 1\",\"distance\":\"43.030\"},{\"name\":\"Test 2\",\"distance\":\"43.030\"},{\"name\":\"Test 3\",\"distance\":\"43.030\"},{\"name\":\"Test 4\",\"distance\":\"43.030\"},{\"name\":\"Test 5\",\"distance\":\"43.030\"},{\"name\":\"Test 6\",\"distance\":\"43.030\"},{\"name\":\"Test 7\",\"distance\":\"43.030\"},{\"name\":\"Test 8\",\"distance\":\"43.030\"},{\"name\":\"Test 9\",\"distance\":\"43.030\"},{\"name\":\"Test 10\",\"distance\":\"43.030\"}]}"; 
-    }
-    
-    public void setOnSpotItemReceiver(OnSpotItemListener listener){
-    	this.mListener = listener;
-    }
-    
+	@Override
+	public String getDumpData() {
+		return "{\"data\":[{\"name\":\"Test 1\",\"distance\":\"43.030\"},{\"name\":\"Test 2\",\"distance\":\"43.030\"},{\"name\":\"Test 3\",\"distance\":\"43.030\"},{\"name\":\"Test 4\",\"distance\":\"43.030\"},{\"name\":\"Test 5\",\"distance\":\"43.030\"},{\"name\":\"Test 6\",\"distance\":\"43.030\"},{\"name\":\"Test 7\",\"distance\":\"43.030\"},{\"name\":\"Test 8\",\"distance\":\"43.030\"},{\"name\":\"Test 9\",\"distance\":\"43.030\"},{\"name\":\"Test 10\",\"distance\":\"43.030\"}]}";
+	}
+
+	public void setOnSpotItemReceiver(OnSpotItemListener listener) {
+		this.mListener = listener;
+	}
 
 }

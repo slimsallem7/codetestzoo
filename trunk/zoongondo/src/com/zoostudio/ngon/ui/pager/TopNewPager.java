@@ -6,10 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.event.OnSpotitemClick;
@@ -17,12 +14,11 @@ import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetTopNewSpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
+import com.zoostudio.restclient.RestClientTask;
+import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
-public class TopNewPager extends NgonHomePager  {
+public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 	private ListView lvSpot;
-	private ProgressBar mProgressBar;
-	private TextView mMessage;
-	private Button mRetry;
 	private boolean mFirstDisplay = true;
 
 	public TopNewPager(Integer indexPager) {
@@ -42,17 +38,16 @@ public class TopNewPager extends NgonHomePager  {
 			GetTopNewSpotTask task = new GetTopNewSpotTask(getActivity(), 20);
 			task.setOnSpotItemReceiver(this);
 			task.setOnDataErrorDelegate(this);
+			task.setOnPreExecuteDelegate(this);
 			task.execute();
+			setUiLoading();
 			mFirstDisplay = false;
 		}
 	}
 
 	@Override
 	public void initControls() {
-//		mProgressBar = (ProgressBar) findViewById(R.id.spotlist_progress);
-//		mMessage = (TextView) findViewById(R.id.spotlist_message);
-//		mRetry = (Button) findViewById(R.id.spotlist_retry);
-		
+		super.initControls();
 		if (null == mAdapter) {
 			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
 					null);
@@ -71,7 +66,6 @@ public class TopNewPager extends NgonHomePager  {
 		lvSpot.addHeaderView(header,null,false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
 		lvSpot.setAdapter(mAdapter);
-//		initUiLoading();
 	}
 
 	@Override
@@ -83,32 +77,19 @@ public class TopNewPager extends NgonHomePager  {
 		return mIndexPager;
 	}
 
-	@SuppressWarnings("unused")
-	private void initUiLoading() {
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.VISIBLE);
+	@Override
+	public void actionPre(RestClientTask task) {
+		mState = LOADING_STATE;
+		setUiLoading();
 	}
-	
-	protected void setUiLoadError() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.VISIBLE);
-		mProgressBar.setVisibility(View.GONE);
-	}
-	
-	protected void setUiLoadEmpty() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.GONE);
-	}
-	@SuppressWarnings("unused")
-	private void initUiLoadDone() {
-		mMessage.setText("");
-		mMessage.setVisibility(View.GONE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.GONE);
+	@Override
+	public void onSpotItemListener(ArrayList<SpotItem> data) {
+		super.onSpotItemListener(data);
+		setUiLoadDone();
 	}
 
+	@Override
+	public void actionDataError(RestClientTask task, int errorCode) {
+		setUiLoadError();
+	}
 }

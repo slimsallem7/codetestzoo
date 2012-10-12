@@ -355,7 +355,9 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	public synchronized void actionDataError(RestClientTask task, int errorCode) {
-
+		if(null != mWaitingDialog && mWaitingDialog.isShowing()){
+			mWaitingDialog.dismiss();
+		}
 	}
 
 	/*

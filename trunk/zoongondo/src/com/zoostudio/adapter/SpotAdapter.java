@@ -72,8 +72,8 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 		viewHolder.tvAddress.setText(item.getAddress());
 
 		try {
-			Log.i("SpotAdatper",
-					"Position = " + position + "| " + item.getLocation());
+//			Log.i("SpotAdatper",
+//					"Position = " + position + "| " + item.getLocation());
 			double distance = Math.round(item.getLocation().distanceTo(
 					mLongtitude, mLatitude) * 100) / 100;
 			viewHolder.tvDistance.setText(FormatterCore.numberFormat(distance));

@@ -68,7 +68,7 @@ public class LocationItem implements Parcelable {
 		float t3 = FloatMath.sin(a1) * FloatMath.sin(b1);
 		double tt = Math.acos(t1 + t2 + t3);
 		
-		Log.i("LocationConvert","Distance = " + 6399.592 * tt);
+//		Log.i("LocationConvert","Distance = " + 6399.592 * tt);
 		return 6399.592 * tt;
   
     }

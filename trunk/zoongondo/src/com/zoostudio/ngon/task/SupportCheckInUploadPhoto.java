@@ -93,7 +93,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 						// String linkURl = result.getString("image_url");
 						// shareItem.setLink(linkURl);
 					}
-					publishProgress();
+					publishProgress(imageIndex);
 					imageIndex++;
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -131,7 +131,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		updateComplete.contentView = remoteViews;
 		updateComplete.contentIntent = PendingIntent.getActivity(mActivity.getApplicationContext(), 1, new Intent(), PendingIntent.FLAG_CANCEL_CURRENT);
 		updateComplete.flags = Notification.FLAG_AUTO_CANCEL;
-		notificationManager.notify(R.string.app_name, updateComplete);
+		notificationManager.notify(values[0], updateComplete);
 	}
 
 	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,String mimeType,

@@ -2,17 +2,10 @@ package com.zoostudio.ngon.ui.pager;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.event.OnSpotitemClick;
@@ -20,15 +13,12 @@ import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetTopLikeSpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
-import com.zoostudio.ngon.utils.LocationItem;
 import com.zoostudio.restclient.RestClientTask;
-import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
+import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
-public class TopLikePager extends NgonHomePager {
+public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate {
 	private ListView lvSpot;
-	private ProgressBar mProgressBar;
-	private TextView mMessage;
-	private Button mRetry;
+	private boolean mFirstDisplay = true;
 
 	public TopLikePager(Integer indexPager) {
 		super(indexPager);
@@ -37,24 +27,23 @@ public class TopLikePager extends NgonHomePager {
 	@Override
 	protected void onTabSelected(int position) {
 		super.onTabSelected(position);
-		if (mAdapter.isEmpty()) {
+		if (mFirstDisplay) {
+			mFirstDisplay = false;
 			GetTopLikeSpotTask task = new GetTopLikeSpotTask(
 					this.getActivity(), 20);
 			task.setOnSpotItemReceiver(this);
 			task.setOnDataErrorDelegate(this);
+			task.setOnPreExecuteDelegate(this);
 			task.execute();
 		}
 	}
 
 	@Override
 	public void initControls() {
-//		mProgressBar = (ProgressBar) findViewById(R.id.spotlist_progress);
-//		mMessage = (TextView) findViewById(R.id.spotlist_message);
-//		mRetry = (Button) findViewById(R.id.spotlist_retry);
+		super.initControls();
 		if (null == mAdapter) {
-			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
-					null);
-//			mMessage.setText(getString(R.string.lang_vi_spotlist_loading_message));
+			mAdapter = new SpotAdapter(getActivity(),
+					new ArrayList<SpotItem>(), null);
 		}
 
 		lvSpot = (ListView) findViewById(R.id.spotlist);
@@ -62,14 +51,14 @@ public class TopLikePager extends NgonHomePager {
 		header.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+				startActivity(new Intent(getApplicationContext(),
+						SearchActivity.class));
 			}
 		});
-		
-		lvSpot.addHeaderView(header,null,false);
+
+		lvSpot.addHeaderView(header, null, false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
 		lvSpot.setAdapter(mAdapter);
-//		initUiLoading();
 	}
 
 	@Override
@@ -82,34 +71,21 @@ public class TopLikePager extends NgonHomePager {
 	}
 
 
+	@Override
+	public void actionPre(RestClientTask task) {
+		mState = LOADING_STATE;
+		setUiLoading();
+	}
+	
+	@Override
+	public void onSpotItemListener(ArrayList<SpotItem> data) {
+		super.onSpotItemListener(data);
+		setUiLoadDone();
+	}
 
-	@SuppressWarnings("unused")
-	private void initUiLoading() {
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.VISIBLE);
-	}
-	
-	protected void setUiLoadError() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.VISIBLE);
-		mProgressBar.setVisibility(View.GONE);
-	}
-	
-	protected void setUiLoadEmpty() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.GONE);
-	}
-	
-	@SuppressWarnings("unused")
-	private void initUiLoadDone() {
-		mMessage.setText("");
-		mMessage.setVisibility(View.GONE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.GONE);
+	@Override
+	public void actionDataError(RestClientTask task, int errorCode) {
+		setUiLoadError();
 	}
 
 }
