@@ -130,14 +130,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mSpot = bundle.getParcelable(EXTRA_SPOT);
 	}
 
-	private void loadPhoto(JSONArray data) throws JSONException {
-		for (int i = 0, size = data.length(); i < size; i++) {
-			JSONObject row = data.getJSONObject(i);
-			PhotoItem item = ParserUtils.parsePhoto(row);
-			photoAdapter.add(item);
-		}
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -146,29 +138,22 @@ public class SpotDetailsActivity extends NgonActivity implements
 			intent.putExtra(EXTRA_SPOT, mSpot);
 			startActivity(intent);
 			break;
-
 		case R.id.addreview:
 			break;
-
 		case R.id.share:
-
 			break;
-
 		case R.id.like:
 			LikeTask likeTask = new LikeTask(this, mSpot.getId());
 			likeTask.setOnLikeTaskListener(this);
 			likeTask.execute();
 			break;
-
 		case R.id.menu:
 			Intent i = new Intent(this, SpotMenu.class);
 			startActivity(i);
 			break;
-
 		case R.id.addphoto:
 			doUploadPhoto();
 			break;
-
 		case R.id.spot_map:
 			doNavigator();
 			break;

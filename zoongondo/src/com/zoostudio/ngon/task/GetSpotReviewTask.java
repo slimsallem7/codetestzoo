@@ -21,7 +21,7 @@ public class GetSpotReviewTask extends RestClientTask {
 	private int mOffset;
 	private ArrayList<ReviewItem> data;
 	private OnSpotReviewTaskListener mListener;
-	
+
 	public GetSpotReviewTask(Activity activity, String spot_id) {
 		this(activity, spot_id, 0);
 	}
@@ -63,8 +63,7 @@ public class GetSpotReviewTask extends RestClientTask {
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
-		if (null != onPostExecuteDelegate
-				&& status == RestClientNotification.OK) {
+		if (status == RestClientNotification.OK) {
 			mListener.onSpotReviewTaskListener(data);
 
 		} else if (status == RestClientNotification.ERROR
@@ -83,13 +82,15 @@ public class GetSpotReviewTask extends RestClientTask {
 				ReviewItem item = ParserUtils.parseReview(row);
 				data.add(item);
 			}
+			return RestClientNotification.OK;
 		} catch (JSONException e) {
 			e.printStackTrace();
+			return RestClientNotification.ERROR_DATA;
 		}
-		return RestClientNotification.OK;
+
 	}
-	
-	public void setOnSpotReviewTaskListener(OnSpotReviewTaskListener listener){
+
+	public void setOnSpotReviewTaskListener(OnSpotReviewTaskListener listener) {
 		mListener = listener;
 	}
 
