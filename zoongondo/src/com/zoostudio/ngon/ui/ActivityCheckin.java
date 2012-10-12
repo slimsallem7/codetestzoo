@@ -12,6 +12,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,7 @@ import com.facebook.android.Utility;
 import com.google.android.maps.GeoPoint;
 import com.twitter.android.OnTwitterListener;
 import com.twitter.android.TwitterSupport;
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.android.image.SmartImageView;
@@ -72,8 +73,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 	private CheckBox mShareTumbler;
 
 	private ButtonUp mUp;
-	private ArrayList<DishItem> mDishseOriginal;
-	private ArrayList<DishItem> mDishseSelected;
+	private ArrayList<MenuItem> mDishseOriginal;
+	private ArrayList<MenuItem> mDishseSelected;
 	private TextView lblDishSelected;
 	private String lblDishCount;
 	private TextView mAddressMap;
@@ -92,6 +93,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 	private TwitterSupport twitterSupport;
 	private boolean checkTW;
 	private String mSpotId;
+	private SpotItem mSpotItem;
 	private final static String CALL_BACK_URL = "zoostudio-ngon-do-checkin://callback";
 	private final static String CALL_BACK_SCHEME = "zoostudio-ngon-do-checkin";
 
@@ -124,12 +126,12 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	@Override
 	protected void loadLocation() {
-		SpotItem item = this.getIntent().getExtras()
+		mSpotItem = this.getIntent().getExtras()
 				.getParcelable(SpotDetailsActivity.EXTRA_SPOT);
-		mCurrentAddress = item.getAddress();
-		mCurrentLat = item.getLocation().getLatitude();
-		mCurrentLong = item.getLocation().getLongtitude();
-		mSpotId = item.getId();
+		mCurrentAddress = mSpotItem.getAddress();
+		mCurrentLat = mSpotItem.getLocation().getLatitude();
+		mCurrentLong = mSpotItem.getLocation().getLongtitude();
+		mSpotId = mSpotItem.getId();
 		if (mCurrentLat != -1 && mCurrentLong != -1) {
 			mMeGeoPoint = new GeoPoint((int) (mCurrentLat),
 					(int) (mCurrentLong));
@@ -162,8 +164,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	protected void initVariables() {
 		super.initVariables();
-		mDishseSelected = new ArrayList<DishItem>();
-		mDishseOriginal = new ArrayList<DishItem>();
+		mDishseSelected = new ArrayList<MenuItem>();
+		mDishseOriginal = new ArrayList<MenuItem>();
 		builder = new StringBuilder(1024);
 		lblDishCount = this.getResources().getString(
 				R.string.comment_dish_count);
@@ -226,9 +228,10 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	@Override
 	public void onItemClick() {
-		Intent intent = new Intent(this, ChooseDish.class);
+		Intent intent = new Intent(this, SpotMenuActivity.class);
 		intent.putExtra("LIST_DISH", mDishseOriginal);
 		intent.putExtra("LIST_SELECTED", mDishseSelected);
+		intent.putExtra(SpotMenuActivity.EXTRA_SPOT, mSpotItem);
 		startActivityForResult(intent, CHOOSE_DISH);
 	}
 
@@ -239,11 +242,11 @@ public class ActivityCheckin extends BaseMapActivity implements
 			if (resultCode == RESULT_OK) {
 				pagerDish.resetViews();
 				Bundle extras = data.getExtras();
-				mDishseSelected = (ArrayList<DishItem>) extras
+				mDishseSelected = (ArrayList<MenuItem>) extras
 						.getSerializable("LIST_SELECTED");
 				lblDishSelected.setText(lblDishCount + " "
 						+ mDishseSelected.size() + " " + lblDish);
-				mDishseOriginal = (ArrayList<DishItem>) extras
+				mDishseOriginal = (ArrayList<MenuItem>) extras
 						.getSerializable("LIST_DISH");
 				pagerDish.setData(mDishseSelected);
 			}
@@ -325,15 +328,16 @@ public class ActivityCheckin extends BaseMapActivity implements
 			// postTwitter();
 			// }
 		} else {
-			Intent intent = new Intent(this, ChooseDish.class);
+			Intent intent = new Intent(this, SpotMenuActivity.class);
 			intent.putExtra("LIST_DISH", mDishseOriginal);
 			intent.putExtra("LIST_SELECTED", mDishseSelected);
+			intent.putExtra(SpotMenuActivity.EXTRA_SPOT,mSpotItem);
 			startActivityForResult(intent, CHOOSE_DISH);
 		}
 	}
 
 	@Override
-	public void onItemUnSelect(DishItem dishItem) {
+	public void onItemUnSelect(MenuItem dishItem) {
 		mDishseSelected.remove(dishItem);
 		String dishId = dishItem.getDishId();
 		for (int i = 0, n = mDishseOriginal.size(); i < n; i++) {
@@ -491,7 +495,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 		params.putString("message", mess);
 		params.putString("link", "http://ngon.do/spot/1");
 		String dish = "";
-		for (DishItem item : mDishseSelected) {
+		for (MenuItem item : mDishseSelected) {
 			dish += item.getTitle();
 			dish += " \r\n";
 		}
@@ -540,7 +544,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 	private void postCheckIn() {
 		ArrayList<String> dishList = new ArrayList<String>();
 		if (mDishseSelected.size() > 0) {
-			for (DishItem item : mDishseSelected) {
+			for (MenuItem item : mDishseSelected) {
 				dishList.add(item.getDishId());
 			}
 		}

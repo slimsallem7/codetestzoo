@@ -1,6 +1,6 @@
 package com.zoostudio.android.image;
 
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.utils.ConfigSize;
 
@@ -25,7 +25,7 @@ public class ZooImageDishBorder extends SmartImageView {
 	private String mTitleDish;
 	
 	private OnUnSelectedListener listener;
-	private DishItem disItem;
+	private MenuItem disItem;
 	private static Bitmap bg;
 	
 	public ZooImageDishBorder(Context context, AttributeSet attrs, int defStyle) {
@@ -49,7 +49,7 @@ public class ZooImageDishBorder extends SmartImageView {
 		mTitleDish = "";
 	}
 	
-	public void setImageUrl(String url,int type,DishItem dishItem) {
+	public void setImageUrl(String url,int type,MenuItem dishItem) {
 		this.type = type;
 		this.mImageLargeUrl = dishItem.getUrlImageThumb();
 		this.mTitleDish = dishItem.getTitle();
@@ -57,7 +57,7 @@ public class ZooImageDishBorder extends SmartImageView {
 		setImage(new ZooAvatarWebImage(url, ConfigSize.SIZE_THUMB));
 	}
 	
-	public void setImageBitmap(Bitmap source, int type,DishItem dishItem) {
+	public void setImageBitmap(Bitmap source, int type,MenuItem dishItem) {
 		this.type = type;
 		this.mImageLargeUrl = dishItem.getUrlImageThumb();
 		this.mTitleDish = dishItem.getTitle();
@@ -106,7 +106,7 @@ public class ZooImageDishBorder extends SmartImageView {
 	}
 
 	public interface OnUnSelectedListener {
-		public void onUnSelectListener(View view,DishItem disItem);
+		public void onUnSelectListener(View view,MenuItem disItem);
 	}
 
 

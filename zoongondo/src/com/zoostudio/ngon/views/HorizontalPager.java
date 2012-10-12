@@ -36,7 +36,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Scroller;
 
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.android.image.ZooImageDishBorder;
 import com.zoostudio.ngon.R;
 
@@ -622,12 +622,12 @@ public class HorizontalPager extends ViewGroup implements
 	public static interface OnItemChangeListener {
 		void onItemClick();
 
-		void onItemUnSelect(DishItem dishItem);
+		void onItemUnSelect(MenuItem dishItem);
 
 		void onItemShowPopup(View view, String title, String urlImage);
 	}
 
-	public void setData(ArrayList<DishItem> items) {
+	public void setData(ArrayList<MenuItem> items) {
 		int size = items.size();
 		int totalPage = size / 4;
 		int page = size % 4;
@@ -728,7 +728,7 @@ public class HorizontalPager extends ViewGroup implements
 	}
 
 	@Override
-	public void onUnSelectListener(View view, DishItem dishItem) {
+	public void onUnSelectListener(View view, MenuItem dishItem) {
 		view.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

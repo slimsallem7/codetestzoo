@@ -148,7 +148,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 			likeTask.execute();
 			break;
 		case R.id.menu:
-			Intent i = new Intent(this, SpotMenu.class);
+			Intent i = new Intent(this, SpotMenuActivity.class);
 			startActivity(i);
 			break;
 		case R.id.addphoto:

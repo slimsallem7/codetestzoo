@@ -14,12 +14,12 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.views.ZooRelativeAnimationView;
 
-public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
+public class ChooseDishAdapter extends ArrayAdapter<MenuItem> implements
 		ZooRelativeAnimationView.OnAnimationEnd {
 	private LayoutInflater mInflater;
 	private volatile boolean isAnimating;
@@ -28,7 +28,7 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 	private int dishCount;
 
 	public ChooseDishAdapter(Context context, int textViewResourceId,
-			List<DishItem> objects, OnDishChoice listener) {
+			List<MenuItem> objects, OnDishChoice listener) {
 		super(context, textViewResourceId, objects);
 		this.mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -40,7 +40,7 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		DishItem item = getItem(position);
+		MenuItem item = getItem(position);
 		ViewHolder holder;
 		if (null == convertView) {
 			holder = new ViewHolder();
@@ -72,10 +72,10 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 	}
 
 	private class CheckDish implements OnCheckedChangeListener {
-		private DishItem dishItem;
+		private MenuItem dishItem;
 		private View view;
 
-		public CheckDish(DishItem dishItem, View view) {
+		public CheckDish(MenuItem dishItem, View view) {
 			this.dishItem = dishItem;
 			this.view = view;
 		}
@@ -104,14 +104,14 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 	}
 
 	@Override
-	public void onAnimationEnd(DishItem item) {
+	public void onAnimationEnd(MenuItem item) {
 		handler.post(new RemoveItem(item));
 	}
 
 	private class RemoveItem implements Runnable {
-		DishItem item;
+		MenuItem item;
 
-		public RemoveItem(DishItem item) {
+		public RemoveItem(MenuItem item) {
 			this.item = item;
 		}
 
@@ -131,6 +131,6 @@ public class ChooseDishAdapter extends ArrayAdapter<DishItem> implements
 	}
 
 	public interface OnDishChoice {
-		public void onDishChoiceListener(int count,DishItem item);
+		public void onDishChoiceListener(int count,MenuItem item);
 	}
 }

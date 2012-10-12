@@ -21,7 +21,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.facebook.android.Utility;
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.adapter.item.ShareItem;
 import com.zoostudio.ngon.R;
@@ -67,7 +67,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 	@Override
 	protected Integer doInBackground(Void... params) {
 		Log.e("UploadPhoto", "Upload image");
-		ArrayList<DishItem> dishItems;
+		ArrayList<MenuItem> dishItems;
 		StringBuffer buffer = new StringBuffer(1024);
 		for (MediaItem media : medias) {
 			imageUpload = false;
@@ -83,7 +83,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 				if (!dishItems.isEmpty()) {
 					String dishes = "";
 					buffer.delete(0, buffer.length());
-					for (DishItem dish : dishItems) {
+					for (MenuItem dish : dishItems) {
 						buffer.append(dish.getDishId()).append(",");
 					}
 					dishes = buffer.toString();

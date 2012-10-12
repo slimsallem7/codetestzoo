@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zoostudio.adapter.item.MenuItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.adapter.item.ReviewItem;
 import com.zoostudio.adapter.item.SpotItem;
@@ -54,8 +55,8 @@ public class ParserUtils {
     }
 
     public static MenuItem parseMenu(JSONObject menu, String spot_id) throws JSONException {
-        MenuItem item = new MenuItem();
-        item.setId(menu.getString("id"));
+    	MenuItem item = new MenuItem();
+        item.setDishId(menu.getString("id"));
         item.setSpotId(spot_id);
         item.setName(menu.getString("name"));
         return item;

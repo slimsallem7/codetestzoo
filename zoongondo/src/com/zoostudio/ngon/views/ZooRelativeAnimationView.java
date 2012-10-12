@@ -7,11 +7,11 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.RelativeLayout;
 
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 
 public class ZooRelativeAnimationView extends RelativeLayout {
 	private OnAnimationEnd listener;
-	private DishItem item;
+	private MenuItem item;
 
 	public ZooRelativeAnimationView(Context context, AttributeSet attrs,
 			int defStyle) {
@@ -26,7 +26,7 @@ public class ZooRelativeAnimationView extends RelativeLayout {
 		super(context);
 	}
 
-	public void startAnimation(DishItem item, OnAnimationEnd listener) {
+	public void startAnimation(MenuItem item, OnAnimationEnd listener) {
 		this.listener = listener;
 		this.item = item;
 
@@ -53,7 +53,7 @@ public class ZooRelativeAnimationView extends RelativeLayout {
 	}
 
 	public interface OnAnimationEnd {
-		public void onAnimationEnd(DishItem item);
+		public void onAnimationEnd(MenuItem item);
 
 		public void onStart();
 	}
