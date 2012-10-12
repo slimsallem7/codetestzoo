@@ -12,7 +12,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,8 +36,8 @@ import com.facebook.android.Utility;
 import com.google.android.maps.GeoPoint;
 import com.twitter.android.OnTwitterListener;
 import com.twitter.android.TwitterSupport;
-import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.ZooImageDishBorder;
@@ -230,10 +229,10 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	@Override
 	public void onItemClick() {
-		Intent intent = new Intent(this, SpotMenuActivity.class);
+		Intent intent = new Intent(this, ChooseDishActivity.class);
 		intent.putExtra("LIST_DISH", mDishseOriginal);
 		intent.putExtra("LIST_SELECTED", mDishseSelected);
-		intent.putExtra(SpotMenuActivity.EXTRA_SPOT, mSpotItem);
+		intent.putExtra(ChooseDishActivity.EXTRA_SPOT, mSpotItem);
 		startActivityForResult(intent, CHOOSE_DISH);
 	}
 
@@ -330,10 +329,10 @@ public class ActivityCheckin extends BaseMapActivity implements
 			// postTwitter();
 			// }
 		} else {
-			Intent intent = new Intent(this, SpotMenuActivity.class);
+			Intent intent = new Intent(this, ChooseDishActivity.class);
 			intent.putExtra("LIST_DISH", mDishseOriginal);
 			intent.putExtra("LIST_SELECTED", mDishseSelected);
-			intent.putExtra(SpotMenuActivity.EXTRA_SPOT,mSpotItem);
+			intent.putExtra(ChooseDishActivity.EXTRA_SPOT,mSpotItem);
 			startActivityForResult(intent, CHOOSE_DISH);
 		}
 	}

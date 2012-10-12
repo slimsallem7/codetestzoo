@@ -85,16 +85,6 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.UserProfile"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.NgonDo" >
-        </activity>
-        <activity
-            android:name=".ui.SpotMenu"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.NgonDo" >
-        </activity>
-        <activity
             android:name=".ui.AddDishActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
@@ -119,7 +109,7 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.ChooseDish"
+            android:name=".ui.ChooseDishActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
         </activity>
@@ -175,6 +165,12 @@
             android:name="com.twitter.android.TwitterWebViewActivity"
             android:configChanges="orientation"
             android:theme="@style/Theme.NgonDo" >
+        </activity>
+        <activity
+            android:name=".ui.SpotMenu"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NgonDo" 
+            >
         </activity>
     </application>
 

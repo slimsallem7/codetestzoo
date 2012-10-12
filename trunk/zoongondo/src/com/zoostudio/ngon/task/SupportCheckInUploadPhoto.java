@@ -116,7 +116,6 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		NotificationManager notificationManager = (NotificationManager) mActivity
 				.getApplicationContext().getSystemService(
 						Context.NOTIFICATION_SERVICE);
-		
 		CharSequence tickerText = mActivity.getResources().getString(R.string.title_notification);
 		long when = System.currentTimeMillis();
 		CharSequence contentTitle;

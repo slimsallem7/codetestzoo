@@ -28,9 +28,6 @@ public class MenuItem implements Serializable {
 		this.urlImageLarge = imageLargeUrl;
 	}
 	
-
-	
-
 	public void setDishId(String dishId) {
 		this.dishId = dishId;
 	}
@@ -45,6 +42,12 @@ public class MenuItem implements Serializable {
 		this.urlImageThumb = urlImageThumb;
 		this.urlImageLarge = urlImageLarge;
 		selected = false;
+	}
+
+	public MenuItem(String name, String price, String likeCount) {
+		this.name = name;
+		this.price = price;
+		this.likeCount = likeCount;
 	}
 
 	public String getUrlImageThumb() {
