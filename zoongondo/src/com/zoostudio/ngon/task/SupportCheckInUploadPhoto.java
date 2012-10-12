@@ -36,32 +36,26 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 	private int imageIndex;
 	private String checkinId;
 	private Activity mActivity;
+	private Context mContext;
 	private boolean mIsNeedAuth;
 	private NgonRestClient restClient;
 	private final static int NOTIFI_UPLOAD_IMAGE = 0;
 	
-	public SupportCheckInUploadPhoto(Activity activity) {
-		this(activity, true);
-	}
-
-	public SupportCheckInUploadPhoto(Activity activity, boolean isNeedAuth) {
-		mActivity = activity;
-		mIsNeedAuth = isNeedAuth;
-		SharedPreferences pref = activity.getSharedPreferences("account",
-				Context.MODE_PRIVATE);
-		String tokenKey = pref.getString("token_key", "");
-		String tokenSecret = pref.getString("token_secret", "");
-		restClient = new NgonRestClient(tokenKey, tokenSecret, isNeedAuth);
-
-	}
 	public SupportCheckInUploadPhoto(Activity activity,
 			ArrayList<MediaItem> medias, String spotId,
 			String checkinId) {
+		mActivity = activity;
+		mContext = activity.getApplicationContext();
 		this.medias = medias;
 		this.mSpotId = spotId;
 		shareItem = new ArrayList<ShareItem>();
 		imageIndex = 0;
 		this.checkinId = checkinId;
+		SharedPreferences pref = activity.getSharedPreferences("account",
+				Context.MODE_PRIVATE);
+		String tokenKey = pref.getString("token_key", "");
+		String tokenSecret = pref.getString("token_secret", "");
+		restClient = new NgonRestClient(tokenKey, tokenSecret, true);
 	}
 
 	@Override
@@ -75,8 +69,8 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 			shareItem.setTitle("Title ZooStudio");
 			try {
 				Uri photoUri = Uri.fromFile(new File(media.getPathMedia()));
-				byte[] photoData = Utility.scaleImage(mActivity
-						.getApplicationContext(), photoUri, media);
+				Log.e("SupportCheckIn"," doInBackground Context =" +  mContext);
+				byte[] photoData = Utility.scaleImage(mContext, photoUri, media);
 				restClient.addParam("spot_id", mSpotId);
 				dishItems = media.getDishTagged();
 
@@ -113,8 +107,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 
 	@Override
 	protected void onProgressUpdate(Integer... values) {
-		NotificationManager notificationManager = (NotificationManager) mActivity
-				.getApplicationContext().getSystemService(
+		NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(
 						Context.NOTIFICATION_SERVICE);
 		CharSequence tickerText = mActivity.getResources().getString(R.string.title_notification);
 		long when = System.currentTimeMillis();
