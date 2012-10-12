@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 
+import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class CreateSpotTask extends RestClientTask {
@@ -39,9 +40,8 @@ public class CreateSpotTask extends RestClientTask {
     }
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		// TODO Auto-generated method stub
-		
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		return RestClientNotification.OK;
 	}
 
 }

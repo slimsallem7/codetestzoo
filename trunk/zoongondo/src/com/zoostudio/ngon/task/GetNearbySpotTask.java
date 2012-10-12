@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 
 import com.zoostudio.adapter.item.SpotItem;
-import com.zoostudio.ngon.task.callback.OnSpotItemReceiver;
+import com.zoostudio.ngon.task.callback.OnSpotItemListener;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
@@ -33,7 +33,7 @@ public class GetNearbySpotTask extends RestClientTask {
 			"http://img.foodnetwork.com/FOOD/2011/11/14/FNM_120111-WN-Dinners-009_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
 	
-	private OnSpotItemReceiver mListener;
+	private OnSpotItemListener mListener;
 	private ArrayList<SpotItem> mData;
     
     public GetNearbySpotTask(Activity activity, double latitude, double longitude) {
@@ -73,14 +73,14 @@ public class GetNearbySpotTask extends RestClientTask {
         restClient.get("/spot/nearby");
     }
     @Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
+	protected int parseJSONToObject(JSONObject jsonObject) {
 		JSONArray spotData;
 		mData = new ArrayList<SpotItem>();
 		try {
 			spotData = jsonObject.getJSONArray("data");
 			int size = spotData.length();
 			if (size == 0) {
-				return;
+				return RestClientNotification.OK;
 			}
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
@@ -91,6 +91,7 @@ public class GetNearbySpotTask extends RestClientTask {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		return RestClientNotification.OK;
     }
     @Override
 	protected void onPostExecute(Integer status) {
@@ -101,11 +102,11 @@ public class GetNearbySpotTask extends RestClientTask {
 
 		if (null != mListener
 				&& status == RestClientNotification.OK) {
-			mListener.onDataReceiver(mData);
+			mListener.onSpotItemListener(mData);
 
 		} else if (status == RestClientNotification.ERROR
 				&& null != mListener) {
-			mListener.onError(mErrorCode);
+			onDataErrorDelegate.actionDataError(this,mErrorCode);
 		}
 	}
 
@@ -114,7 +115,8 @@ public class GetNearbySpotTask extends RestClientTask {
         return "{\"data\":[{\"name\":\"Test 1\",\"distance\":\"43.030\"},{\"name\":\"Test 2\",\"distance\":\"43.030\"},{\"name\":\"Test 3\",\"distance\":\"43.030\"},{\"name\":\"Test 4\",\"distance\":\"43.030\"},{\"name\":\"Test 5\",\"distance\":\"43.030\"},{\"name\":\"Test 6\",\"distance\":\"43.030\"},{\"name\":\"Test 7\",\"distance\":\"43.030\"},{\"name\":\"Test 8\",\"distance\":\"43.030\"},{\"name\":\"Test 9\",\"distance\":\"43.030\"},{\"name\":\"Test 10\",\"distance\":\"43.030\"}]}"; 
     }
     
-    public void setOnSpotItemReceiver(OnSpotItemReceiver listener){
+    public void setOnSpotItemReceiver(OnSpotItemListener listener){
     	this.mListener = listener;
     }
+   
 }

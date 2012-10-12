@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 
+import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class CreateDishTask extends RestClientTask {
@@ -25,8 +26,8 @@ public class CreateDishTask extends RestClientTask {
     }
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		
-	}
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		return RestClientNotification.OK;
+	}	
 
 }

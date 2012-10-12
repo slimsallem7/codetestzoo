@@ -29,7 +29,6 @@ import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.adapter.item.ReviewItem;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.cropimage.CropImageActivity;
-import com.zoostudio.ngon.ErrorCode;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.RequestCode;
@@ -43,12 +42,17 @@ import com.zoostudio.ngon.task.GetSpotReviewTask;
 import com.zoostudio.ngon.task.GetSpotTask;
 import com.zoostudio.ngon.task.LikeTask;
 import com.zoostudio.ngon.task.UploadPhotoTask;
+import com.zoostudio.ngon.task.callback.OnLikeTaskListener;
+import com.zoostudio.ngon.task.callback.OnSpotPhotoTaskListener;
+import com.zoostudio.ngon.task.callback.OnSpotReviewTaskListener;
+import com.zoostudio.ngon.task.callback.OnSpotTaskListener;
+import com.zoostudio.ngon.task.callback.OnUploadPhotoTask;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.ngon.views.ButtonCaptionedIcon;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.ListCommentView;
 import com.zoostudio.restclient.RestClientTask;
-import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
+import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 import com.zoostudio.zooslideshow.LikerItem;
 import com.zoostudio.zooslideshow.OnSlideShowListener;
@@ -56,7 +60,9 @@ import com.zoostudio.zooslideshow.ZooLikerView;
 import com.zoostudio.zooslideshow.ZooSlideView;
 
 public class SpotDetailsActivity extends NgonActivity implements
-		OnClickListener, OnPostExecuteDelegate, OnPreExecuteDelegate {
+		OnClickListener, OnPreExecuteDelegate, OnDataErrorDelegate,
+		OnSpotTaskListener, OnSpotReviewTaskListener, OnLikeTaskListener,
+		OnSpotPhotoTaskListener, OnUploadPhotoTask {
 	public static final String EXTRA_SPOT = "com.ngon.do.spotdetailactivity.SPOT";
 
 	protected static final int DIALOG_TAKE_PHOTO = 1000;
@@ -97,21 +103,15 @@ public class SpotDetailsActivity extends NgonActivity implements
 	protected void initControls() {
 		mSlideImageView = (ZooSlideView) this
 				.findViewById(R.id.spot_details_slideImageDish);
-		mLikerView = (ZooLikerView) this.findViewById(R.id.zooLikerView);
+		mLikerView = (ZooLikerView) findViewById(R.id.zooLikerView);
 		btnCheckin = (ImageButton) findViewById(R.id.checkin);
-		mListCommentView = (ListCommentView) this
-				.findViewById(R.id.reView_ListCommentView);
-		mMenu = (TextView) this.findViewById(R.id.menu);
+		mListCommentView = (ListCommentView) findViewById(R.id.reView_ListCommentView);
+		mMenu = (TextView) findViewById(R.id.menu);
 		mAddReView = this.findViewById(R.id.addreview);
+		tvSpotName = (TextView) findViewById(R.id.spot_name);
+		tvSpotAddress = (TextView) findViewById(R.id.spot_address);
 		mMenu.setOnClickListener(this);
 		mAddReView.setOnClickListener(this);
-		ArrayList<String> datas = new ArrayList<String>();
-		datas.add("");
-		datas.add("");
-		datas.add("");
-		datas.add("");
-		datas.add("");
-		mSlideImageView.setDatas(datas);
 
 		ArrayList<LikerItem> likers = new ArrayList<LikerItem>();
 		likers.add(new LikerItem("", "11"));
@@ -119,12 +119,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 		likers.add(new LikerItem("", "13"));
 		likers.add(new LikerItem("", "14"));
 		mLikerView.setDatas(likers, 15);
-
-		ArrayList<ReviewItem> reviews = new ArrayList<ReviewItem>();
-		reviews.add(new ReviewItem());
-		reviews.add(new ReviewItem());
-		reviews.add(new ReviewItem());
-		mListCommentView.setDatas(reviews);
 
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
 	}
@@ -139,24 +133,9 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private void loadPhoto(JSONArray data) throws JSONException {
 		for (int i = 0, size = data.length(); i < size; i++) {
 			JSONObject row = data.getJSONObject(i);
-
 			PhotoItem item = ParserUtils.parsePhoto(row);
 			photoAdapter.add(item);
 		}
-	}
-
-	private void loadReview(JSONArray data) throws JSONException {
-		for (int i = 0, size = data.length(); i < size; i++) {
-			JSONObject row = data.getJSONObject(i);
-			ReviewItem item = ParserUtils.parseReview(row);
-		}
-	}
-
-	private void loadSpotInfo(JSONObject result) throws JSONException {
-		mSpot.setName(result.getString("name"));
-		mSpot.setAddress(result.getString("address"));
-		tvSpotName.setText(mSpot.getName());
-		tvSpotAddress.setText(mSpot.getAddress());
 	}
 
 	@Override
@@ -177,7 +156,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 		case R.id.like:
 			LikeTask likeTask = new LikeTask(this, mSpot.getId());
-			likeTask.setOnPostExecuteDelegate(this);
+			likeTask.setOnLikeTaskListener(this);
 			likeTask.execute();
 			break;
 
@@ -222,7 +201,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 					UploadPhotoTask uploadTask = new UploadPhotoTask(this,
 							mSpot.getId(), bitmapOrgi);
 					uploadTask.setOnPreExecuteDelegate(this);
-					uploadTask.setOnPostExecuteDelegate(this);
+					uploadTask.setOnUploadPhotoTaskListener(this);
 					uploadTask.execute();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -269,71 +248,9 @@ public class SpotDetailsActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void actionPost(RestClientTask task, JSONObject result) {
-		try {
-			if (task instanceof GetSpotPhotoTask) {
-				boolean status = result.getBoolean("status");
-
-				if (status) {
-					JSONArray data = result.getJSONArray("data");
-
-					loadPhoto(data);
-				}
-			} else if (task instanceof GetSpotReviewTask) {
-				boolean status = result.getBoolean("status");
-
-				if (status) {
-					JSONArray data = result.getJSONArray("data");
-
-					loadReview(data);
-				}
-			} else if (task instanceof GetSpotTask) {
-				mWaitingDialog.dismiss();
-				mWaitingDialog = null;
-
-				JSONObject spotInfo = result.getJSONObject("info");
-				loadSpotInfo(spotInfo);
-			} else if (task instanceof LikeTask) {
-				boolean status = result.getBoolean("status");
-
-				if (false == status) {
-					int errorCode = result.getInt("error_code");
-					NgonErrorDialog errorDialog = new NgonErrorDialog(this);
-					int msg = 0;
-
-					if (errorCode == ErrorCode.SPOT_ALREADY_LIKE) {
-						msg = R.string.string_error_spot_already_like;
-					}
-
-					errorDialog.setMessage(msg);
-					errorDialog.show();
-				}
-			} else if (task instanceof UploadPhotoTask) {
-
-				if (mWaitingDialog != null) {
-					mWaitingDialog.dismiss();
-					mWaitingDialog = null;
-				}
-
-				boolean status = result.getBoolean("status");
-				if (status) {
-					JSONObject photoData = result.getJSONObject("data");
-					PhotoItem photoItem = ParserUtils.parsePhoto(photoData);
-					photoAdapter.add(photoItem);
-
-				} else {
-
-				}
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
 	protected void initActions() {
 		mSlideImageView.setImageMainSpot(mSpot.getUrlImageSpot());
-		
+
 		btnCheckin.setOnClickListener(this);
 		mLikerView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -358,14 +275,29 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 			@Override
 			public void onSelectFullImage() {
-
 			}
 
 			@Override
 			public void onListThumbClicked() {
-
 			}
 		});
+
+		// Load Spot Info
+		infoTask = new GetSpotTask(this, mSpot.getId());
+		infoTask.setOnSpotTaskListener(this);
+		infoTask.setOnDataErrorDelegate(this);
+		infoTask.setOnPreExecuteDelegate(this);
+		infoTask.execute();
+
+		// Load Spot Review
+		reviewTask = new GetSpotReviewTask(this, mSpot.getId());
+		reviewTask.setOnSpotReviewTaskListener(this);
+		reviewTask.execute();
+
+		// load photo
+		photoTask = new GetSpotPhotoTask(this, mSpot.getId());
+		photoTask.setOnSpotPhotoTaskListener(this);
+		photoTask.execute();
 	}
 
 	private void sendMailReport() {
@@ -435,4 +367,62 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 		return dialog;
 	}
+
+	@Override
+	public synchronized void actionDataError(RestClientTask task, int errorCode) {
+
+	}
+
+	/*
+	 * Du lieu duoc tra ve khi lay duoc thong tin cua spot (non-Javadoc)
+	 * 
+	 * @see
+	 * com.zoostudio.ngon.task.callback.OnSpotTaskListener#onSpotTaskListener
+	 * (java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void onSpotTaskListener(String name, String address) {
+		if (mWaitingDialog.isShowing())
+			mWaitingDialog.dismiss();
+		mSpot.setName(name);
+		mSpot.setAddress(address);
+		tvSpotName.setText(mSpot.getName());
+		tvSpotAddress.setText(mSpot.getAddress());
+	}
+
+	@Override
+	public void onSpotReviewTaskListener(ArrayList<ReviewItem> data) {
+		ArrayList<ReviewItem> reviews = new ArrayList<ReviewItem>();
+		reviews.add(new ReviewItem());
+		reviews.add(new ReviewItem());
+		reviews.add(new ReviewItem());
+		mListCommentView.setDatas(reviews);
+	}
+
+	@Override
+	public void onSpotAlreadyLike(int messId) {
+		NgonErrorDialog errorDialog = new NgonErrorDialog(this);
+		errorDialog.setMessage(messId);
+		errorDialog.show();
+	}
+
+	@Override
+	public void onSpotPhotoTaskListener(ArrayList<PhotoItem> data) {
+		ArrayList<String> dataTest = new ArrayList<String>();
+		dataTest.add("");
+		dataTest.add("");
+		dataTest.add("");
+		dataTest.add("");
+		dataTest.add("");
+		mSlideImageView.setDatas(dataTest);
+	}
+
+	@Override
+	public void onUploadPhotoTaskListener(PhotoItem photoItem) {
+		if (mWaitingDialog != null) {
+			mWaitingDialog.dismiss();
+			mWaitingDialog = null;
+		}
+	}
+
 }

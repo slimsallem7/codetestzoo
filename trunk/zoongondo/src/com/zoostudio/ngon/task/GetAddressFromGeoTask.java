@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.location.Location;
 import android.util.Log;
 
+import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class GetAddressFromGeoTask extends RestClientTask {
@@ -32,9 +33,8 @@ public class GetAddressFromGeoTask extends RestClientTask {
     }
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		// TODO Auto-generated method stub
-		
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		return RestClientNotification.OK;
 	}
 
 }
