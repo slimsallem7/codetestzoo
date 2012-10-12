@@ -86,7 +86,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 					restClient.addParam("dishes", dishes);
 				}
 				restClient.postMultiPart("/photo", "photo",
-						convertByteToByteArrayBody(mSpotId, photoData));
+						convertByteToByteArrayBody(mSpotId, media.getMineType(),photoData));
 				try {
 					JSONObject result = new JSONObject(restClient.getResponse());
 					if (imageUpload = result.getBoolean("status")) {
@@ -134,9 +134,9 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		notificationManager.notify(R.string.app_name, updateComplete);
 	}
 
-	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,
+	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,String mimeType,
 			byte[] data) {
-		ByteArrayBody bab = new ByteArrayBody(data, "image/jpg", "photo_spot_"
+		ByteArrayBody bab = new ByteArrayBody(data,mimeType, "photo_spot_"
 				+ spot_id + ".jpg");
 		return bab;
 	}

@@ -21,9 +21,15 @@ import com.zoostudio.service.impl.NgonLocationListener;
 import com.zoostudio.service.impl.NgonLocationManager;
 
 public abstract class NgonHomePager extends BaseFragmentScreen implements
-		NgonLocationListener , OnSpotItemListener,OnDataErrorDelegate{
+		NgonLocationListener, OnSpotItemListener, OnDataErrorDelegate {
+	protected final static int NORMAL_STATE = 0;
+	protected final static int EMPTY_SATE = 1;
+	protected final static int ERROR_SATE = 2;
+	protected int mState;
 	protected SpotAdapter mAdapter;
+
 	public abstract void initControls();
+
 	public abstract void initVariables();
 
 	protected int mIndexPager;
@@ -39,7 +45,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		hasRequestLocation = false;
 		this.mIndexPager = indexPager;
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -52,6 +58,15 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	public void onStart() {
 		super.onStart();
 		mParent.setCurrentPager(getPagerIndex());
+	}
+
+	@Override
+	protected void initActions() {
+		if (mState == ERROR_SATE) {
+			setUiLoadError();
+		} else if (mState == EMPTY_SATE) {
+			setUiLoadEmpty();
+		}
 	}
 
 	/**
@@ -116,21 +131,29 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		}
 		return fragment;
 	}
-	
+
+	protected abstract void setUiLoadEmpty();
+
+	protected abstract void setUiLoadError();
+
 	@Override
 	public void onSpotItemListener(ArrayList<SpotItem> data) {
 		if (data.isEmpty()) {
+			mState = EMPTY_SATE;
+			setUiLoadEmpty();
 			return;
 		}
+
+		mState = NORMAL_STATE;
 		mAdapter.clear();
-		for(SpotItem spotItem : data){
+		for (SpotItem spotItem : data) {
 			mAdapter.add(spotItem);
 		}
 		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
-	public synchronized void actionDataError(RestClientTask task,int errorCode) {
-		
+	public synchronized void actionDataError(RestClientTask task, int errorCode) {
+		mState = ERROR_SATE;
 	}
 }
