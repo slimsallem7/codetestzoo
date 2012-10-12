@@ -12,14 +12,14 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.zoostudio.adapter.item.DishItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.ngon.R;
 
-public class NgonListDishSelected extends ArrayAdapter<DishItem> {
+public class NgonListDishSelected extends ArrayAdapter<MenuItem> {
 	private LayoutInflater inflater;
 
 	public NgonListDishSelected(Context context, int textViewResourceId,
-			List<DishItem> objects) {
+			List<MenuItem> objects) {
 		super(context, textViewResourceId, objects);
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -28,7 +28,7 @@ public class NgonListDishSelected extends ArrayAdapter<DishItem> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-		DishItem item = this.getItem(position);
+		MenuItem item = this.getItem(position);
 		if (null == convertView) {
 			holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.item_dish_dialog, null);
@@ -52,9 +52,9 @@ public class NgonListDishSelected extends ArrayAdapter<DishItem> {
 	}
 
 	private class OnChecked implements OnCheckedChangeListener {
-		private DishItem dishItem;
+		private MenuItem dishItem;
 
-		public OnChecked(DishItem dishItem) {
+		public OnChecked(MenuItem dishItem) {
 			this.dishItem = dishItem;
 		}
 

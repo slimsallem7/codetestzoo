@@ -14,7 +14,7 @@ public class MediaItem implements Serializable {
 
 	private boolean isSelected;
 	private String mineType;
-	private ArrayList<DishItem> dishTagged = new ArrayList<DishItem>();
+	private ArrayList<MenuItem> dishTagged = new ArrayList<MenuItem>();
 
 	public MediaItem() {
 		idMedia = -1;
@@ -30,7 +30,7 @@ public class MediaItem implements Serializable {
 		this.idMedia = mediaId;
 		this.orient = orient;
 		this.mineType = mineType;
-		dishTagged = new ArrayList<DishItem>();
+		dishTagged = new ArrayList<MenuItem>();
 	}
 
 	public void setValue(String path, long mediaId, boolean selected) {
@@ -63,11 +63,11 @@ public class MediaItem implements Serializable {
 		return mineType;
 	}
 
-	public void setDishTagged(ArrayList<DishItem> dishTagged) {
+	public void setDishTagged(ArrayList<MenuItem> dishTagged) {
 		this.dishTagged = dishTagged;
 	}
 
-	public ArrayList<DishItem> getDishTagged() {
+	public ArrayList<MenuItem> getDishTagged() {
 		return dishTagged;
 	}
 }
