@@ -132,6 +132,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 		mCurrentLat = mSpotItem.getLocation().getLatitude();
 		mCurrentLong = mSpotItem.getLocation().getLongtitude();
 		mSpotId = mSpotItem.getId();
+		mCurrentLat = mCurrentLat * 1E6;
+		mCurrentLong = mCurrentLong * 1E6;
 		if (mCurrentLat != -1 && mCurrentLong != -1) {
 			mMeGeoPoint = new GeoPoint((int) (mCurrentLat),
 					(int) (mCurrentLong));
