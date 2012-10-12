@@ -23,7 +23,6 @@ import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
-import com.zoostudio.service.impl.NgonLocationManager;
 
 public class NearByPager extends NgonHomePager implements OnClickListener,
 		OnPreExecuteDelegate {
@@ -104,7 +103,9 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	@Override
 	public void initVariables() {
 	}
-
+	
+	
+	
 	@Override
 	public void onClick(View v) {
 	}
@@ -170,7 +171,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 
 	@Override
 	public void actionPre(RestClientTask task) {
-		mState = LOADING_STATE;
 		setUiLoading();
 	}
+
 }

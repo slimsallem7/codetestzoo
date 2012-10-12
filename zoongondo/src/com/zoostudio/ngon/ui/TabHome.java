@@ -289,7 +289,7 @@ public class TabHome extends BaseFragmentActivity implements
 	@Override
 	public void onPageSelected(int position) {
 		NgonHomePager fragment = getFragmentPager(position);
-		fragment.doTabSelected(position);
+		fragment.onTabSelected(position);
 	}
 
 	// TODO :@huy Lam animation cho nut search o man hinh MainScreen

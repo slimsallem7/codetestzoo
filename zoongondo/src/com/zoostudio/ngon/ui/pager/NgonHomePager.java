@@ -31,7 +31,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected final static int EMPTY_SATE = 1;
 	protected final static int ERROR_SATE = 2;
 	protected final static int NORMAL_SATE = -1;
-	protected int mState = NORMAL_SATE;
+	private int mState = NORMAL_SATE;
 	protected SpotAdapter mAdapter;
 	protected NgonProgressView mProgressBar;
 	protected Button mRetry;
@@ -91,30 +91,26 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		mParent.setCurrentPager(getPagerIndex());
 	}
 
-	@Override
-	protected void initActions() {
-		Log.i("Pager", "initActions = " + mState);
-		// if (mState == ERROR_SATE) {
-		// setUiLoadError();
-		// } else if (mState == EMPTY_SATE) {
-		// setUiLoadEmpty();
-		// } else if (mState == LOADING_STATE) {
-		// setUiLoading();
-		// }
-	}
-
 	/**
 	 * ID của Fragment trong XML (Important)
 	 * 
 	 * @return
 	 */
 	protected abstract int getPagerIndex();
-
-	public void doTabSelected(int position) {
-		onTabSelected(position);
+	
+	@Override
+	protected void initActions() {
 	}
 
-	protected void onTabSelected(int position) {
+	public void onTabSelected(int position) {
+		Log.i(""+this.getClass().getName(),"State = " +mState);
+		if (mState == ERROR_SATE) {
+			setUiLoadError();
+		} else if (mState == EMPTY_SATE) {
+			setUiLoadEmpty();
+		} else if (mState == LOADING_STATE) {
+			setUiLoading();
+		}
 		mParent.setCurrentPager(getPagerIndex());
 		if (!hasRequestLocation) {
 			hasRequestLocation = true;
@@ -167,11 +163,13 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoading() {
+		mState = LOADING_STATE;
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
 	}
 
 	protected void setUiLoadError() {
+		mState = ERROR_SATE;
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
@@ -179,6 +177,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoadEmpty() {
+		mState = EMPTY_SATE;
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
@@ -186,6 +185,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoadDone() {
+		mState = NORMAL_SATE;
 		mMessage.setText("");
 		mMessage.setVisibility(View.GONE);
 		mRetry.setVisibility(View.GONE);
@@ -198,11 +198,9 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	@Override
 	public void onSpotItemListener(ArrayList<SpotItem> data) {
 		if (data.isEmpty()) {
-			mState = EMPTY_SATE;
 			setUiLoadEmpty();
 			return;
 		}
-		mState = NORMAL_SATE;
 		mAdapter.clear();
 		for (SpotItem spotItem : data) {
 			mAdapter.add(spotItem);

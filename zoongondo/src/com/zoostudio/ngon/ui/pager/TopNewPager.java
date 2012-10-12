@@ -31,8 +31,7 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 		super.onAttach(activity);
 	}
 
-	@Override
-	protected void onTabSelected(int position) {
+	public void onTabSelected(int position) {
 		super.onTabSelected(position);
 		if (mFirstDisplay) {
 			GetTopNewSpotTask task = new GetTopNewSpotTask(getActivity(), 20);
@@ -79,7 +78,6 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 
 	@Override
 	public void actionPre(RestClientTask task) {
-		mState = LOADING_STATE;
 		setUiLoading();
 	}
 	@Override

@@ -24,8 +24,7 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 		super(indexPager);
 	}
 
-	@Override
-	protected void onTabSelected(int position) {
+	public void onTabSelected(int position) {
 		super.onTabSelected(position);
 		if (mFirstDisplay) {
 			mFirstDisplay = false;
@@ -73,7 +72,6 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 
 	@Override
 	public void actionPre(RestClientTask task) {
-		mState = LOADING_STATE;
 		setUiLoading();
 	}
 	
