@@ -57,7 +57,7 @@ public class LikeTask extends RestClientTask {
 		if (mWaitingDialog != null && mWaitingDialog.isShowing()) {
 			mWaitingDialog.dismiss();
 		}
-		if (status == RestClientNotification.OK && msgId!= -1) {
+		if (status == RestClientNotification.OK) {
 			mListener.onSpotAlreadyLike(msgId);
 
 		} else if (status == RestClientNotification.ERROR

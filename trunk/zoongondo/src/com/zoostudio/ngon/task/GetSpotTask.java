@@ -30,8 +30,9 @@ public class GetSpotTask extends RestClientTask {
 	@Override
 	protected int parseJSONToObject(JSONObject jsonObject) {
 		try {
-			mNameSpot = jsonObject.getString("name");
-			mAddressSpot = jsonObject.getString("address");
+			JSONObject info = jsonObject.getJSONObject("info");
+			mNameSpot = info.getString("name");
+			mAddressSpot = info.getString("address");
 			return RestClientNotification.OK;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -46,8 +47,7 @@ public class GetSpotTask extends RestClientTask {
 			mWaitingDialog.dismiss();
 		}
 
-		if (null != onPostExecuteDelegate
-				&& status == RestClientNotification.OK) {
+		if (status == RestClientNotification.OK) {
 			mListener.onSpotTaskListener(mNameSpot, mAddressSpot);
 
 		} else if (status == RestClientNotification.ERROR

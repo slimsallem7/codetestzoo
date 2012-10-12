@@ -111,7 +111,7 @@ public class GetTopLikeSpotTask extends RestClientTask {
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
-		if (null != mListener && status == RestClientNotification.OK) {
+		if (status == RestClientNotification.OK) {
 			mListener.onSpotItemListener(mData);
 		} else if (status == RestClientNotification.ERROR && null != mListener) {
 			onDataErrorDelegate.actionDataError(this, mErrorCode);
