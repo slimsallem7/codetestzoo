@@ -2,8 +2,8 @@ package com.zoostudio.ngon.ui.pager;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -12,30 +12,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.event.OnSpotitemClick;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
-import com.zoostudio.ngon.views.NgonProgressView;
 import com.zoostudio.restclient.RestClientTask;
+import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
+import com.zoostudio.service.impl.NgonLocationManager;
 
-public class NearByPager extends NgonHomePager implements OnClickListener {
-
-	private static final String TAG = "NearByPager";
+public class NearByPager extends NgonHomePager implements OnClickListener,
+		OnPreExecuteDelegate {
 	private ListView lvSpot;
-	private NgonProgressView mProgressBar;
-	private Button mRetry;
-	private TextView mMessage;
-	private ProgressDialog progressDialog;
-
-	private RelativeLayout mFooterView;
+	private NgonProgressDialog mProgressLocation;
 	/**
 	 * Dùng để lưu trạng thái đã request more hay chưa. Được đặt true khi bắt
 	 * đầu request more; Đặt false khi có dữ liệu trả về. Khi có thêm request
@@ -53,13 +46,18 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
-		Tag = "NearByPager";
-		super.onAttach(activity);
-	}
-
-	@Override
 	public void initControls() {
+		super.initControls();
+		mProgressLocation = new NgonProgressDialog(this.getActivity());
+		mProgressLocation.setCancelable(true);
+
+		mProgressLocation.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				NearByPager.this.getActivity().finish();
+			}
+		});
+
 		if (null == mAdapter) {
 			mAdapter = new SpotAdapter(getActivity(),
 					new ArrayList<SpotItem>(), null);
@@ -85,15 +83,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 
 		lvSpot.addHeaderView(header, null, false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
-
-		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
-
-		mMessage = (TextView) findViewById(R.id.message);
-		mRetry = (Button) findViewById(R.id.retry);
-
-		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(
-				R.layout.item_loading_more, null);
-		mFooterView.setVisibility(View.GONE);
 		lvSpot.addFooterView(mFooterView);
 
 		lvSpot.setOnScrollListener(new OnScrollListener() {
@@ -118,7 +107,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-
 	}
 
 	@Override
@@ -134,6 +122,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 	}
 
 	private void getSpotData(Location location) {
+		Log.i("Pager", "getSpotData");
 		double longitude = location.getLongitude();
 		double latitude = location.getLatitude();
 		mAdapter.clear();
@@ -143,40 +132,14 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 				mParent.getCurrentPositionDistance() + 1);
 		spotTask.setOnSpotItemReceiver(this);
 		spotTask.setOnDataErrorDelegate(this);
+		spotTask.setOnPreExecuteDelegate(this);
 		spotTask.execute();
-		setUiLoading();
-	}
-
-	private void setUiLoading() {
-		mMessage.setVisibility(View.GONE);
-		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.VISIBLE);
-		Log.e(TAG, "SetUiLoading");
-	}
-
-	protected void setUiLoadError() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
-		mProgressBar.setVisibility(View.GONE);
-		mMessage.setVisibility(View.VISIBLE);
-		mRetry.setVisibility(View.VISIBLE);
-	}
-
-	protected void setUiLoadEmpty() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
-		mMessage.setVisibility(View.VISIBLE);
-	}
-
-	private void setUiLoadDone() {
-		if (mFooterView.getVisibility() == View.GONE) {
-			mFooterView.setVisibility(View.VISIBLE);
-		}
-		mProgressBar.setVisibility(View.GONE);
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if (null != progressDialog && progressDialog.isShowing())
-			progressDialog.dismiss();
+		if (null != mProgressLocation && mProgressLocation.isShowing())
+			mProgressLocation.dismiss();
 		mAdapter.setCurrentLocation(location);
 		getSpotData(location);
 	}
@@ -187,8 +150,8 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				progressDialog = ProgressDialog.show(mParent, "Service",
-						"Dang lay location");
+				mProgressLocation.setMessage(R.string.request_location);
+				mProgressLocation.show();
 			}
 		});
 
@@ -203,5 +166,11 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 	@Override
 	public void actionDataError(RestClientTask task, int errorCode) {
 		setUiLoadError();
+	}
+
+	@Override
+	public void actionPre(RestClientTask task) {
+		mState = LOADING_STATE;
+		setUiLoading();
 	}
 }

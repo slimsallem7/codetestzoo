@@ -37,12 +37,12 @@ public class PagerUtils {
 			// NearByPager.class);
 			break;
 		case TOP_NEW:
-			fragment = new NearByPager(TOP_NEW);
+			fragment = new TopNewPager(TOP_NEW);
 			// fragment = TopNewPager.findOrCreateNgonPager(fm, tag, TOP_NEW,
 			// TopNewPager.class);
 			break;
 		case TOP_LIKE:
-			fragment = new NearByPager(TOP_LIKE);
+			fragment = new TopLikePager(TOP_LIKE);
 			// fragment = TopLikePager.findOrCreateNgonPager(fm, tag, TOP_LIKE,
 			// TopLikePager.class);
 			break;

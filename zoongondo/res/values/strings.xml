@@ -4,4 +4,5 @@
     <string name="title_notification">ngon.đó</string>
     <string name="content_notification_ok">Post ảnh thành công</string>
     <string name="content_notification_fail">Post ảnh lỗi</string>
+    <string name="request_location">Đang lấy vị trí</string>
 </resources>

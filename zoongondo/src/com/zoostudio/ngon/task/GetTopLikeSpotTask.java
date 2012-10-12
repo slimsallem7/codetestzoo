@@ -1,6 +1,7 @@
 package com.zoostudio.ngon.task;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +46,9 @@ public class GetTopLikeSpotTask extends RestClientTask {
 
 	@Override
 	protected void onPreExecute() {
-
+		if (null != onPreExecuteDelegate) {
+			onPreExecuteDelegate.actionPre(this);
+		}
 	}
 
 	public GetTopLikeSpotTask(Activity activity) {
@@ -96,7 +99,7 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
 				SpotItem spotItem = ParserUtils.parseSpot(item);
-				spotItem.setUrlImageSpot(imageDumps[i]);
+				spotItem.setUrlImageSpot(imageDumps[getRandom()]);
 				mData.add(spotItem);
 			}
 			return RestClientNotification.OK;
@@ -104,6 +107,11 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			e.printStackTrace();
 		}
 		return RestClientNotification.ERROR_DATA;
+	}
+
+	private int getRandom() {
+		Random random = new Random();
+		return random.nextInt(9);
 	}
 
 	@Override

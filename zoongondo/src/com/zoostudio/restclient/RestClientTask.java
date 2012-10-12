@@ -18,7 +18,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 	private Activity mActivity;
 	protected NgonRestClient restClient;
 	protected OnPostExecuteDelegate onPostExecuteDelegate;
-	private OnPreExecuteDelegate onPreExecuteDelegate;
+	protected OnPreExecuteDelegate onPreExecuteDelegate;
 	private NoInternetDelegate noInternetDelegate;
 	private OnUnauthorizedDelegate onUnauthorizedDelegate;
 	private boolean mIsNeedAuth;
