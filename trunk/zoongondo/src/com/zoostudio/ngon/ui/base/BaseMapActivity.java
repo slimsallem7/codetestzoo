@@ -69,6 +69,8 @@ public abstract class BaseMapActivity extends MapActivity implements
 	private int mBtnGetLocationId;
 	private int mEdtAddressId;
 
+	private Bitmap bitmapPickerMe;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,6 +105,8 @@ public abstract class BaseMapActivity extends MapActivity implements
 	}
 
 	protected void initVariables() {
+		bitmapPickerMe = BitmapFactory.decodeResource(getResources(),
+				R.drawable.icon_picker_location);
 		mapOverlay = new MapOverlay();
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		mHandler = new Handler();
@@ -180,6 +184,13 @@ public abstract class BaseMapActivity extends MapActivity implements
 			e.printStackTrace();
 		}
 	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(bitmapPickerMe!=null && !bitmapPickerMe.isRecycled()){
+			bitmapPickerMe.recycle();
+		}
+	}
 
 	class MapOverlay extends com.google.android.maps.Overlay {
 		private int mMode;
@@ -198,10 +209,8 @@ public abstract class BaseMapActivity extends MapActivity implements
 				mapView.getProjection().toPixels(mMeGeoPoint, screenPts);
 
 				// ---add the marker---
-				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-						R.drawable.icon_picker_location);
 
-				canvas.drawBitmap(bmp, screenPts.x + ConfigSize.SIZE_PICKER,
+				canvas.drawBitmap(bitmapPickerMe, screenPts.x + ConfigSize.SIZE_PICKER,
 						screenPts.y - ConfigSize.SIZE_PICKER, null);
 			}
 

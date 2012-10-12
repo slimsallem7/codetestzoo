@@ -105,7 +105,7 @@ public class GetNearbySpotTask extends RestClientTask {
 			mListener.onSpotItemListener(mData);
 
 		} else if (status == RestClientNotification.ERROR
-				&& null != mListener) {
+				&& null != onDataErrorDelegate) {
 			onDataErrorDelegate.actionDataError(this,mErrorCode);
 		}
 	}

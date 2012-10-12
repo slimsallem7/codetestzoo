@@ -12,6 +12,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.SensorManager;
@@ -20,7 +21,6 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,7 +60,7 @@ public class CameraActivity extends NgonActivity implements
 	private PowerManager.WakeLock wl;
 	private ArrayList<MediaItem> mediasCaptured;
 	private ImageButton btnBackToGallery;
-	
+
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_camera;
@@ -148,7 +148,7 @@ public class CameraActivity extends NgonActivity implements
 			}
 		});
 		btnBackToGallery.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				finishCamera();
@@ -178,7 +178,7 @@ public class CameraActivity extends NgonActivity implements
 			ContentValues values = new ContentValues();
 			values.put(Images.Media.TITLE, title);
 			values.put(Images.Media.DESCRIPTION, "ZooStudio");
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
+			values.put(Images.Media.MIME_TYPE, "image/jpg");
 			values.put(MediaStore.Images.ImageColumns.DATE_TAKEN, timeStamp);
 			values.put(MediaStore.Images.ImageColumns.ORIENTATION, degree);
 
@@ -199,7 +199,7 @@ public class CameraActivity extends NgonActivity implements
 				long mediaId = ContentUris.parseId(url);
 				Images.Thumbnails.getThumbnail(getContentResolver(), mediaId,
 						Images.Thumbnails.MINI_KIND, null);
-				item.setValue(url.getPath(), mediaId, true);
+				item.setValue(getRealPathFromURI(url), mediaId, true);
 				mediasCaptured.add(item);
 
 			} catch (FileNotFoundException e1) {
@@ -224,6 +224,15 @@ public class CameraActivity extends NgonActivity implements
 			camera.startPreview();
 		}
 	};
+
+	private String getRealPathFromURI(Uri contentUri) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
+	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

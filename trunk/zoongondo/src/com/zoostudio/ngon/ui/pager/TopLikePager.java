@@ -41,6 +41,7 @@ public class TopLikePager extends NgonHomePager {
 			GetTopLikeSpotTask task = new GetTopLikeSpotTask(
 					this.getActivity(), 20);
 			task.setOnSpotItemReceiver(this);
+			task.setOnDataErrorDelegate(this);
 			task.execute();
 		}
 	}
