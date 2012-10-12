@@ -41,6 +41,7 @@ public class TopNewPager extends NgonHomePager  {
 		if (mFirstDisplay) {
 			GetTopNewSpotTask task = new GetTopNewSpotTask(getActivity(), 20);
 			task.setOnSpotItemReceiver(this);
+			task.setOnDataErrorDelegate(this);
 			task.execute();
 			mFirstDisplay = false;
 		}

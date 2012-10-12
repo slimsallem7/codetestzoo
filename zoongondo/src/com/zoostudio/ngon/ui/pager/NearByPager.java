@@ -143,6 +143,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 				latitude, longitude, 0,
 				mParent.getCurrentPositionDistance() + 1);
 		spotTask.setOnSpotItemReceiver(this);
+		spotTask.setOnDataErrorDelegate(this);
 		spotTask.execute();
 		setUiLoading();
 	}
@@ -207,5 +208,4 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 	public void actionDataError(RestClientTask task,int errorCode) {
 		setUiLoadError();
 	}
-
 }
