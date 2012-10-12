@@ -102,7 +102,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 			@Override
 			public void run() {
 				mProgressWaiting.dismiss();
-				getFragmentPager(0).doTabSelected(0);
+				getFragmentPager(0).onTabSelected(0);
 			}
 		});
 	}
