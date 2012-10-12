@@ -1,6 +1,7 @@
 package com.zoostudio.ngon.task;
 
 import org.bookmark.helper.TextCore;
+import org.json.JSONObject;
 
 import android.app.Activity;
 
@@ -34,6 +35,12 @@ public class GetSpotSuggest extends RestClientTask {
 		}
 
 		restClient.get("/spot/suggest");
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

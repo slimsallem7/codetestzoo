@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -18,5 +20,11 @@ public class UnlikeTask extends RestClientTask {
         restClient.addParam("spot_id", mSpotId);
         restClient.delete("/spot/like");
     }
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

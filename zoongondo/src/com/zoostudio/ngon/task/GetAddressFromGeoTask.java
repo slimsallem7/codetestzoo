@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.location.Location;
 import android.util.Log;
@@ -28,5 +30,11 @@ public class GetAddressFromGeoTask extends RestClientTask {
         Log.i("GetAddressFromGeoTask","Long =" + mLong + " | Lat = " + mLat);
         restClient.get("/spot/geodecode");
     }
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

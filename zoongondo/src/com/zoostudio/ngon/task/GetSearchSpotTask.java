@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -47,6 +49,12 @@ public class GetSearchSpotTask extends RestClientTask {
 		}
 
 		restClient.get("/spot/search");
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

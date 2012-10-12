@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -50,5 +52,11 @@ public class GetFeedByUseIdTask extends RestClientTask {
     public String getDumpData() {
         return "{\"status\":true,\"num_feed\":2,\"feeds\":[{\"type\":\"1\",\"timestamp\":\"1331886363\",\"spot\":{\"id\":\"101\",\"name\":\"Test 97\",\"address\":\"pacific\"},\"dishes\":[{\"id\":\"1\",\"name\":\"kem\"},{\"id\":\"2\",\"name\":\"bun\"},{\"id\":\"3\",\"name\":\"mien\"}]},{\"type\":\"2\",\"timestamp\":\"1331886363\",\"spot\":{\"id\":\"100\",\"name\":\"Test 96\",\"address\":\"pacific\"}}]}";
     }
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

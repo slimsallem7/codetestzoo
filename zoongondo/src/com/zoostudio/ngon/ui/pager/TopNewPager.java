@@ -2,9 +2,6 @@ package com.zoostudio.ngon.ui.pager;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -20,13 +17,9 @@ import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetTopNewSpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
-import com.zoostudio.ngon.utils.LocationItem;
-import com.zoostudio.restclient.RestClientTask;
-import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 
-public class TopNewPager extends NgonHomePager implements OnPostExecuteDelegate {
+public class TopNewPager extends NgonHomePager  {
 	private ListView lvSpot;
-	private SpotAdapter adapter;
 	private ProgressBar mProgressBar;
 	private TextView mMessage;
 	private Button mRetry;
@@ -42,19 +35,12 @@ public class TopNewPager extends NgonHomePager implements OnPostExecuteDelegate 
 		super.onAttach(activity);
 	}
 
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//			Bundle savedInstanceState) {
-//		mView = inflater.inflate(R.layout.pager_top_new, null);
-//		return mView;
-//	}
-
 	@Override
 	protected void onTabSelected(int position) {
 		super.onTabSelected(position);
 		if (mFirstDisplay) {
 			GetTopNewSpotTask task = new GetTopNewSpotTask(getActivity(), 20);
-			task.setOnPostExecuteDelegate(this);
+			task.setOnSpotItemReceiver(this);
 			task.execute();
 			mFirstDisplay = false;
 		}
@@ -66,8 +52,8 @@ public class TopNewPager extends NgonHomePager implements OnPostExecuteDelegate 
 //		mMessage = (TextView) findViewById(R.id.spotlist_message);
 //		mRetry = (Button) findViewById(R.id.spotlist_retry);
 		
-		if (null == adapter) {
-			adapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
+		if (null == mAdapter) {
+			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
 					null);
 //			mMessage.setText(getString(R.string.lang_vi_spotlist_loading_message));
 			
@@ -83,7 +69,7 @@ public class TopNewPager extends NgonHomePager implements OnPostExecuteDelegate 
 		
 		lvSpot.addHeaderView(header,null,false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
-		lvSpot.setAdapter(adapter);
+		lvSpot.setAdapter(mAdapter);
 //		initUiLoading();
 	}
 
@@ -100,62 +86,28 @@ public class TopNewPager extends NgonHomePager implements OnPostExecuteDelegate 
 	protected void initActions() {
 	}
 
-	@Override
-	public void actionPost(RestClientTask task, JSONObject result) {
-		if (task instanceof GetTopNewSpotTask) {
-			try {
-				JSONArray spotData = result.getJSONArray("data");
-				int size = spotData.length();
-
-				if (size == 0) {
-//					initUiLoadEmpty();
-					return;
-				}
-
-//				initUiLoadDone();
-
-				for (int i = 0; i < size; i++) {
-					JSONObject item = spotData.getJSONObject(i);
-
-					SpotItem spotItem = new SpotItem.Builder()
-							.setId(item.getString("id"))
-							.setName(item.getString("name"))
-							.setLocation(
-									new LocationItem(item.getDouble("lon"),
-											item.getDouble("lat"))).create();
-
-					adapter.add(spotItem);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-//				initUiError();
-			}
-			adapter.notifyDataSetChanged();
-		}
-	}
-
+	@SuppressWarnings("unused")
 	private void initUiLoading() {
 		
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
 	}
-
+	@SuppressWarnings("unused")
 	private void initUiError() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
 		mProgressBar.setVisibility(View.GONE);
 	}
-
+	@SuppressWarnings("unused")
 	private void initUiLoadEmpty() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.GONE);
 	}
-
+	@SuppressWarnings("unused")
 	private void initUiLoadDone() {
 		mMessage.setText("");
 		mMessage.setVisibility(View.GONE);

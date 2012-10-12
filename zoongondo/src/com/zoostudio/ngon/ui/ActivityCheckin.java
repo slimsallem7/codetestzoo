@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -558,7 +557,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 						String checkinId = "010101";
 						if (!mMediaSelected.isEmpty()) {
 							SupportCheckInUploadPhoto uploadPhoto = new SupportCheckInUploadPhoto(
-									ActivityCheckin.this, mMediaSelected, mess,
+									ActivityCheckin.this, mMediaSelected, 
 									mSpotId, checkinId);
 							uploadPhoto.execute();
 						}

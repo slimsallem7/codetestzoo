@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -19,5 +21,11 @@ public class CreateReviewTask extends RestClientTask {
 		restClient.addParam("spot_id", mSpotId);
 		
 		restClient.put("/review");
+	}
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		
 	}
 }

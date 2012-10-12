@@ -1,5 +1,7 @@
 package com.zoostudio.ngon.task;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 
 import com.zoostudio.restclient.RestClientTask;
@@ -21,5 +23,10 @@ public class CreateDishTask extends RestClientTask {
         
         restClient.put("/dish");
     }
+
+	@Override
+	protected void parseJSONToObject(JSONObject jsonObject) {
+		
+	}
 
 }

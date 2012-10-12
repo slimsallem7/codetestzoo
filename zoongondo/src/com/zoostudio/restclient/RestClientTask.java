@@ -17,17 +17,17 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 
 	private Activity mActivity;
 	protected NgonRestClient restClient;
-	private OnPostExecuteDelegate onPostExecuteDelegate;
+	protected OnPostExecuteDelegate onPostExecuteDelegate;
 	private OnPreExecuteDelegate onPreExecuteDelegate;
 	private NoInternetDelegate noInternetDelegate;
 	private OnUnauthorizedDelegate onUnauthorizedDelegate;
 	private boolean mIsNeedAuth;
 	protected String mDumpData;
-	private OnDataErrorDelegate onDataErrorDelegate;
-	private WaitingDialog mWaitingDialog;
-	private boolean mWaitingStatus;
+	protected OnDataErrorDelegate onDataErrorDelegate;
+	protected WaitingDialog mWaitingDialog;
+	protected boolean mWaitingStatus;
 	protected JSONObject result;
-	private int mErrorCode = -1;
+	protected int mErrorCode = -1;
 
 	public RestClientTask(Activity activity) {
 		this(activity, true);
@@ -94,6 +94,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 		}
 		try {
 			result = new JSONObject(restClient.getResponse());
+			parseJSONToObject(result);
 			return RestClientNotification.OK;
 		} catch (JSONException e) {
 			e.fillInStackTrace();
@@ -185,5 +186,6 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 	public interface OnUnauthorizedDelegate {
 		public void actionUnauthorized(RestClientTask task);
 	}
-
+	
+	protected abstract void parseJSONToObject(JSONObject jsonObject);
 }
