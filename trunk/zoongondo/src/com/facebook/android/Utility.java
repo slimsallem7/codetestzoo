@@ -11,9 +11,6 @@ import java.util.Hashtable;
 
 import org.json.JSONObject;
 
-import com.zoostudio.adapter.item.MediaItem;
-
-
 import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
@@ -23,6 +20,9 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import com.zoostudio.adapter.item.MediaItem;
 
 public class Utility extends Application {
 

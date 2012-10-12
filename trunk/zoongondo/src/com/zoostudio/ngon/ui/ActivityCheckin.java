@@ -43,6 +43,7 @@ import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.ZooImageDishBorder;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonDialog;
+import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.dialog.NgonDialog.Builder;
 import com.zoostudio.ngon.task.CheckinTask;
 import com.zoostudio.ngon.task.SupportCheckInUploadPhoto;
@@ -51,17 +52,21 @@ import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.HorizontalPager;
 import com.zoostudio.ngon.views.VerticalImageThumbView;
 import com.zoostudio.restclient.RestClientTask;
+import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
+import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class ActivityCheckin extends BaseMapActivity implements
 		HorizontalPager.OnItemChangeListener,
 		HorizontalPager.OnScreenSwitchListener,
-		android.view.View.OnClickListener, OnTwitterListener {
+		android.view.View.OnClickListener, OnTwitterListener,
+		OnPreExecuteDelegate, OnDataErrorDelegate {
 	private HorizontalPager pagerDish;
 	private VerticalImageThumbView mImageThumbViews;
 	private static final int CHOOSE_DISH = 0;
 	private static final int REQUEST_MEDIA = 1;
 	private final static int AUTHORIZE_FACEBOOK = 2;
+	private NgonProgressDialog mWaitingDialog;
 
 	public static final String APP_ID = "254841481305890";
 	private static final String[] PERMISSIONS = new String[] {
@@ -332,7 +337,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 			Intent intent = new Intent(this, ChooseDishActivity.class);
 			intent.putExtra("LIST_DISH", mDishseOriginal);
 			intent.putExtra("LIST_SELECTED", mDishseSelected);
-			intent.putExtra(ChooseDishActivity.EXTRA_SPOT,mSpotItem);
+			intent.putExtra(ChooseDishActivity.EXTRA_SPOT, mSpotItem);
 			startActivityForResult(intent, CHOOSE_DISH);
 		}
 	}
@@ -550,19 +555,24 @@ public class ActivityCheckin extends BaseMapActivity implements
 			}
 		}
 		final String mess = mEditWriteReview.getText().toString();
-		CheckinTask checkinTask = new CheckinTask(ActivityCheckin.this, mSpotId, mess,
-				dishList);
+		CheckinTask checkinTask = new CheckinTask(ActivityCheckin.this,
+				mSpotId, mess, dishList);
+		checkinTask.setOnPreExecuteDelegate(this);
+		checkinTask.setOnDataErrorDelegate(this);
 		checkinTask.setOnPostExecuteDelegate(new OnPostExecuteDelegate() {
 			@Override
 			public void actionPost(RestClientTask task, JSONObject result) {
 				try {
+					if (mWaitingDialog.isShowing())
+						mWaitingDialog.dismiss();
 					if (result.getBoolean("status")) {
-						Toast.makeText(getApplicationContext(), "Check in Zoo Done", Toast.LENGTH_SHORT).show();
-//						String checkinId = result.getString("checkin_id");
+						Toast.makeText(getApplicationContext(),
+								"Check in Zoo Done", Toast.LENGTH_SHORT).show();
+						// String checkinId = result.getString("checkin_id");
 						String checkinId = "010101";
 						if (!mMediaSelected.isEmpty()) {
 							SupportCheckInUploadPhoto uploadPhoto = new SupportCheckInUploadPhoto(
-									ActivityCheckin.this, mMediaSelected, 
+									ActivityCheckin.this, mMediaSelected,
 									mSpotId, checkinId);
 							uploadPhoto.execute();
 						}
@@ -577,5 +587,19 @@ public class ActivityCheckin extends BaseMapActivity implements
 		});
 		checkinTask.execute();
 
+	}
+
+	@Override
+	public void actionPre(RestClientTask task) {
+		mWaitingDialog = new NgonProgressDialog(this);
+		mWaitingDialog.show();
+	}
+
+	@Override
+	public void actionDataError(RestClientTask task, int errorCode) {
+		if (mWaitingDialog.isShowing())
+			mWaitingDialog.dismiss();
+		Toast.makeText(getApplicationContext(), "" + errorCode,
+				Toast.LENGTH_SHORT).show();
 	}
 }
