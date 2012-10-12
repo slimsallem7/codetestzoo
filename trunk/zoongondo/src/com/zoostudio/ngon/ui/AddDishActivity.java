@@ -56,7 +56,6 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 
 	private SpotItem getSpot() {
 		Bundle extras = getIntent().getExtras();
-
 		if (extras.containsKey("spot_id")) {
 			return extras.getParcelable("spot_id");
 		} else {

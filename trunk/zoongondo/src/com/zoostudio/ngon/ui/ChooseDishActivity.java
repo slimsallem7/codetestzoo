@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -165,6 +166,13 @@ public class ChooseDishActivity extends NgonActivity implements
 	@Override
 	public void actionPre(RestClientTask task) {
 		mWaitingDialog = new WaitingDialog(this);
+		mWaitingDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				mMenuTask.cancel(true);
+			}
+		});
+		mWaitingDialog.setCancelable(true);
 		mWaitingDialog.show();
 	}
 

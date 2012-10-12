@@ -26,8 +26,7 @@ import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.ngon.views.NgonProgressView;
 import com.zoostudio.restclient.RestClientTask;
 
-public class NearByPager extends NgonHomePager implements OnClickListener
-		 {
+public class NearByPager extends NgonHomePager implements OnClickListener {
 
 	private static final String TAG = "NearByPager";
 	private ListView lvSpot;
@@ -62,8 +61,8 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 	@Override
 	public void initControls() {
 		if (null == mAdapter) {
-			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
-					null);
+			mAdapter = new SpotAdapter(getActivity(),
+					new ArrayList<SpotItem>(), null);
 		}
 		mAdapter.setRequestMoreListener(new SpotAdapter.IOnRequestMoreListener() {
 			@Override
@@ -154,27 +153,24 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 		mProgressBar.setVisibility(View.VISIBLE);
 		Log.e(TAG, "SetUiLoading");
 	}
-	@SuppressWarnings("unused")
-	private void setUiLoadError() {
+
+	protected void setUiLoadError() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
+		mProgressBar.setVisibility(View.GONE);
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
 	}
-	@SuppressWarnings("unused")
-	private void setUiLoadEmpty() {
+
+	protected void setUiLoadEmpty() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
 	}
-	
+
 	private void setUiLoadDone() {
 		if (mFooterView.getVisibility() == View.GONE) {
 			mFooterView.setVisibility(View.VISIBLE);
 		}
 		mProgressBar.setVisibility(View.GONE);
-	}
-
-	@Override
-	protected void initActions() {
 	}
 
 	@Override
@@ -197,15 +193,15 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 		});
 
 	}
-	
+
 	@Override
 	public void onSpotItemListener(ArrayList<SpotItem> data) {
 		super.onSpotItemListener(data);
 		setUiLoadDone();
 	}
-	
+
 	@Override
-	public void actionDataError(RestClientTask task,int errorCode) {
+	public void actionDataError(RestClientTask task, int errorCode) {
 		setUiLoadError();
 	}
 }

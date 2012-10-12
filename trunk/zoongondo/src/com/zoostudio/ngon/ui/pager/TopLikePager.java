@@ -81,9 +81,6 @@ public class TopLikePager extends NgonHomePager {
 		return mIndexPager;
 	}
 
-	@Override
-	protected void initActions() {
-	}
 
 
 	@SuppressWarnings("unused")
@@ -92,20 +89,21 @@ public class TopLikePager extends NgonHomePager {
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
 	}
-	@SuppressWarnings("unused")
-	private void initUiError() {
+	
+	protected void setUiLoadError() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
 		mProgressBar.setVisibility(View.GONE);
 	}
-	@SuppressWarnings("unused")
-	private void initUiLoadEmpty() {
+	
+	protected void setUiLoadEmpty() {
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.GONE);
 	}
+	
 	@SuppressWarnings("unused")
 	private void initUiLoadDone() {
 		mMessage.setText("");
