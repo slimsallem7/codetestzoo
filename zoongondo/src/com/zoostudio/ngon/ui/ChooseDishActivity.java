@@ -43,7 +43,7 @@ import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
-public class SpotMenuActivity extends NgonActivity implements
+public class ChooseDishActivity extends NgonActivity implements
 		OnPreExecuteDelegate, OnClickListener, OnItemClickListener,
 		OnDataErrorDelegate, ChooseDishAdapter.OnDishChoice, OnMenuTaskListener {
 
