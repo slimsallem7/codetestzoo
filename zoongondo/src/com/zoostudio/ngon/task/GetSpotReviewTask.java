@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 
 import com.zoostudio.adapter.item.ReviewItem;
+import com.zoostudio.ngon.task.callback.OnSpotReviewTaskListener;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
@@ -18,8 +19,9 @@ public class GetSpotReviewTask extends RestClientTask {
 	private String mSpotId;
 	private int mLimit;
 	private int mOffset;
-	private ArrayList<ReviewItem> datas;
-
+	private ArrayList<ReviewItem> data;
+	private OnSpotReviewTaskListener mListener;
+	
 	public GetSpotReviewTask(Activity activity, String spot_id) {
 		this(activity, spot_id, 0);
 	}
@@ -63,7 +65,7 @@ public class GetSpotReviewTask extends RestClientTask {
 		}
 		if (null != onPostExecuteDelegate
 				&& status == RestClientNotification.OK) {
-			onPostExecuteDelegate.actionPost(this, this.result);
+			mListener.onSpotReviewTaskListener(data);
 
 		} else if (status == RestClientNotification.ERROR
 				&& null != onDataErrorDelegate) {
@@ -72,18 +74,23 @@ public class GetSpotReviewTask extends RestClientTask {
 	}
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		datas = new ArrayList<ReviewItem>();
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		data = new ArrayList<ReviewItem>();
 		try {
-			JSONArray data = jsonObject.getJSONArray("data");
-			for (int i = 0, size = data.length(); i < size; i++) {
-				JSONObject row = data.getJSONObject(i);
+			JSONArray array = jsonObject.getJSONArray("data");
+			for (int i = 0, size = array.length(); i < size; i++) {
+				JSONObject row = array.getJSONObject(i);
 				ReviewItem item = ParserUtils.parseReview(row);
-				datas.add(item);
+				data.add(item);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		return RestClientNotification.OK;
+	}
+	
+	public void setOnSpotReviewTaskListener(OnSpotReviewTaskListener listener){
+		mListener = listener;
 	}
 
 }

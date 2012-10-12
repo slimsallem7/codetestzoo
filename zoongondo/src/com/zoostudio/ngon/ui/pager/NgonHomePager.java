@@ -13,13 +13,15 @@ import android.view.ViewGroup;
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
-import com.zoostudio.ngon.task.callback.OnSpotItemReceiver;
+import com.zoostudio.ngon.task.callback.OnSpotItemListener;
 import com.zoostudio.ngon.ui.base.BaseFragmentScreen;
+import com.zoostudio.restclient.RestClientTask;
+import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.service.impl.NgonLocationListener;
 import com.zoostudio.service.impl.NgonLocationManager;
 
 public abstract class NgonHomePager extends BaseFragmentScreen implements
-		NgonLocationListener , OnSpotItemReceiver{
+		NgonLocationListener , OnSpotItemListener,OnDataErrorDelegate{
 	protected SpotAdapter mAdapter;
 	public abstract void initControls();
 	public abstract void initVariables();
@@ -116,7 +118,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 	
 	@Override
-	public void onDataReceiver(ArrayList<SpotItem> data) {
+	public void onSpotItemListener(ArrayList<SpotItem> data) {
 		if (data.isEmpty()) {
 			return;
 		}
@@ -128,7 +130,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
-	public void onError(int errorCode) {
+	public synchronized void actionDataError(RestClientTask task,int errorCode) {
 		
 	}
 }

@@ -13,6 +13,7 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonErrorDialog;
 import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.dialog.WaitingDialog;
+import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class RequestTokenTask extends RestClientTask {
@@ -71,9 +72,8 @@ public class RequestTokenTask extends RestClientTask {
     }
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		// TODO Auto-generated method stub
-		
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		return RestClientNotification.OK;		
 	}
 
 }

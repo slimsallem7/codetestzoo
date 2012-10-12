@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 
+import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class UploadAvatarTask extends RestClientTask {
@@ -45,8 +46,8 @@ public class UploadAvatarTask extends RestClientTask {
     }
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		return RestClientNotification.OK;
 	}
 
 }

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 
+import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class LoginTask extends RestClientTask {
@@ -35,8 +36,7 @@ public class LoginTask extends RestClientTask {
     }
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
-		// TODO Auto-generated method stub
-		
+	protected int parseJSONToObject(JSONObject jsonObject) {
+		return RestClientNotification.OK;
 	}
 }

@@ -10,7 +10,7 @@ import android.app.Activity;
 import android.location.Location;
 
 import com.zoostudio.adapter.item.SpotItem;
-import com.zoostudio.ngon.task.callback.OnSpotItemReceiver;
+import com.zoostudio.ngon.task.callback.OnSpotItemListener;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
@@ -32,7 +32,7 @@ public class GetTopNewSpotTask extends RestClientTask {
 			"http://img.foodnetwork.com/FOOD/2010/03/25/FNM_050110-Weeknight-Dinners-032_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2011/11/14/FNM_120111-WN-Dinners-009_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
-	private OnSpotItemReceiver mListener;
+	private OnSpotItemListener mListener;
     public GetTopNewSpotTask(Activity activity, Location loc, int limit, int offset) {
         super(activity);
 
@@ -80,14 +80,14 @@ public class GetTopNewSpotTask extends RestClientTask {
     protected void onPreExecute() {
     }
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
+	protected int parseJSONToObject(JSONObject jsonObject) {
 		JSONArray spotData;
 		mData = new ArrayList<SpotItem>();
 		try {
 			spotData = jsonObject.getJSONArray("data");
 			int size = spotData.length();
 			if (size == 0) {
-				return;
+				return RestClientNotification.NO_DATA;
 			}
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
@@ -95,9 +95,11 @@ public class GetTopNewSpotTask extends RestClientTask {
 				spotItem.setUrlImageSpot(imageDumps[i]);
 				mData.add(spotItem);
 			}
+			return RestClientNotification.OK;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		return RestClientNotification.ERROR_DATA;
 	}
 	protected void onPostExecute(Integer status) {
 
@@ -107,11 +109,11 @@ public class GetTopNewSpotTask extends RestClientTask {
 
 		if (null != mListener
 				&& status == RestClientNotification.OK) {
-			mListener.onDataReceiver(mData);
+			mListener.onSpotItemListener(mData);
 
 		} else if (status == RestClientNotification.ERROR
 				&& null != mListener) {
-			mListener.onError(mErrorCode);
+			onDataErrorDelegate.actionDataError(this,mErrorCode);
 		}
 	}
 
@@ -120,7 +122,9 @@ public class GetTopNewSpotTask extends RestClientTask {
         return "{\"data\":[{\"name\":\"Test 1\",\"distance\":\"43.030\"},{\"name\":\"Test 2\",\"distance\":\"43.030\"},{\"name\":\"Test 3\",\"distance\":\"43.030\"},{\"name\":\"Test 4\",\"distance\":\"43.030\"},{\"name\":\"Test 5\",\"distance\":\"43.030\"},{\"name\":\"Test 6\",\"distance\":\"43.030\"},{\"name\":\"Test 7\",\"distance\":\"43.030\"},{\"name\":\"Test 8\",\"distance\":\"43.030\"},{\"name\":\"Test 9\",\"distance\":\"43.030\"},{\"name\":\"Test 10\",\"distance\":\"43.030\"}]}"; 
     }
     
-    public void setOnSpotItemReceiver(OnSpotItemReceiver listener){
+    public void setOnSpotItemReceiver(OnSpotItemListener listener){
     	this.mListener = listener;
     }
+    
+
 }

@@ -24,6 +24,7 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.ngon.views.NgonProgressView;
+import com.zoostudio.restclient.RestClientTask;
 
 public class NearByPager extends NgonHomePager implements OnClickListener
 		 {
@@ -197,14 +198,14 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 	}
 	
 	@Override
-	public void onDataReceiver(ArrayList<SpotItem> data) {
-		super.onDataReceiver(data);
+	public void onSpotItemListener(ArrayList<SpotItem> data) {
+		super.onSpotItemListener(data);
 		setUiLoadDone();
 	}
 	
 	@Override
-	public void onError(int errorCode) {
-		super.onError(errorCode);
+	public void actionDataError(RestClientTask task,int errorCode) {
 		setUiLoadError();
 	}
+
 }

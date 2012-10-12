@@ -10,7 +10,7 @@ import android.app.Activity;
 import android.location.Location;
 
 import com.zoostudio.adapter.item.SpotItem;
-import com.zoostudio.ngon.task.callback.OnSpotItemReceiver;
+import com.zoostudio.ngon.task.callback.OnSpotItemListener;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
@@ -32,7 +32,7 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			"http://img.foodnetwork.com/FOOD/2010/03/25/FNM_050110-Weeknight-Dinners-032_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2011/11/14/FNM_120111-WN-Dinners-009_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
-	private OnSpotItemReceiver mListener;
+	private OnSpotItemListener mListener;
 
 	public GetTopLikeSpotTask(Activity activity, Location loc, int limit,
 			int offset) {
@@ -42,12 +42,12 @@ public class GetTopLikeSpotTask extends RestClientTask {
 		mOffset = offset;
 		mLocation = loc;
 	}
-	
+
 	@Override
 	protected void onPreExecute() {
-		
+
 	}
-	
+
 	public GetTopLikeSpotTask(Activity activity) {
 		this(activity, 0);
 	}
@@ -84,14 +84,14 @@ public class GetTopLikeSpotTask extends RestClientTask {
 	}
 
 	@Override
-	protected void parseJSONToObject(JSONObject jsonObject) {
+	protected int parseJSONToObject(JSONObject jsonObject) {
 		JSONArray spotData;
 		mData = new ArrayList<SpotItem>();
 		try {
 			spotData = jsonObject.getJSONArray("data");
 			int size = spotData.length();
 			if (size == 0) {
-				return;
+				return RestClientNotification.NO_DATA;
 			}
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
@@ -99,9 +99,11 @@ public class GetTopLikeSpotTask extends RestClientTask {
 				spotItem.setUrlImageSpot(imageDumps[i]);
 				mData.add(spotItem);
 			}
+			return RestClientNotification.OK;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		return RestClientNotification.ERROR_DATA;
 	}
 
 	@Override
@@ -110,13 +112,13 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			mWaitingDialog.dismiss();
 		}
 		if (null != mListener && status == RestClientNotification.OK) {
-			mListener.onDataReceiver(mData);
+			mListener.onSpotItemListener(mData);
 		} else if (status == RestClientNotification.ERROR && null != mListener) {
-			mListener.onError(mErrorCode);
+			onDataErrorDelegate.actionDataError(this, mErrorCode);
 		}
 	}
 
-	public void setOnSpotItemReceiver(OnSpotItemReceiver listener) {
+	public void setOnSpotItemReceiver(OnSpotItemListener listener) {
 		this.mListener = listener;
 	}
 

@@ -187,5 +187,6 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 		public void actionUnauthorized(RestClientTask task);
 	}
 	
-	protected abstract void parseJSONToObject(JSONObject jsonObject);
+	protected abstract int parseJSONToObject(JSONObject jsonObject);
+	
 }
