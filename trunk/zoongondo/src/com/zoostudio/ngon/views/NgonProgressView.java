@@ -30,11 +30,20 @@ public class NgonProgressView extends ImageView {
 		anim = (AnimationDrawable) getDrawable();
 	}
 
-	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus) {
-		super.onWindowFocusChanged(hasWindowFocus);
-		if (anim != null)
+	// @Override
+	// public void onWindowFocusChanged(boolean hasWindowFocus) {
+	// super.onWindowFocusChanged(hasWindowFocus);
+	// if (anim != null){
+	// anim.setVisible(true, true);
+	// anim.start();
+	// }
+	// }
+
+	public void startAnim() {
+		if (!anim.isRunning()) {
+			anim.setVisible(true, true);
 			anim.start();
+		}
 	}
 
 	public void stopAnim() {

@@ -37,13 +37,15 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected Button mRetry;
 	protected TextView mMessage;
 	protected RelativeLayout mFooterView;
-
+	private NgonProgressView mProgressLoadMore;
+	private boolean mNeedShow;
 	protected void initControls() {
 		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
 		mMessage = (TextView) findViewById(R.id.message);
 		mRetry = (Button) findViewById(R.id.retry);
 		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(
 				R.layout.item_loading_more, null);
+		mProgressLoadMore = (NgonProgressView) mFooterView.findViewById(R.id.ngonProgressLoadMore);
 		mFooterView.setVisibility(View.VISIBLE);
 	}
 
@@ -81,6 +83,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	public void onDestroyView() {
 		super.onDestroyView();
 		Log.i("Pager", "onDestroyView");
+		mProgressLoadMore.stopAnim();
 	}
 
 	@Override
@@ -110,6 +113,8 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		} else if (mState == LOADING_STATE) {
 			setUiLoading();
 		}
+		if(mNeedShow)
+			mProgressLoadMore.startAnim();
 		mParent.setCurrentPager(getPagerIndex());
 		if (!hasRequestLocation) {
 			hasRequestLocation = true;
@@ -160,6 +165,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 
 	protected void setUiLoading() {
 		mState = LOADING_STATE;
+		mProgressLoadMore.startAnim();
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.GONE);
 	}
@@ -182,6 +188,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 
 	protected void setUiLoadDone() {
 		mState = NORMAL_SATE;
+		mNeedShow = true;
 		mMessage.setText("");
 		mMessage.setVisibility(View.GONE);
 		mRetry.setVisibility(View.GONE);
@@ -208,4 +215,5 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	public synchronized void actionDataError(RestClientTask task, int errorCode) {
 		mState = ERROR_SATE;
 	}
+	
 }
