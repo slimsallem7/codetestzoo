@@ -15,12 +15,10 @@ import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.ImageRollIndicator;
 
 public class ViewPhotoActivity extends NgonActivity {
+	
 
-//    private SmartImageView ivPhoto;
-//    private String mPhotoId;
 	private  NgonListImageAdapter adapter;
 	private ImageRollIndicator mIndicator;
-//	private HorizontalListView listView;
 	private Gallery mGallery;
 	private ButtonUp mUp;
 	
@@ -31,8 +29,6 @@ public class ViewPhotoActivity extends NgonActivity {
 
     @Override
     protected void initControls() {
-//        ivPhoto = (SmartImageView) findViewById(R.id.photo);
-//    	listView = (HorizontalListView) findViewById(R.id.listImage);
     	mGallery = (Gallery) findViewById(R.id.imageroll);
     	mIndicator = (ImageRollIndicator) findViewById(R.id.image_indicator);
     	mUp = (ButtonUp) findViewById(R.id.btn_up);
@@ -51,16 +47,6 @@ public class ViewPhotoActivity extends NgonActivity {
     	mGallery.setAdapter(adapter);
     	mIndicator.setPageCount(adapter.getCount());
     	
-//        Bundle extras = getIntent().getExtras();
-//
-//        if (extras.size() == 0) {
-//            finish();
-//        }
-//
-//        mPhotoId = extras.getString("photo_id");
-//
-//        String path = extras.getString("path");
-//        ivPhoto.setImageUrl(path);
     }
 
 	@Override

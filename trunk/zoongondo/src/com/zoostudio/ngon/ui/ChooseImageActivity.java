@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.GridView;
@@ -48,7 +49,7 @@ public class ChooseImageActivity extends NgonActivity implements
 	private ImageButton btnBackToGallery;
 	private TextView mPagerIndex;
 	private boolean isDataChange;
-	private ImageButton btnCheckIn;
+	private Button btnCheckIn;
 
 	@Override
 	protected int setLayoutView() {
@@ -59,7 +60,7 @@ public class ChooseImageActivity extends NgonActivity implements
 	protected void initControls() {
 		gridView = (GridView) findViewById(R.id.listImage);
 		camera = (ImageButton) findViewById(R.id.btn_take_camera);
-		btnCheckIn = (ImageButton) findViewById(R.id.btnSelected);
+		btnCheckIn = (Button) findViewById(R.id.btnSelected);
 		mNumberMediaSelected = (TextView) findViewById(R.id.txtNumbersImage);
 		mRbtShowAllMedia = (RadioButton) findViewById(R.id.showAllMedia);
 		mRbtShowSeletedMedia = (RadioButton) findViewById(R.id.showSeletedMedia);
@@ -90,6 +91,8 @@ public class ChooseImageActivity extends NgonActivity implements
 		imagePager.setAdapter(galleryPagerAdapter);
 		galleryPagerAdapter.setOnItemSelectListener(this);
 		scanner.loadMedia();
+		
+		mRbtShowAllMedia.setChecked(true);
 	}
 
 	@Override

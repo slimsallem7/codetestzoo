@@ -101,14 +101,10 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	}
 
 	@Override
-	public void initVariables() {
-	}
-	
-	
+	public void initVariables() { }
 	
 	@Override
-	public void onClick(View v) {
-	}
+	public void onClick(View v) { }
 
 	@Override
 	public void onFragmentResult(Bundle bundle, int requestCode, int resultCode) {

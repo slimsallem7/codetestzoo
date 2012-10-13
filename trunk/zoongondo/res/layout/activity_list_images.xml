@@ -13,11 +13,13 @@
             android:id="@+id/listImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fadingEdge="none"
             android:gravity="center"
-            android:horizontalSpacing="5dip"
+            android:horizontalSpacing="2dip"
+            android:listSelector="@null"
             android:numColumns="3"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="5dip" >
+            android:verticalSpacing="2dip" >
         </GridView>
 
         <android.support.v4.view.ViewPager
@@ -71,6 +73,7 @@
             android:contentDescription="@string/content_description"
             android:src="@drawable/btn_take_camera" />
 
+        <!--
         <ImageButton
             android:id="@+id/btnSelected"
             android:layout_width="56dp"
@@ -79,34 +82,38 @@
             android:layout_centerVertical="true"
             android:background="@drawable/btn_ab_default"
             android:contentDescription="@string/content_description"
-            android:src="@drawable/btn_backto_checkin" />
+            android:src="@drawable/btn_backto_checkin" />
+        -->
 
-        <TextView
-            android:id="@+id/txtNumbersImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/btnSelected"
-            android:layout_alignTop="@id/btnSelected"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/bg_image_quality"
-            android:gravity="center"
+        <Button
+            android:id="@+id/btnSelected"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_ab_default"
+            android:contentDescription="@string/content_description"
+            android:text="@string/button_done"
             android:textColor="#FFFFFF"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:visibility="invisible" />
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/btnSelected"
+            android:background="@drawable/img_ab_divider" />
 
         <RadioGroup
             android:id="@+id/radioGroup1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/btnSelected"
-            android:layout_toRightOf="@+id/btn_take_camera"
+            android:layout_centerInParent="true"
             android:orientation="horizontal" >
 
             <RadioButton
                 android:id="@+id/showAllMedia"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
@@ -120,7 +127,7 @@
 
             <RadioButton
                 android:id="@+id/showSeletedMedia"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
@@ -129,6 +136,21 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/select_photo_selected" />
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/txtNumbersImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/radioGroup1"
+            android:layout_alignTop="@+id/radioGroup1"
+            android:layout_marginRight="-5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_image_quality"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 </LinearLayout>

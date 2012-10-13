@@ -4,13 +4,15 @@
     <style name="Theme.NgonDo" parent="@android:style/Theme.NoTitleBar">
         <item name="android:windowBackground">@drawable/img_detailbackground</item>
     </style>
-    
+
     <style name="Theme.NgonDo.Fullscreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@drawable/img_detailbackground</item>
     </style>
-    
+
     <style name="Theme.NgonDo.Cover" parent="@android:style/Theme.NoTitleBar">
         <item name="android:windowBackground">@drawable/background_cover</item>
     </style>
+
+    <style name="Theme.NgonDo.Slideshow" parent="@android:style/Theme.Black.NoTitleBar"></style>
 
 </resources>
