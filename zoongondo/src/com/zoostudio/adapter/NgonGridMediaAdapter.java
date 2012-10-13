@@ -55,6 +55,7 @@ public class NgonGridMediaAdapter extends ArrayAdapter<MediaItem> {
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
+			holder.imageView1.setImageId(0, R.drawable.picker_checkmark_hint);
 			holder.chkSelectImage.setOnCheckedChangeListener(null);
 		}
 

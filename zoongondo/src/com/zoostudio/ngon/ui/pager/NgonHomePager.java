@@ -44,8 +44,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		mRetry = (Button) findViewById(R.id.retry);
 		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(
 				R.layout.item_loading_more, null);
-		mFooterView.setVisibility(View.GONE);
-
+		mFooterView.setVisibility(View.VISIBLE);
 	}
 
 	public abstract void initVariables();
@@ -103,7 +102,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	public void onTabSelected(int position) {
-		Log.i(""+this.getClass().getName(),"State = " +mState);
+		Log.i("" + this.getClass().getName(), "State = " + mState);
 		if (mState == ERROR_SATE) {
 			setUiLoadError();
 		} else if (mState == EMPTY_SATE) {
@@ -119,17 +118,14 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
-	public void onFailGetLocation() {
-	}
+	public void onFailGetLocation() { }
 
 	@Override
-	public void onGettingLocation() {
-	}
+	public void onGettingLocation() { }
 
 	@Override
 	public void onLocationReceiver(final Location location) {
 		mHandler.post(new Runnable() {
-
 			@Override
 			public void run() {
 				onLocationChanged(location);
@@ -165,7 +161,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected void setUiLoading() {
 		mState = LOADING_STATE;
 		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.VISIBLE);
+		mProgressBar.setVisibility(View.GONE);
 	}
 
 	protected void setUiLoadError() {

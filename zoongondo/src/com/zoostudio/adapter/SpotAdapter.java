@@ -6,7 +6,6 @@ import org.bookmark.helper.FormatterCore;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +59,6 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 					.findViewById(R.id.spot_distance);
 			viewHolder.imageSpot = (SmartImageView) convertView
 					.findViewById(R.id.imageSpot);
-			// viewHolder.tvDistanceUnit = (TextView) convertView
-			// .findViewById(R.id.distance_unit);
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -72,8 +69,6 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 		viewHolder.tvAddress.setText(item.getAddress());
 
 		try {
-//			Log.i("SpotAdatper",
-//					"Position = " + position + "| " + item.getLocation());
 			double distance = Math.round(item.getLocation().distanceTo(
 					mLongtitude, mLatitude) * 100) / 100;
 			viewHolder.tvDistance.setText(FormatterCore.numberFormat(distance));

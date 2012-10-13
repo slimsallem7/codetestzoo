@@ -2,6 +2,8 @@ package com.zoostudio.android.image;
 
 import java.io.InputStream;
 
+import com.zoostudio.ngon.R;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -43,6 +45,10 @@ public class ZooAjustImageView extends SmartImageView {
 	// Helpers to set image by URL
 	public void setImageId(long idMedia) {
 		setImage(new LocalImage(idMedia));
+	}
+	
+	public void setImageId(long idMedia, int fallbackResId) {
+		setImage(new LocalImage(idMedia), fallbackResId);
 	}
 
 	@Override
