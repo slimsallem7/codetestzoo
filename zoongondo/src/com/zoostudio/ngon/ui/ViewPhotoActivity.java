@@ -2,25 +2,30 @@ package com.zoostudio.ngon.ui;
 
 import java.util.ArrayList;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 
 import com.zoostudio.adapter.NgonListImageAdapter;
-import com.zoostudio.adapter.item.WrapItem;
+import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.ImageRollIndicator;
 
 public class ViewPhotoActivity extends NgonActivity {
-	
+	public static final String EXTRA_MEDIA = "com.zoostudio.ngon.ui.ViewPhotoActivity";
+
+	private static final String TAG = "ViewPhotoActivity";
 
 	private  NgonListImageAdapter adapter;
 	private ImageRollIndicator mIndicator;
 	private Gallery mGallery;
 	private ButtonUp mUp;
+	private ArrayList<MediaItem> images = null;
 	
     @Override
     protected int setLayoutView() {
@@ -34,19 +39,29 @@ public class ViewPhotoActivity extends NgonActivity {
     	mUp = (ButtonUp) findViewById(R.id.btn_up);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void initVariables() {
-    	ArrayList<WrapItem> data = new ArrayList<WrapItem>();
-    	data.add(new WrapItem("1"));
-    	data.add(new WrapItem("2"));
-    	data.add(new WrapItem("3"));
-    	data.add(new WrapItem("4"));
-    	data.add(new WrapItem("5"));
+//    	ArrayList<MediaItem> data = new ArrayList<MediaItem>();
+//    	data.add(new WrapItem("1"));
+//    	data.add(new WrapItem("2"));
+//    	data.add(new WrapItem("3"));
+//    	data.add(new WrapItem("4"));
+//    	data.add(new WrapItem("5"));
     	
-    	adapter = new NgonListImageAdapter(getApplicationContext(), 0, data,this);
+    	adapter = new NgonListImageAdapter(getApplicationContext(), 0, 
+    			new ArrayList<MediaItem>(), this);
     	mGallery.setAdapter(adapter);
     	mIndicator.setPageCount(adapter.getCount());
     	
+    	Bundle bundle = getIntent().getExtras();
+    	try {
+    		if (bundle != null) {
+    			images = (ArrayList<MediaItem>) bundle.getSerializable(EXTRA_MEDIA);
+    		}
+    	} catch (Exception e) {
+    		Log.e(TAG, "Error");
+    	}
     }
 
 	@Override

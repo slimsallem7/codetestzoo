@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.zoostudio.android.image.SmartImageView
+    <com.zoostudio.android.image.ZooImageThumb
         android:id="@+id/imgDishCheckin"
         android:layout_width="305dp"
         android:layout_height="287dp"
         android:background="@drawable/bg_photo_dish_checkin"
         android:contentDescription="@string/content_description"
         android:src="@drawable/img_photo_dish_sample" >
-    </com.zoostudio.android.image.SmartImageView>
+    </com.zoostudio.android.image.ZooImageThumb>
 
     <ImageButton
         android:id="@+id/imgBtnDeletePhoto"
