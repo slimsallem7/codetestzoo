@@ -120,4 +120,8 @@
 	<string name="choosedish_emptylist">Bạn chưa chọn món nào</string>
 	<string name="select_photo_all">Tất cả</string>
 	<string name="select_photo_selected">Đã chọn</string>
+	<string name="adddish_name">TÊN MÓN ĂN</string>
+	<string name="adddish_price">GIÁ (VNĐ)</string>
+	<string name="adddish_addmore">THÊM NỮA</string>
+	<string name="adddish_done">XONG</string>
 </resources>

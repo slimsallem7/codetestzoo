@@ -122,4 +122,13 @@
         <item name="android:background">@drawable/blank</item>
     </style>
 
-</resources>
+    <style name="ButtonRed">
+        <item name="android:background">@drawable/btn_red</item>
+        <item name="android:textColor">@color/NgonDoWhite</item>
+    </style>
+
+    <style name="ButtonBlue">
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:textColor">@color/NgonDoWhite</item>
+    </style>
+</resources>

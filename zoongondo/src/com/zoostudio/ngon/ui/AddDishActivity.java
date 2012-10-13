@@ -39,7 +39,7 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 		mSpot = getSpot();
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
 		etDishName = (EditText) findViewById(R.id.dish_name);
-		btnAddDish = (Button) findViewById(R.id.add_dish);
+		btnAddDish = (Button) findViewById(R.id.done);
 
 		mUp.setOnClickListener(new OnClickListener() {
 			@Override
@@ -67,7 +67,7 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.add_dish:
+		case R.id.done:
 			String dish_name = etDishName.getText().toString().trim();
 			if (dish_name.length() > 2) {
 				CreateDishTask addDishTask = new CreateDishTask(this, dish_name, mSpot.getId());
