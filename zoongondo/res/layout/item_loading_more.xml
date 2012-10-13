@@ -6,7 +6,7 @@
     android:paddingTop="10dp" >
 
     <com.zoostudio.ngon.views.NgonProgressView
-        android:id="@+id/ngonProgressView1"
+        android:id="@+id/ngonProgressLoadMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
