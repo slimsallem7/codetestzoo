@@ -170,6 +170,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	protected void initVariables() {
 		super.initVariables();
+		mMediaSelected = new ArrayList<MediaItem>();
 		mDishseSelected = new ArrayList<MenuItem>();
 		mDishseOriginal = new ArrayList<MenuItem>();
 		builder = new StringBuilder(1024);

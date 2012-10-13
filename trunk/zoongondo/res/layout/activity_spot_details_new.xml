@@ -115,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spot_details_info_detail"
                 android:background="@drawable/btn_transparentblue"
+                android:visibility="gone"
                 android:clickable="true" >
             </com.zoostudio.zooslideshow.ZooLikerView>
 

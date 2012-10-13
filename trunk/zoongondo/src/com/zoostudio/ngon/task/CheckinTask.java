@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 
-import com.zoostudio.adapter.item.CheckInItem;
 import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
