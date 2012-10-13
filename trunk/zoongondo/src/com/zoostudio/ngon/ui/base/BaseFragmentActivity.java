@@ -237,20 +237,20 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 		return fragment;
 	}
 
-	@Override
-	public void onBackPressed() {
-		showQuitDialog();
-	}
-
-	private void showQuitDialog() {
-		Builder dialog = new NgonDialog.Builder(this);
-		dialog.setTitle(R.string.dialog_exit_title);
-		dialog.setCancelable(false);
-		dialog.setMessage(R.string.dialog_exit_msg);
-		dialog.setPositiveButton(R.string.dialog_exit_title, this);
-		dialog.setNegativeButton(R.string.string_cancel, this);
-		dialog.show();
-	}
+//	@Override
+//	public void onBackPressed() {
+//		showQuitDialog();
+//	}
+//
+//	private void showQuitDialog() {
+//		Builder dialog = new NgonDialog.Builder(this);
+//		dialog.setTitle(R.string.dialog_exit_title);
+//		dialog.setCancelable(false);
+//		dialog.setMessage(R.string.dialog_exit_msg);
+//		dialog.setPositiveButton(R.string.dialog_exit_title, this);
+//		dialog.setNegativeButton(R.string.string_cancel, this);
+//		dialog.show();
+//	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {

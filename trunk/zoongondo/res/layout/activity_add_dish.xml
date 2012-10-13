@@ -21,93 +21,96 @@
             android:layout_alignParentTop="true"
             android:background="@drawable/btn_ab_default" >
         </com.zoostudio.ngon.views.ButtonUp>
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/add_dish"
-            android:background="@drawable/img_ab_divider" />
-
-        <Button
-            android:id="@+id/add_dish"
-            style="@style/ButtonActionBar"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/button_done" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/adddish_form"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+    <ImageView
+        android:id="@+id/add_image"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
         android:layout_below="@+id/actionbar"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp" >
+        android:layout_margin="@dimen/padding_medium"
+        android:background="@drawable/adddish_default_img"
+        android:contentDescription="@string/content_description"
+        android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/title"
-            style="@style/FormTitleSecondary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/actionbar"
-            android:text="THÊM MÓN" />
-
-        <EditText
-            android:id="@+id/dish_name"
-            style="@style/NgonDoEditText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:hint="Tên món"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true" >
-
-            <requestFocus />
-        </EditText>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/adddish_address"
+    <TextView
+        android:id="@+id/name_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/adddish_form"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="-14dp"
-        android:orientation="vertical"
-        android:padding="10dp" >
+        android:layout_alignTop="@+id/add_image"
+        android:layout_toRightOf="@+id/add_image"
+        android:text="@string/adddish_name"
+        android:textColor="#ac8e4e"
+        android:textSize="@dimen/textsize_general"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/adddish_location_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="Large Text"
-            android:textColor="@color/NgonDoGreen"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:typeface="serif" />
+    <EditText
+        android:id="@+id/dish_name"
+        style="@style/NgonDoEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_title"
+        android:layout_marginRight="@dimen/padding_medium"
+        android:layout_toRightOf="@+id/add_image"
+        android:background="@drawable/img_adddish_edittext"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true" >
 
-        <TextView
-            android:id="@+id/adddish_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="Medium Text"
-            android:textColor="@color/NgonDoGreen"
-            android:textSize="14dp"
-            android:typeface="serif" />
-    </LinearLayout>
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/price_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dish_name"
+        android:layout_marginTop="@dimen/padding_medium"
+        android:layout_toRightOf="@+id/add_image"
+        android:text="@string/adddish_price"
+        android:textColor="#ac8e4e"
+        android:textSize="@dimen/textsize_general"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/price"
+        style="@style/NgonDoEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/dish_name"
+        android:layout_below="@+id/price_title"
+        android:layout_toRightOf="@+id/add_image"
+        android:background="@drawable/img_adddish_edittext"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/NgonDoBlue" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/done"
+        style="@style/ButtonRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/add_image"
+        android:layout_alignRight="@+id/price"
+        android:layout_below="@+id/add_image"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginTop="30dp"
+        android:text="@string/adddish_done" />
+
+    <Button
+        android:id="@+id/done_and_add_more"
+        style="@style/ButtonBlue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/done"
+        android:layout_alignRight="@+id/done"
+        android:layout_below="@+id/done"
+        android:text="@string/adddish_addmore" />
 
 </RelativeLayout>
