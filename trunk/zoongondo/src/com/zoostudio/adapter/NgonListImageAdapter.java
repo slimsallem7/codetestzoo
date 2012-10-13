@@ -12,18 +12,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 
-import com.zoostudio.adapter.item.WrapItem;
-import com.zoostudio.android.image.SmartImageView;
+import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.android.image.ZooImageThumb;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonDialog;
 import com.zoostudio.ngon.dialog.NgonDialog.Builder;
 
-public class NgonListImageAdapter extends ArrayAdapter<WrapItem> {
+public class NgonListImageAdapter extends ArrayAdapter<MediaItem> {
 	private LayoutInflater inflater;
 	private Activity parent;
 
 	public NgonListImageAdapter(Context context, int textViewResourceId,
-			ArrayList<WrapItem> objects, Activity pActivity) {
+			ArrayList<MediaItem> objects, Activity pActivity) {
 		super(context, textViewResourceId, objects);
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -32,12 +32,12 @@ public class NgonListImageAdapter extends ArrayAdapter<WrapItem> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		WrapItem item = this.getItem(position);
+		MediaItem item = this.getItem(position);
 		ViewHolder holder;
 		if (null == convertView) {
 			holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.item_photo, null);
-			holder.imageView = (SmartImageView) convertView
+			holder.imageView = (ZooImageThumb) convertView
 					.findViewById(R.id.imgDishCheckin);
 			holder.button = (ImageButton) convertView
 					.findViewById(R.id.imgBtnDeletePhoto);
@@ -51,14 +51,14 @@ public class NgonListImageAdapter extends ArrayAdapter<WrapItem> {
 	}
 
 	private class ViewHolder {
-		SmartImageView imageView;
+		ZooImageThumb imageView;
 		ImageButton button;
 	}
 
 	private class OnDelete implements OnClickListener {
-		private WrapItem item;
+		private MediaItem item;
 
-		public OnDelete(WrapItem item) {
+		public OnDelete(MediaItem item) {
 			this.item = item;
 		}
 
@@ -68,7 +68,7 @@ public class NgonListImageAdapter extends ArrayAdapter<WrapItem> {
 		}
 	}
 
-	private void showDialogConfirm(final WrapItem item) {
+	private void showDialogConfirm(final MediaItem item) {
 		Builder dialog = new NgonDialog.Builder(parent);
 		dialog.setCancelable(true);
 		dialog.setTitle(R.string.string_notice);
