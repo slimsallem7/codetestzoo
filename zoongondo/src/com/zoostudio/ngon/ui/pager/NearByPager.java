@@ -169,5 +169,4 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	public void actionPre(RestClientTask task) {
 		setUiLoading();
 	}
-
 }
