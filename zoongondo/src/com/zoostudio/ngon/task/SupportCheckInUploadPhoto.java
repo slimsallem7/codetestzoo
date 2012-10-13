@@ -134,9 +134,9 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		notificationManager.notify(values[0], updateComplete);
 	}
 
-	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,String mimeType,
+	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,String mineType,
 			byte[] data) {
-		ByteArrayBody bab = new ByteArrayBody(data,mimeType, "photo_spot_"
+		ByteArrayBody bab = new ByteArrayBody(data,mineType, "photo_spot_"
 				+ spot_id + ".jpg");
 		return bab;
 	}

@@ -49,6 +49,7 @@ public class ChooseDishActivity extends NgonActivity implements
 		OnDataErrorDelegate, ChooseDishAdapter.OnDishChoice, OnMenuTaskListener {
 
 	public static final String EXTRA_SPOT = "com.ngon.do.choosedish.SPOT";
+	public static final String EXTRA_MENU_ITEM = "com.ngon.do.choosedish.MENUITEM";
 
 	private ListView lvMenu;
 	private SpotItem mSpot;
@@ -67,7 +68,8 @@ public class ChooseDishActivity extends NgonActivity implements
 	private int mCount;
 	private View incPopUp;
 	private ButtonUp btnUp;
-	private View footer;
+	private View footerView;
+	private View mLoadMore;
 
 	@Override
 	protected int setLayoutView() {
@@ -88,8 +90,9 @@ public class ChooseDishActivity extends NgonActivity implements
 		mDishSelected.setOnClickListener(this);
 		LayoutInflater inflate = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		footer = inflate.inflate(R.layout.inc_footer_add_dish, null);
-		lvMenu.addFooterView(footer);
+		footerView = inflate.inflate(R.layout.inc_footer_add_dish, null);
+		lvMenu.addFooterView(footerView, null, false);
+		mLoadMore = footerView.findViewById(R.id.footer);
 		btnUp = (ButtonUp) findViewById(R.id.btn_up);
 	}
 
@@ -179,7 +182,6 @@ public class ChooseDishActivity extends NgonActivity implements
 	private void doLoadMenuError(int errorCode) {
 		switch (errorCode) {
 		case ErrorCode.SPOT_NOT_EXIST:
-
 			break;
 		}
 	}
@@ -227,6 +229,16 @@ public class ChooseDishActivity extends NgonActivity implements
 
 	@Override
 	protected void initActions() {
+		mLoadMore.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ChooseDishActivity.this,
+						AddDishActivity.class);
+				intent.putExtra(AddDishActivity.EXTRA_SPOT, mSpot);
+				ChooseDishActivity.this.startActivityForResult(intent,
+						RequestCode.ADD_DISH);
+			}
+		});
 		btnUp.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -236,9 +248,8 @@ public class ChooseDishActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+	public void onItemClick(AdapterView<?> arg0, View view, int position,
 			long arg3) {
-
 	}
 
 	@Override
@@ -380,4 +391,13 @@ public class ChooseDishActivity extends NgonActivity implements
 			doLoadMenuError(errorCode);
 		}
 	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			MenuItem item = (MenuItem) data.getExtras().getSerializable(
+					EXTRA_MENU_ITEM);
+			mMenuAdapter.add(item);
+			mTempOriginalList.add(item);
+		}
+	};
 }

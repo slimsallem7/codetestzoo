@@ -18,4 +18,6 @@ public class RequestCode {
 
     public static final int REGISTER = 11;
     public static final int RELOGIN = 12;
+    
+    
 }

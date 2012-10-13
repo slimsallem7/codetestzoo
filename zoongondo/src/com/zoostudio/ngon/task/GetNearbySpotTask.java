@@ -20,6 +20,7 @@ public class GetNearbySpotTask extends RestClientTask {
 	private int mAccLvl;
 	private double mLong;
 	private double mLat;
+	private int start;
 
 	private String[] imageDumps = {
 			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_10_09-ProsciuttoArugulaPizza01.jpg",
@@ -74,7 +75,8 @@ public class GetNearbySpotTask extends RestClientTask {
 		if (mAccLvl > 0) {
 			restClient.addParam("max_distance", mAccLvl);
 		}
-
+		restClient.addParam("start", start);
+		
 		restClient.get("/spot/nearby");
 	}
 

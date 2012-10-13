@@ -169,8 +169,7 @@
         <activity
             android:name=".ui.SpotMenu"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.NgonDo" 
-            >
+            android:theme="@style/Theme.NgonDo" >
         </activity>
     </application>
 
