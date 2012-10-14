@@ -61,14 +61,12 @@
         <item>Mới Nhất</item>
     </string-array>
     <string-array name="titles_tab_user_profile_screen">
-        <item>Đã Đến</item>
-        <item>Bạn Bè</item>
         <item>Cá Nhân</item>
     </string-array>
 
     <string name="user_pager_at">tại</string>
-    <string name="fragment_home_page_message_loading">Loading</string>
-    <string name="fragment_home_page_retry">Retry</string>
+    <string name="fragment_home_page_message_loading">Đang lấy danh sách địa điểm</string>
+    <string name="fragment_home_page_retry">Thử lại</string>
     <string name="menu_eat_title">Đã ăn</string>
     <string name="menu_add_title">Thêm</string>
     <string name="menu_like_title">Thích</string>

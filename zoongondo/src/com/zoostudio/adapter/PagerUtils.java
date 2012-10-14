@@ -3,11 +3,7 @@ package com.zoostudio.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.widget.FrameLayout;
 
-import com.zoostudio.ngon.R;
-import com.zoostudio.ngon.ui.pager.CheckedInPager;
-import com.zoostudio.ngon.ui.pager.FriendPager;
 import com.zoostudio.ngon.ui.pager.MyProfilePager;
 import com.zoostudio.ngon.ui.pager.NearByPager;
 import com.zoostudio.ngon.ui.pager.TopLikePager;
@@ -25,10 +21,10 @@ public class PagerUtils {
 	public static Fragment makeHomeTab(Context context, FragmentManager fm,
 			int position) {
 		Fragment fragment = null;
-		StringBuilder builder = new StringBuilder();
-		builder.append("android:switcher:").append(R.id.indicator).append(":")
-				.append(position);
-		String tag = builder.toString();
+//		StringBuilder builder = new StringBuilder();
+//		builder.append("android:switcher:").append(R.id.indicator).append(":")
+//				.append(position);
+//		String tag = builder.toString();
 
 		switch (position) {
 		case NEAR_BY:
@@ -53,26 +49,23 @@ public class PagerUtils {
 	public static Fragment makeUserTab(Context context, FragmentManager fm,
 			int position) {
 		Fragment fragment = null;
-		StringBuilder builder = new StringBuilder();
-		builder.append("android:switcher:").append(R.id.indicator).append(":")
-				.append(position);
-		String tag = builder.toString();
+//		StringBuilder builder = new StringBuilder();
+//		builder.append("android:switcher:").append(R.id.indicator).append(":")
+//				.append(position);
+//		String tag = builder.toString();
 
 		switch (position) {
-		case CHECKED_IN:
-			fragment = new CheckedInPager();
-			// fragment = CheckedInPager.findOrCreateNgonPager(fm, tag,
-			// CheckedInPager.class);
-			break;
-		case FRIENDS:
-			fragment = new FriendPager();
-			// fragment = FriendPager.findOrCreateNgonPager(fm, tag,
-			// FriendPager.class);
-			break;
-		case INDIVIDUAL:
+//		case CHECKED_IN:
+//			fragment = new CheckedInPager();
+//			break;
+//		case FRIENDS:
+//			fragment = new FriendPager();
+//			break;
+//		case INDIVIDUAL:
+//			fragment = new MyProfilePager();
+//			break;
+		default:
 			fragment = new MyProfilePager();
-			// fragment = MyProfilePager.findOrCreateNgonPager(fm, tag,
-			// MyProfilePager.class);
 			break;
 		}
 		return fragment;

@@ -71,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignWithParentIfMissing="true"
                 android:layout_below="@id/spot_details_slideImageDish"
+                android:layout_marginBottom="@dimen/padding_medium"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="12dp" >
@@ -115,8 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spot_details_info_detail"
                 android:background="@drawable/btn_transparentblue"
-                android:visibility="gone"
-                android:clickable="true" >
+                android:clickable="true"
+                android:visibility="gone" >
             </com.zoostudio.zooslideshow.ZooLikerView>
 
             <View
