@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
@@ -43,8 +44,8 @@ import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.ZooImageDishBorder;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonDialog;
-import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.dialog.NgonDialog.Builder;
+import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.task.CheckinTask;
 import com.zoostudio.ngon.task.SupportCheckInUploadPhoto;
 import com.zoostudio.ngon.ui.base.BaseMapActivity;
@@ -415,6 +416,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 			}
 		}
 	};
+	private CheckinTask mCheckinTask;
 
 	/*
 	 * The Callback for notifying the application when log out starts and
@@ -556,11 +558,11 @@ public class ActivityCheckin extends BaseMapActivity implements
 			}
 		}
 		final String mess = mEditWriteReview.getText().toString();
-		CheckinTask checkinTask = new CheckinTask(ActivityCheckin.this,
+		mCheckinTask = new CheckinTask(ActivityCheckin.this,
 				mSpotId, mess, dishList);
-		checkinTask.setOnPreExecuteDelegate(this);
-		checkinTask.setOnDataErrorDelegate(this);
-		checkinTask.setOnPostExecuteDelegate(new OnPostExecuteDelegate() {
+		mCheckinTask.setOnPreExecuteDelegate(this);
+		mCheckinTask.setOnDataErrorDelegate(this);
+		mCheckinTask.setOnPostExecuteDelegate(new OnPostExecuteDelegate() {
 			@Override
 			public void actionPost(RestClientTask task, JSONObject result) {
 				try {
@@ -586,18 +588,25 @@ public class ActivityCheckin extends BaseMapActivity implements
 				}
 			}
 		});
-		checkinTask.execute();
+		mCheckinTask.execute();
 
 	}
 
 	@Override
-	public void actionPre(RestClientTask task) {
+	public void onActionPre(RestClientTask task) {
 		mWaitingDialog = new NgonProgressDialog(this);
+		mWaitingDialog.setCancelable(true);
+		mWaitingDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				mCheckinTask.cancel(true);
+			}
+		});
 		mWaitingDialog.show();
 	}
 
 	@Override
-	public void actionDataError(RestClientTask task, int errorCode) {
+	public void onActionDataError(RestClientTask task, int errorCode) {
 		if (mWaitingDialog.isShowing())
 			mWaitingDialog.dismiss();
 		Toast.makeText(getApplicationContext(), "" + errorCode,

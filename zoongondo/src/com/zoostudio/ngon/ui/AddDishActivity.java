@@ -85,7 +85,7 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 	}
 
 	@Override
-	public void actionPre(RestClientTask task) {
+	public void onActionPre(RestClientTask task) {
 		mWaitingDialog = new WaitingDialog(this);
 		mWaitingDialog.show();
 	}

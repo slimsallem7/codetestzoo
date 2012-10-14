@@ -125,7 +125,7 @@ public class SpotMenu extends NgonActivity implements OnPreExecuteDelegate, OnPo
     }
 
     @Override
-    public void actionPre(RestClientTask task) {
+    public void onActionPre(RestClientTask task) {
     }
 
     @Override

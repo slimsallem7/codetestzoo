@@ -88,7 +88,7 @@ public class GetSpotPhotoTask extends RestClientTask {
 			mListener.onSpotPhotoTaskListener(data);
 		} else if (status == RestClientNotification.ERROR
 				&& null != onDataErrorDelegate) {
-			onDataErrorDelegate.actionDataError(this, mErrorCode);
+			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
 

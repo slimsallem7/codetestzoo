@@ -225,7 +225,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void actionPre(RestClientTask task) {
+	public void onActionPre(RestClientTask task) {
 		if (null == mWaitingDialog) {
 			mWaitingDialog = new WaitingDialog(this);
 			mWaitingDialog.show();
@@ -354,7 +354,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	}
 
 	@Override
-	public synchronized void actionDataError(RestClientTask task, int errorCode) {
+	public synchronized void onActionDataError(RestClientTask task, int errorCode) {
 		if(null != mWaitingDialog && mWaitingDialog.isShowing()){
 			mWaitingDialog.dismiss();
 		}

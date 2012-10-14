@@ -33,6 +33,7 @@ public class CheckinTask extends RestClientTask {
 
 	@Override
 	public void doExecute() {
+		if(isCancelled()) return;
 		restClient.addParam("spot_id", mSpotId);
 		if (mDishesId.size() > 0) {
 			StringBuffer buffer = new StringBuffer(1024);
