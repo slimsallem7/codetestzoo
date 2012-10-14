@@ -68,7 +68,7 @@ public class GetSpotReviewTask extends RestClientTask {
 
 		} else if (status == RestClientNotification.ERROR
 				&& null != onDataErrorDelegate) {
-			onDataErrorDelegate.actionDataError(this, mErrorCode);
+			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
 

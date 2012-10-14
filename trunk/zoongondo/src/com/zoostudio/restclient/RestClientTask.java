@@ -67,7 +67,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 		}
 
 		if (null != onPreExecuteDelegate) {
-			onPreExecuteDelegate.actionPre(this);
+			onPreExecuteDelegate.onActionPre(this);
 		}
 	}
 
@@ -85,7 +85,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 		} else if (status == RestClientNotification.ERROR
 				&& null != onDataErrorDelegate) {
 
-			onDataErrorDelegate.actionDataError(this, mErrorCode);
+			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
 
@@ -184,11 +184,11 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	public interface OnPreExecuteDelegate {
-		public void actionPre(RestClientTask task);
+		public void onActionPre(RestClientTask task);
 	}
 
 	public interface OnDataErrorDelegate {
-		public void actionDataError(RestClientTask task, int errorCode);
+		public void onActionDataError(RestClientTask task, int errorCode);
 	}
 
 	public interface NoInternetDelegate {

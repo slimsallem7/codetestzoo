@@ -297,7 +297,7 @@ public class LoginActivity extends NgonActivity implements OnClickListener,
 	}
 
 	@Override
-	public void actionDataError(RestClientTask task, int errorCode) {
+	public void onActionDataError(RestClientTask task, int errorCode) {
 		showDialog(ZooException.NETWORK.NETWORK_ERROR_DESC);
 	}
 	

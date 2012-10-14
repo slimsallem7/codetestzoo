@@ -181,6 +181,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 
 	protected void setUiLoading() {
 		mRetry.setVisibility(View.GONE);
+		mMessage.setText("");
 		mProgressBar.setVisibility(View.VISIBLE);
 		mProgressBar.startAnim();
 	}
@@ -238,10 +239,11 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
-	public synchronized void actionDataError(RestClientTask task, int errorCode) {
+	public synchronized void onActionDataError(RestClientTask task, int errorCode) {
 		if (mState == LOADING_STATE) {
 			mState = ERROR_SATE;
 			setUiLoadError();
+			
 		} else if (mState == LOADING_MORE_STATE) {
 			mState = ERROR_LOAD_MORE_SATE;
 		}
@@ -257,7 +259,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
-	public void actionPre(RestClientTask task) {
+	public void onActionPre(RestClientTask task) {
 		if (mState == LOADING_STATE) {
 			setUiLoading();
 		}

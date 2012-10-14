@@ -82,7 +82,7 @@ public class GetTopNewSpotTask extends RestClientTask {
 	@Override
 	protected void onPreExecute() {
 		if (null != onPreExecuteDelegate) {
-			onPreExecuteDelegate.actionPre(this);
+			onPreExecuteDelegate.onActionPre(this);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class GetTopNewSpotTask extends RestClientTask {
 			mListener.onSpotItemListener(mData);
 
 		} else if (status == RestClientNotification.ERROR && null != mListener) {
-			onDataErrorDelegate.actionDataError(this, mErrorCode);
+			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
 

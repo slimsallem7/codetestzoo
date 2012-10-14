@@ -169,7 +169,7 @@ public class ChooseDishActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void actionPre(RestClientTask task) {
+	public void onActionPre(RestClientTask task) {
 		mWaitingDialog = new WaitingDialog(this);
 		mWaitingDialog.setOnCancelListener(new OnCancelListener() {
 			@Override
@@ -389,7 +389,7 @@ public class ChooseDishActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void actionDataError(RestClientTask task, int errorCode) {
+	public void onActionDataError(RestClientTask task, int errorCode) {
 		if (errorCode == RestClientNotification.ERROR_DATA) {
 			this.finish();
 		} else {

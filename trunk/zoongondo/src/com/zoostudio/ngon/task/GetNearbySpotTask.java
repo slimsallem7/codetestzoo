@@ -44,7 +44,7 @@ public class GetNearbySpotTask extends RestClientTask {
 	protected void onPreExecute() {
 		isLoading = true;
 		if (null != onPreExecuteDelegate) {
-			onPreExecuteDelegate.actionPre(this);
+			onPreExecuteDelegate.onActionPre(this);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class GetNearbySpotTask extends RestClientTask {
 
 		} else if (status == RestClientNotification.ERROR
 				&& null != onDataErrorDelegate) {
-			onDataErrorDelegate.actionDataError(this, mErrorCode);
+			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
 
