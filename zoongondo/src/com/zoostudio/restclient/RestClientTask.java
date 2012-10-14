@@ -28,7 +28,8 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 	protected boolean mWaitingStatus;
 	protected JSONObject result;
 	protected int mErrorCode = -1;
-
+	protected boolean isLoading;
+	
 	public RestClientTask(Activity activity) {
 		this(activity, true);
 	}
@@ -59,6 +60,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 
 	@Override
 	protected void onPreExecute() {
+		isLoading = true;
 		if (mWaitingStatus) {
 			mWaitingDialog = new WaitingDialog(mActivity);
 			mWaitingDialog.show();
@@ -71,7 +73,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer status) {
-
+		isLoading = false;
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
@@ -138,7 +140,17 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 		}
 		return RestClientNotification.ERROR;
 	}
-
+	
+	@Override
+	protected void onCancelled() {
+		super.onCancelled();
+		isLoading = false;
+	}
+	
+	public boolean isLoading() {
+		return isLoading;
+	}
+	
 	public void setOnPostExecuteDelegate(OnPostExecuteDelegate delegate) {
 		onPostExecuteDelegate = delegate;
 	}

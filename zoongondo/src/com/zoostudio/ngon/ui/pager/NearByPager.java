@@ -7,7 +7,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
@@ -21,11 +20,9 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
-import com.zoostudio.restclient.RestClientTask;
-import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
-public class NearByPager extends NgonHomePager implements OnClickListener,
-		OnPreExecuteDelegate {
+public class NearByPager extends NgonHomePager implements OnClickListener
+		 {
 	private ListView lvSpot;
 	private NgonProgressDialog mProgressLocation;
 	/**
@@ -35,6 +32,10 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	 * đang là true) thì không làm gì cả, ngược lại thì request more;
 	 */
 	boolean firedRequestMore = false;
+	private double mLongitude;
+	private double mLatitude;
+	private GetNearbySpotTask mLoadMoreSpotTask;
+	private GetNearbySpotTask mLoadNewSpotTask;
 
 	public NearByPager(Integer indexPager) {
 		super(indexPager);
@@ -101,10 +102,12 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	}
 
 	@Override
-	public void initVariables() { }
-	
+	public void initVariables() {
+	}
+
 	@Override
-	public void onClick(View v) { }
+	public void onClick(View v) {
+	}
 
 	@Override
 	public void onFragmentResult(Bundle bundle, int requestCode, int resultCode) {
@@ -119,18 +122,11 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 	}
 
 	private void getSpotData(Location location) {
-		Log.i("Pager", "getSpotData");
-		double longitude = location.getLongitude();
-		double latitude = location.getLatitude();
+		mLongitude = location.getLongitude();
+		mLatitude = location.getLatitude();
 		mAdapter.clear();
 		mAdapter.notifyDataSetChanged();
-		GetNearbySpotTask spotTask = new GetNearbySpotTask(getActivity(),
-				latitude, longitude, 0,
-				mParent.getCurrentPositionDistance() + 1);
-		spotTask.setOnSpotItemReceiver(this);
-		spotTask.setOnDataErrorDelegate(this);
-		spotTask.setOnPreExecuteDelegate(this);
-		spotTask.execute();
+		refreshSpotItem();
 	}
 
 	@Override
@@ -154,19 +150,29 @@ public class NearByPager extends NgonHomePager implements OnClickListener,
 
 	}
 
+
 	@Override
-	public void onSpotItemListener(ArrayList<SpotItem> data) {
-		super.onSpotItemListener(data);
-		setUiLoadDone();
+	protected void loadMoreSpotItem() {
+		if (mLoadMoreSpotTask != null && mLoadMoreSpotTask.isLoading())
+			return;
+		super.loadMoreSpotItem();
+		mLoadMoreSpotTask = new GetNearbySpotTask(getActivity(), mLatitude,
+				mLongitude, 0, mParent.getCurrentPositionDistance() + 1);
+		mLoadMoreSpotTask.setOnSpotItemReceiver(this);
+		mLoadMoreSpotTask.setOnDataErrorDelegate(this);
+		mLoadMoreSpotTask.setOnPreExecuteDelegate(this);
+		mLoadMoreSpotTask.execute();
 	}
 
 	@Override
-	public void actionDataError(RestClientTask task, int errorCode) {
-		setUiLoadError();
+	protected void refreshSpotItem() {
+		super.refreshSpotItem();
+		mLoadNewSpotTask = new GetNearbySpotTask(getActivity(), mLatitude,
+				mLongitude, 0, mParent.getCurrentPositionDistance() + 1);
+		mLoadNewSpotTask.setOnSpotItemReceiver(this);
+		mLoadNewSpotTask.setOnDataErrorDelegate(this);
+		mLoadNewSpotTask.setOnPreExecuteDelegate(this);
+		mLoadNewSpotTask.execute();
 	}
 
-	@Override
-	public void actionPre(RestClientTask task) {
-		setUiLoading();
-	}
 }

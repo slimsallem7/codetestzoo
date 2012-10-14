@@ -9,7 +9,8 @@ import android.widget.ImageView;
 
 public class NgonProgressView extends ImageView {
 	AnimationDrawable anim;
-
+	private boolean isAutoShow = true;
+	
 	public NgonProgressView(Context context) {
 		super(context);
 		init();
@@ -29,18 +30,22 @@ public class NgonProgressView extends ImageView {
 		setImageResource(R.anim.loading);
 		anim = (AnimationDrawable) getDrawable();
 	}
-
-	// @Override
-	// public void onWindowFocusChanged(boolean hasWindowFocus) {
-	// super.onWindowFocusChanged(hasWindowFocus);
-	// if (anim != null){
-	// anim.setVisible(true, true);
-	// anim.start();
-	// }
-	// }
+	
+	public void setAutoShow(boolean auto){
+		isAutoShow = auto;
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasWindowFocus) {
+		super.onWindowFocusChanged(hasWindowFocus);
+		if (anim != null && isAutoShow) {
+			anim.setVisible(true, true);
+			anim.start();
+		}
+	}
 
 	public void startAnim() {
-		if (!anim.isRunning()) {
+		if (!isAutoShow) {
 			anim.setVisible(true, true);
 			anim.start();
 		}

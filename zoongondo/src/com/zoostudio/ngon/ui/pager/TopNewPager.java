@@ -14,12 +14,13 @@ import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetTopNewSpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
-import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 	private ListView lvSpot;
 	private boolean mFirstDisplay = true;
+	private GetTopNewSpotTask mLoadMoreSpotTask;
+	private GetTopNewSpotTask mLoadNewSpotTask;
 
 	public TopNewPager(Integer indexPager) {
 		super(indexPager);
@@ -34,12 +35,7 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 	public void onTabSelected(int position) {
 		super.onTabSelected(position);
 		if (mFirstDisplay) {
-			GetTopNewSpotTask task = new GetTopNewSpotTask(getActivity(), 20);
-			task.setOnSpotItemReceiver(this);
-			task.setOnDataErrorDelegate(this);
-			task.setOnPreExecuteDelegate(this);
-			task.execute();
-			setUiLoading();
+			refreshSpotItem();
 			mFirstDisplay = false;
 		}
 	}
@@ -78,17 +74,23 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 	}
 
 	@Override
-	public void actionPre(RestClientTask task) {
-		setUiLoading();
+	protected void refreshSpotItem() {
+		super.refreshSpotItem();
+		mLoadNewSpotTask = new GetTopNewSpotTask(getActivity(), 20);
+		mLoadNewSpotTask.setOnSpotItemReceiver(this);
+		mLoadNewSpotTask.setOnDataErrorDelegate(this);
+		mLoadNewSpotTask.setOnPreExecuteDelegate(this);
+		mLoadNewSpotTask.execute();
 	}
 	@Override
-	public void onSpotItemListener(ArrayList<SpotItem> data) {
-		super.onSpotItemListener(data);
-		setUiLoadDone();
-	}
-
-	@Override
-	public void actionDataError(RestClientTask task, int errorCode) {
-		setUiLoadError();
+	protected void loadMoreSpotItem() {
+		if (mLoadMoreSpotTask != null && mLoadMoreSpotTask.isLoading())
+			return;
+		super.loadMoreSpotItem();
+		mLoadMoreSpotTask = new GetTopNewSpotTask(getActivity(), 20);
+		mLoadMoreSpotTask.setOnSpotItemReceiver(this);
+		mLoadMoreSpotTask.setOnDataErrorDelegate(this);
+		mLoadMoreSpotTask.setOnPreExecuteDelegate(this);
+		mLoadMoreSpotTask.execute();
 	}
 }
