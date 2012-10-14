@@ -15,13 +15,11 @@ import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
 
 public class GetNearbySpotTask extends RestClientTask {
-
 	private int mLimit;
 	private int mAccLvl;
 	private double mLong;
 	private double mLat;
 	private int start;
-
 	private String[] imageDumps = {
 			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_10_09-ProsciuttoArugulaPizza01.jpg",
 			"http://i136.photobucket.com/albums/q197/bermuda2810/main_dish_image-1.jpg",
@@ -44,6 +42,7 @@ public class GetNearbySpotTask extends RestClientTask {
 
 	@Override
 	protected void onPreExecute() {
+		isLoading = true;
 		if (null != onPreExecuteDelegate) {
 			onPreExecuteDelegate.actionPre(this);
 		}
@@ -51,7 +50,7 @@ public class GetNearbySpotTask extends RestClientTask {
 
 	public GetNearbySpotTask(Activity activity, double latitude,
 			double longitude, int limit) {
-		this(activity, latitude, longitude, limit, 2);
+		this(activity, latitude, longitude, limit,2);
 	}
 
 	public GetNearbySpotTask(Activity activity, double latitude,
@@ -67,7 +66,6 @@ public class GetNearbySpotTask extends RestClientTask {
 	public void doExecute() {
 		restClient.addParam("long", mLong);
 		restClient.addParam("lat", mLat);
-
 		if (mLimit > 0) {
 			restClient.addParam("limit", mLimit);
 		}
@@ -104,7 +102,7 @@ public class GetNearbySpotTask extends RestClientTask {
 
 	@Override
 	protected void onPostExecute(Integer status) {
-
+		isLoading = false;
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
@@ -126,5 +124,4 @@ public class GetNearbySpotTask extends RestClientTask {
 	public void setOnSpotItemReceiver(OnSpotItemListener listener) {
 		this.mListener = listener;
 	}
-
 }

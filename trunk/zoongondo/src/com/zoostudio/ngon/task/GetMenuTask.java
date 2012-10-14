@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import android.app.Activity;
 
 import com.zoostudio.adapter.item.MenuItem;
-import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.ngon.task.callback.OnMenuTaskListener;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.RestClientNotification;

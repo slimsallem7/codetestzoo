@@ -13,13 +13,13 @@ import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetTopLikeSpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
-import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate {
 	private ListView lvSpot;
 	private boolean mFirstDisplay = true;
-
+	private GetTopLikeSpotTask mLoadNewSpotTask;
+	private GetTopLikeSpotTask mLoadMoreSpotTask;
 	public TopLikePager(Integer indexPager) {
 		super(indexPager);
 	}
@@ -28,12 +28,7 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 		super.onTabSelected(position);
 		if (mFirstDisplay) {
 			mFirstDisplay = false;
-			GetTopLikeSpotTask task = new GetTopLikeSpotTask(
-					this.getActivity(), 20);
-			task.setOnSpotItemReceiver(this);
-			task.setOnDataErrorDelegate(this);
-			task.setOnPreExecuteDelegate(this);
-			task.execute();
+			refreshSpotItem();
 		}
 	}
 
@@ -70,21 +65,27 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 		return mIndexPager;
 	}
 
-
 	@Override
-	public void actionPre(RestClientTask task) {
-		setUiLoading();
+	protected void loadMoreSpotItem() {
+		if (mLoadMoreSpotTask != null && mLoadMoreSpotTask.isLoading())
+			return;
+		super.loadMoreSpotItem();
+		mLoadMoreSpotTask = new GetTopLikeSpotTask(
+				this.getActivity(), 20);
+		mLoadMoreSpotTask.setOnSpotItemReceiver(this);
+		mLoadMoreSpotTask.setOnDataErrorDelegate(this);
+		mLoadMoreSpotTask.setOnPreExecuteDelegate(this);
+		mLoadMoreSpotTask.execute();
 	}
 	
 	@Override
-	public void onSpotItemListener(ArrayList<SpotItem> data) {
-		super.onSpotItemListener(data);
-		setUiLoadDone();
+	protected void refreshSpotItem() {
+		super.refreshSpotItem();
+		mLoadNewSpotTask = new GetTopLikeSpotTask(
+				this.getActivity(), 20);
+		mLoadNewSpotTask.setOnSpotItemReceiver(this);
+		mLoadNewSpotTask.setOnDataErrorDelegate(this);
+		mLoadNewSpotTask.setOnPreExecuteDelegate(this);
+		mLoadNewSpotTask.execute();
 	}
-
-	@Override
-	public void actionDataError(RestClientTask task, int errorCode) {
-		setUiLoadError();
-	}
-
 }

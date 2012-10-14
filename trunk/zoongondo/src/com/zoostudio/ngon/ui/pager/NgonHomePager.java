@@ -22,14 +22,17 @@ import com.zoostudio.ngon.ui.base.BaseFragmentScreen;
 import com.zoostudio.ngon.views.NgonProgressView;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
+import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 import com.zoostudio.service.impl.NgonLocationListener;
 import com.zoostudio.service.impl.NgonLocationManager;
 
 public abstract class NgonHomePager extends BaseFragmentScreen implements
-		NgonLocationListener, OnSpotItemListener, OnDataErrorDelegate {
+		NgonLocationListener, OnSpotItemListener, OnDataErrorDelegate ,OnPreExecuteDelegate{
 	protected final static int LOADING_STATE = 0;
 	protected final static int EMPTY_SATE = 1;
 	protected final static int ERROR_SATE = 2;
+	protected final static int ERROR_LOAD_MORE_SATE = 3;
+	protected final static int LOADING_MORE_STATE = 4;
 	protected final static int NORMAL_SATE = -1;
 	private int mState = NORMAL_SATE;
 	protected SpotAdapter mAdapter;
@@ -39,14 +42,18 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected RelativeLayout mFooterView;
 	private NgonProgressView mProgressLoadMore;
 	private boolean mNeedShow;
+
 	protected void initControls() {
 		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
+		mProgressBar.setAutoShow(false);
 		mMessage = (TextView) findViewById(R.id.message);
 		mRetry = (Button) findViewById(R.id.retry);
 		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(
 				R.layout.item_loading_more, null);
-		mProgressLoadMore = (NgonProgressView) mFooterView.findViewById(R.id.ngonProgressLoadMore);
-		mFooterView.setVisibility(View.VISIBLE);
+		mProgressLoadMore = (NgonProgressView) mFooterView
+				.findViewById(R.id.ngonProgressLoadMore);
+		mProgressLoadMore.setAutoShow(false);
+		mFooterView.setVisibility(mNeedShow ? View.VISIBLE : View.GONE);
 	}
 
 	public abstract void initVariables();
@@ -99,13 +106,12 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	 * @return
 	 */
 	protected abstract int getPagerIndex();
-	
+
 	@Override
 	protected void initActions() {
 	}
 
 	public void onTabSelected(int position) {
-		Log.i("" + this.getClass().getName(), "State = " + mState);
 		if (mState == ERROR_SATE) {
 			setUiLoadError();
 		} else if (mState == EMPTY_SATE) {
@@ -113,7 +119,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		} else if (mState == LOADING_STATE) {
 			setUiLoading();
 		}
-		if(mNeedShow)
+		if (mNeedShow)
 			mProgressLoadMore.startAnim();
 		mParent.setCurrentPager(getPagerIndex());
 		if (!hasRequestLocation) {
@@ -123,10 +129,12 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
-	public void onFailGetLocation() { }
+	public void onFailGetLocation() {
+	}
 
 	@Override
-	public void onGettingLocation() { }
+	public void onGettingLocation() {
+	}
 
 	@Override
 	public void onLocationReceiver(final Location location) {
@@ -164,34 +172,34 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoading() {
-		mState = LOADING_STATE;
 		mProgressLoadMore.startAnim();
 		mRetry.setVisibility(View.GONE);
-		mProgressBar.setVisibility(View.GONE);
+		mProgressBar.setVisibility(View.VISIBLE);
+		mProgressBar.startAnim();
 	}
 
 	protected void setUiLoadError() {
-		mState = ERROR_SATE;
 		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
+		mProgressBar.stopAnim();
 		mProgressBar.setVisibility(View.GONE);
 	}
 
 	protected void setUiLoadEmpty() {
-		mState = EMPTY_SATE;
 		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
+		mProgressBar.stopAnim();
 		mProgressBar.setVisibility(View.GONE);
 	}
 
 	protected void setUiLoadDone() {
-		mState = NORMAL_SATE;
 		mNeedShow = true;
 		mMessage.setText("");
 		mMessage.setVisibility(View.GONE);
 		mRetry.setVisibility(View.GONE);
+		mProgressBar.stopAnim();
 		mProgressBar.setVisibility(View.GONE);
 		if (mFooterView.getVisibility() == View.GONE) {
 			mFooterView.setVisibility(View.VISIBLE);
@@ -201,19 +209,46 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	@Override
 	public void onSpotItemListener(ArrayList<SpotItem> data) {
 		if (data.isEmpty()) {
+			mState = EMPTY_SATE;
 			setUiLoadEmpty();
 			return;
 		}
+		
 		mAdapter.clear();
 		for (SpotItem spotItem : data) {
 			mAdapter.add(spotItem);
 		}
 		mAdapter.notifyDataSetChanged();
+		
+		if(mState == LOADING_STATE){
+			setUiLoadDone();
+		}
+		mState = NORMAL_SATE;
 	}
 
 	@Override
 	public synchronized void actionDataError(RestClientTask task, int errorCode) {
-		mState = ERROR_SATE;
+		if (mState == LOADING_STATE) {
+			mState = ERROR_SATE;
+			setUiLoadError();
+		} else if (mState == LOADING_MORE_STATE) {
+			mState = ERROR_LOAD_MORE_SATE;
+		}
+	}
+
+	protected void loadMoreSpotItem() {
+		mState = LOADING_MORE_STATE;
 	}
 	
+	protected void refreshSpotItem(){
+		mState = LOADING_STATE;
+		mFooterView.setVisibility(View.GONE);
+	}
+	
+	@Override
+	public void actionPre(RestClientTask task) {
+		if(mState==LOADING_STATE){
+			setUiLoading();
+		}
+	}
 }
