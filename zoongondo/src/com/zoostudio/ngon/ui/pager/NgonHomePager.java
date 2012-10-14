@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -110,6 +111,12 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 
 	@Override
 	protected void initActions() {
+		mRetry.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				refreshSpotItem();
+			}
+		});
 	}
 
 	public void onTabSelected(int position) {
