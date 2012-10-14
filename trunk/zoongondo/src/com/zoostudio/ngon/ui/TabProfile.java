@@ -22,12 +22,12 @@ public class TabProfile extends FragmentActivity implements OnPageChangeListener
 		super.onCreate(arg0);
 		this.setContentView(R.layout.activity_pager);
 		mBuilderTab = new StringBuilder(256);
-		titlesTabUserProfile = this.getResources().getStringArray(R.array.titles_tab_user_profile_screen);
+		titlesTabUserProfile = getResources().getStringArray(
+				R.array.titles_tab_user_profile_screen);
 		mUserAdapter = new NgonUserAdapter(getParent(),
 				getSupportFragmentManager(), titlesTabUserProfile);
-		mTitlePageIndicator = (TitlePageIndicator) this
-				.findViewById(R.id.indicator);
-		mTabsPager = (ViewPager) this.findViewById(R.id.content_pager);
+		mTitlePageIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
+		mTabsPager = (ViewPager) findViewById(R.id.content_pager);
 		mTabsPager.setAdapter(mUserAdapter);
 		mTitlePageIndicator.setViewPager(mTabsPager);
 		mTitlePageIndicator.setOnPageChangeListener(this);
@@ -51,9 +51,8 @@ public class TabProfile extends FragmentActivity implements OnPageChangeListener
 	private NgonUserPager getFragmentPager(int position) {
 		mBuilderTab.append("android:switcher:").append(R.id.content_pager)
 				.append(":").append(position);
-		NgonUserPager fragment = (NgonUserPager) this
-				.getSupportFragmentManager().findFragmentByTag(
-						mBuilderTab.toString());
+		NgonUserPager fragment = (NgonUserPager) getSupportFragmentManager()
+				.findFragmentByTag(mBuilderTab.toString());
 		mBuilderTab.delete(0, mBuilderTab.length());
 		return fragment;
 	}
