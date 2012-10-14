@@ -1,14 +1,17 @@
 package com.zoostudio.ngon.utils;
 
+import java.io.Serializable;
+
 import android.location.Location;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.FloatMath;
-import android.util.Log;
 
-public class LocationItem implements Parcelable {
+public class LocationItem implements Serializable {
 
-    private double longtitude;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private double longtitude;
     private double latitude;
 
     public LocationItem(double longtitude, double latitude) {
@@ -16,21 +19,6 @@ public class LocationItem implements Parcelable {
         setLongtitude(longtitude);
     }
     
-    public LocationItem(Parcel in) {
-    	readFromParcel(in);
-    }
-
-    private void readFromParcel(Parcel in) {
-		latitude = in.readDouble();
-		longtitude = in.readDouble();
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeDouble(latitude);
-		dest.writeDouble(longtitude);
-	}
-
     public double getLongtitude() {
         return longtitude;
     }
@@ -72,20 +60,4 @@ public class LocationItem implements Parcelable {
 		return 6399.592 * tt;
   
     }
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	
-	public static final Parcelable.Creator<LocationItem> CREATOR =
-			new Parcelable.Creator<LocationItem>() {
-		public LocationItem createFromParcel(Parcel in) {
-			return new LocationItem(in);
-		}
-
-		public LocationItem[] newArray(int size) {
-			return new LocationItem[size];
-		}
-	};
 }

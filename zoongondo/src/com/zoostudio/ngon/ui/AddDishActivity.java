@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.NgonActivity;
@@ -25,6 +26,8 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 	protected static final String EXTRA_SPOT = "com.ngon.do.adddishactivity.SPOT";
 	private EditText etDishName;
 	private Button btnAddDish;
+	private Button btnAddAndMore;
+	private ImageView mThumb;
 	private SpotItem mSpot;
 	private WaitingDialog mWaitingDialog;
 	private ButtonUp mUp;
@@ -40,6 +43,8 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
 		etDishName = (EditText) findViewById(R.id.dish_name);
 		btnAddDish = (Button) findViewById(R.id.done);
+		btnAddAndMore = (Button) findViewById(R.id.done_and_add_more);
+		mThumb = (ImageView) findViewById(R.id.add_image);
 
 		mUp.setOnClickListener(new OnClickListener() {
 			@Override
@@ -56,8 +61,8 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 
 	private SpotItem getSpot() {
 		Bundle extras = getIntent().getExtras();
-		if (extras.containsKey("spot_id")) {
-			return extras.getParcelable("spot_id");
+		if (extras.containsKey(AddDishActivity.EXTRA_SPOT)) {
+			return (SpotItem) extras.getSerializable(AddDishActivity.EXTRA_SPOT);
 		} else {
 			finish();
 			return null;
@@ -139,6 +144,20 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 					addDishTask.setOnPostExecuteDelegate(AddDishActivity.this);
 					addDishTask.execute();
 				} else {}
+			}
+		});
+		
+		btnAddAndMore.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		mThumb.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
 			}
 		});
 	}

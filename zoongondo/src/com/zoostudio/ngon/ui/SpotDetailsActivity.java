@@ -127,7 +127,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	protected void initVariables() {
 		mHandler = new Handler();
 		Bundle bundle = this.getIntent().getExtras();
-		mSpot = bundle.getParcelable(EXTRA_SPOT);
+		mSpot = (SpotItem) bundle.getSerializable(EXTRA_SPOT);
 	}
 
 	@Override

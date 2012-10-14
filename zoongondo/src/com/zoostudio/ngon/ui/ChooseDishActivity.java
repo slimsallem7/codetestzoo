@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import com.zoostudio.ngon.dialog.WaitingDialog;
 import com.zoostudio.ngon.task.GetMenuTask;
 import com.zoostudio.ngon.task.callback.OnMenuTaskListener;
 import com.zoostudio.ngon.utils.ArrayUtils;
+import com.zoostudio.ngon.utils.Logger;
 import com.zoostudio.ngon.utils.PipedDeepCopy;
 import com.zoostudio.ngon.views.ButtonListitemAdd;
 import com.zoostudio.ngon.views.ButtonUp;
@@ -50,6 +52,7 @@ public class ChooseDishActivity extends NgonActivity implements
 
 	public static final String EXTRA_SPOT = "com.ngon.do.choosedish.SPOT";
 	public static final String EXTRA_MENU_ITEM = "com.ngon.do.choosedish.MENUITEM";
+	protected static final String TAG = "ChooseDishActivity";
 
 	private ListView lvMenu;
 	private SpotItem mSpot;
@@ -69,8 +72,8 @@ public class ChooseDishActivity extends NgonActivity implements
 	private View incPopUp;
 	private ButtonUp btnUp;
 	private View footerView;
-	private View mLoadMore;
-
+	private View mAddNew;
+	
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_choose_dish;
@@ -88,11 +91,10 @@ public class ChooseDishActivity extends NgonActivity implements
 		lvMenu.setOnItemClickListener(this);
 		btnDone.setOnClickListener(this);
 		mDishSelected.setOnClickListener(this);
-		LayoutInflater inflate = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		footerView = inflate.inflate(R.layout.inc_footer_add_dish, null);
 		lvMenu.addFooterView(footerView, null, false);
-		mLoadMore = footerView.findViewById(R.id.footer);
+		mAddNew = footerView.findViewById(R.id.footer);
 		btnUp = (ButtonUp) findViewById(R.id.btn_up);
 	}
 
@@ -159,7 +161,7 @@ public class ChooseDishActivity extends NgonActivity implements
 	private SpotItem getSpot() {
 		Bundle extras = getIntent().getExtras();
 		if (extras.containsKey(EXTRA_SPOT)) {
-			return extras.getParcelable(EXTRA_SPOT);
+			return (SpotItem) extras.getSerializable(EXTRA_SPOT);
 		} else {
 			finish();
 			return null;
@@ -229,14 +231,10 @@ public class ChooseDishActivity extends NgonActivity implements
 
 	@Override
 	protected void initActions() {
-		mLoadMore.setOnClickListener(new OnClickListener() {
+		mAddNew.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(ChooseDishActivity.this,
-						AddDishActivity.class);
-				intent.putExtra(AddDishActivity.EXTRA_SPOT, mSpot);
-				ChooseDishActivity.this.startActivityForResult(intent,
-						RequestCode.ADD_DISH);
+				gotoAddDish();
 			}
 		});
 		btnUp.setOnClickListener(new OnClickListener() {
@@ -245,6 +243,13 @@ public class ChooseDishActivity extends NgonActivity implements
 				onBackPressed();
 			}
 		});
+	}
+
+	protected void gotoAddDish() {
+		Intent intent = new Intent(getApplicationContext(),
+				AddDishActivity.class);
+		intent.putExtra(AddDishActivity.EXTRA_SPOT, mSpot);
+		startActivityForResult(intent, RequestCode.ADD_DISH);
 	}
 
 	@Override
