@@ -172,7 +172,6 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoading() {
-		mProgressLoadMore.startAnim();
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.setVisibility(View.VISIBLE);
 		mProgressBar.startAnim();
@@ -204,6 +203,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		if (mFooterView.getVisibility() == View.GONE) {
 			mFooterView.setVisibility(View.VISIBLE);
 		}
+		mProgressLoadMore.startAnim();
 	}
 
 	@Override
