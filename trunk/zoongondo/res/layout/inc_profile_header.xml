@@ -41,7 +41,7 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/radio0"
+            android:id="@+id/checkin_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -55,7 +55,7 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/radio1"
+            android:id="@+id/like_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"
@@ -70,7 +70,7 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/radio2"
+            android:id="@+id/comment_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"
@@ -85,7 +85,7 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/radio03"
+            android:id="@+id/friend_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"

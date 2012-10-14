@@ -25,6 +25,10 @@ public class MyProfilePager extends NgonUserPager {
 	private TextView userNameView;
 	private TextView addressView;
 	private NgonListCheckInAdapter infoUserAdapter;
+	private TextView mCheckInList;
+	private TextView mLikeList;
+	private TextView mCommentList;
+	private TextView mFriendList;
 	
 	@Override
 	protected int getLayoutId() {
@@ -45,12 +49,16 @@ public class MyProfilePager extends NgonUserPager {
 	@Override
 	public void initViews() {
 		mListView = (ListView) this.mView.findViewById(R.id.listProfile);
-		View header = inflater.inflate(R.layout.inc_profile_header,null);
+		View header = inflater.inflate(R.layout.inc_profile_header, null);
 		mListView.addHeaderView(header);
 		mListView.setAdapter(infoUserAdapter);
 		mAvatar = (SmartImageView) header.findViewById(R.id.imageAvatarProfile);
 		userNameView = (TextView) header.findViewById(R.id.txt_username);
 		addressView = (TextView) header.findViewById(R.id.txtAdress);
+		mCheckInList = (TextView) header.findViewById(R.id.checkin_list);
+		mLikeList = (TextView) header.findViewById(R.id.like_list);
+		mCommentList = (TextView) header.findViewById(R.id.comment_list);
+		mFriendList = (TextView) header.findViewById(R.id.friend_list);
 	}
 
 	@Override
@@ -60,7 +68,35 @@ public class MyProfilePager extends NgonUserPager {
 		mAvatar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				createDialogTakePhoto();
+				createDialogTakePhoto().show();
+			}
+		});
+		
+		mCheckInList.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		mLikeList.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		mCommentList.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		mFriendList.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
 			}
 		});
 	}
@@ -119,6 +155,6 @@ public class MyProfilePager extends NgonUserPager {
 	}
 
 	private void deleteAvatar() {
-
+		
 	}
 }
