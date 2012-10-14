@@ -11,6 +11,6 @@ public class NgonUserAdapter extends NgonPagerAdapter {
 	}
 	@Override
 	public Fragment getItem(int position) {
-		return PagerUtils.makeUserTab(mContext,this.fm, position);
+		return PagerUtils.makeUserTab(mContext, fm, position);
 	}
 }
