@@ -130,8 +130,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	@Override
 	protected void loadLocation() {
-		mSpotItem = this.getIntent().getExtras()
-				.getParcelable(SpotDetailsActivity.EXTRA_SPOT);
+		mSpotItem = (SpotItem) getIntent().getExtras()
+				.getSerializable(SpotDetailsActivity.EXTRA_SPOT);
 		mCurrentAddress = mSpotItem.getAddress();
 		mCurrentLat = mSpotItem.getLocation().getLatitude();
 		mCurrentLong = mSpotItem.getLocation().getLongtitude();

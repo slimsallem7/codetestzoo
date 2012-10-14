@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -78,7 +79,7 @@ public class SpotMenu extends NgonActivity implements OnPreExecuteDelegate, OnPo
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
 		
 		mFooterViewAddNew = new ButtonListitemAdd(getApplicationContext());
-		mFooterViewAddNew.setText("Thêm món");
+		mFooterViewAddNew.setText("Thï¿½m mï¿½n");
 		mFooterViewAddNew.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		mFooterViewAddNew.setOnClickListener(new OnClickListener() {
 			@Override
@@ -116,7 +117,7 @@ public class SpotMenu extends NgonActivity implements OnPreExecuteDelegate, OnPo
         Bundle extras = getIntent().getExtras();
 
         if (extras.containsKey(EXTRA_SPOT)) {
-            return extras.getParcelable(EXTRA_SPOT);
+            return (SpotItem) extras.getSerializable(EXTRA_SPOT);
         } else {
             finish();
             return null;

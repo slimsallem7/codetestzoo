@@ -1,21 +1,20 @@
 package com.zoostudio.adapter.item;
 
+import java.io.Serializable;
+
 import com.zoostudio.ngon.utils.LocationItem;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class SpotItem implements Parcelable {
-    private String name;
+public class SpotItem implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String name;
     private String address;
     private String id;
     private String urlImageSpot;
     private LocationItem location;
     
-    public SpotItem(Parcel in) {
-    	readFromParcel(in);
-    }
-
 	public SpotItem(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
@@ -24,23 +23,6 @@ public class SpotItem implements Parcelable {
 		this.urlImageSpot = builder.urlImageSpot;
 	}
 
-	private void readFromParcel(Parcel in) {
-		name = in.readString();
-		address = in.readString();
-		id = in.readString();
-		location = in.readParcelable(LocationItem.class.getClassLoader());
-		urlImageSpot = in.readString();
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(name);
-		dest.writeString(address);
-		dest.writeString(id);
-		dest.writeParcelable(location, PARCELABLE_WRITE_RETURN_VALUE);
-		dest.writeString(urlImageSpot);
-	}
-    
 	public String getName() {
         return name;
     }
@@ -73,22 +55,6 @@ public class SpotItem implements Parcelable {
         this.location = location;
     }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	public static final Parcelable.Creator<SpotItem> CREATOR =
-			new Parcelable.Creator<SpotItem>() {
-		public SpotItem createFromParcel(Parcel in) {
-			return new SpotItem(in);
-		}
-
-		public SpotItem[] newArray(int size) {
-			return new SpotItem[size];
-		}
-	};
-	
 	public static class Builder {
 		private String name;
 	    private String address;
