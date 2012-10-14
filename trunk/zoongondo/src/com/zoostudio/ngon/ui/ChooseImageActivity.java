@@ -17,6 +17,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.zoostudio.adapter.GalleryPagerAdapter;
@@ -43,6 +44,7 @@ public class ChooseImageActivity extends NgonActivity implements
 	private ArrayList<MediaItem> seletedMedia;
 	private RadioButton mRbtShowAllMedia;
 	private RadioButton mRbtShowSeletedMedia;
+	private RadioGroup group;
 	private ViewPager imagePager;
 	private boolean isPagerShowing;
 	private GalleryPagerAdapter galleryPagerAdapter;
@@ -64,6 +66,7 @@ public class ChooseImageActivity extends NgonActivity implements
 		mNumberMediaSelected = (TextView) findViewById(R.id.txtNumbersImage);
 		mRbtShowAllMedia = (RadioButton) findViewById(R.id.showAllMedia);
 		mRbtShowSeletedMedia = (RadioButton) findViewById(R.id.showSeletedMedia);
+		group = (RadioGroup) findViewById(R.id.radioGroup1);
 		imagePager = (ViewPager) findViewById(R.id.imagePager);
 		mPagerIndex = (TextView) findViewById(R.id.pageIndex);
 		int margin = getResources().getDimensionPixelSize(R.dimen.margin_pager);
@@ -87,7 +90,7 @@ public class ChooseImageActivity extends NgonActivity implements
 				.setOnCheckedChangeListener(changeDataToSelectedMedia);
 		btnBackToGallery.setOnClickListener(this);
 		galleryPagerAdapter = new GalleryPagerAdapter(
-				ChooseImageActivity.this, allMedia);
+				ChooseImageActivity.this, new ArrayList<MediaItem>());
 		imagePager.setAdapter(galleryPagerAdapter);
 		galleryPagerAdapter.setOnItemSelectListener(this);
 		scanner.loadMedia();
@@ -114,7 +117,7 @@ public class ChooseImageActivity extends NgonActivity implements
 		allMedia.clear();
 		seletedMedia.clear();
 		allMedia = ids;
-
+		galleryPagerAdapter.setData(allMedia);
 		if (!adapter.isEmpty()) {
 			adapter.clear();
 			adapter.notifyDataSetChanged();
@@ -235,8 +238,7 @@ public class ChooseImageActivity extends NgonActivity implements
 	};
 
 	private void changeToPagerGallery() {
-		mRbtShowAllMedia.setVisibility(View.INVISIBLE);
-		mRbtShowSeletedMedia.setVisibility(View.INVISIBLE);
+		group.setVisibility(View.GONE);
 		camera.setVisibility(View.INVISIBLE);
 		mPagerIndex.setVisibility(View.VISIBLE);
 		btnBackToGallery.setVisibility(View.VISIBLE);
@@ -244,8 +246,7 @@ public class ChooseImageActivity extends NgonActivity implements
 	}
 
 	private void changeToGridGallery() {
-		mRbtShowAllMedia.setVisibility(View.VISIBLE);
-		mRbtShowSeletedMedia.setVisibility(View.VISIBLE);
+		group.setVisibility(View.VISIBLE);
 		mPagerIndex.setVisibility(View.GONE);
 		camera.setVisibility(View.VISIBLE);
 		btnBackToGallery.setVisibility(View.GONE);
@@ -310,6 +311,6 @@ public class ChooseImageActivity extends NgonActivity implements
 	@Override
 	public void onPageSelected(int position) {
 		mCurrentPosition = position;
-		mPagerIndex.setText("" + position + "/" + totalImage);
+		mPagerIndex.setText("" + (position +1) + "/" + totalImage);
 	}
 }

@@ -21,7 +21,7 @@ import com.zoostudio.ngon.views.PhotoToggleButton;
 
 public class GalleryPagerAdapter extends PagerAdapter {
 
-	private ArrayList<MediaItem> datas;
+	private ArrayList<MediaItem> data;
 	private LayoutInflater inflater;
 	private View view;
 	private ZooAjustImageView imageView;
@@ -29,13 +29,13 @@ public class GalleryPagerAdapter extends PagerAdapter {
 	private OnItemSelectListener listener;
 
 	public GalleryPagerAdapter(Activity activity, ArrayList<MediaItem> datas) {
-		this.datas = datas;
+		this.data = datas;
 		this.inflater = activity.getLayoutInflater();
 	}
 
 	@Override
 	public int getCount() {
-		return datas.size();
+		return data.size();
 	}
 
 	/**
@@ -57,14 +57,18 @@ public class GalleryPagerAdapter extends PagerAdapter {
 		imageView = (ZooAjustImageView) view.findViewById(R.id.imageMedia);
 		button = (PhotoToggleButton) view.findViewById(R.id.check_image);
 
-		imageView.setImageId(datas.get(position).getIdMedia());
-		button.setChecked(datas.get(position).isSelected());
-		button.setOnCheckedChangeListener(new ZooMediaCheck(position, datas
+		imageView.setImageId(data.get(position).getIdMedia());
+		button.setChecked(data.get(position).isSelected());
+		button.setOnCheckedChangeListener(new ZooMediaCheck(position, data
 				.get(position).getIdMedia()));
 		((ViewPager) collection).addView(view, 0);
 		return view;
 	}
-
+	
+	public void setData(ArrayList<MediaItem> data) {
+		this.data = data;
+		notifyDataSetChanged();
+	}
 	/**
 	 * Remove a page for the given position. The adapter is responsible for
 	 * removing the view from its container, although it only must ensure this
@@ -127,9 +131,9 @@ public class GalleryPagerAdapter extends PagerAdapter {
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
-			GalleryPagerAdapter.this.datas.get(position).setSelected(isChecked);
+			GalleryPagerAdapter.this.data.get(position).setSelected(isChecked);
 			listener.onMediaChanged(isChecked, idMedia,
-					GalleryPagerAdapter.this.datas.get(position));
+					GalleryPagerAdapter.this.data.get(position));
 		}
 	}
 
