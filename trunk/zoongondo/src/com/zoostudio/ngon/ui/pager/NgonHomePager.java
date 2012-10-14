@@ -27,7 +27,8 @@ import com.zoostudio.service.impl.NgonLocationListener;
 import com.zoostudio.service.impl.NgonLocationManager;
 
 public abstract class NgonHomePager extends BaseFragmentScreen implements
-		NgonLocationListener, OnSpotItemListener, OnDataErrorDelegate ,OnPreExecuteDelegate{
+		NgonLocationListener, OnSpotItemListener, OnDataErrorDelegate,
+		OnPreExecuteDelegate {
 	protected final static int LOADING_STATE = 0;
 	protected final static int EMPTY_SATE = 1;
 	protected final static int ERROR_SATE = 2;
@@ -209,18 +210,21 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	@Override
 	public void onSpotItemListener(ArrayList<SpotItem> data) {
 		if (data.isEmpty()) {
-			mState = EMPTY_SATE;
-			setUiLoadEmpty();
+			if (mState == LOADING_STATE) {
+				setUiLoadEmpty();
+				mState = EMPTY_SATE;
+			}
+			mState = NORMAL_SATE;
 			return;
 		}
-		
+		////////////////////////////////////////////////////////
 		mAdapter.clear();
 		for (SpotItem spotItem : data) {
 			mAdapter.add(spotItem);
 		}
 		mAdapter.notifyDataSetChanged();
-		
-		if(mState == LOADING_STATE){
+		////////////////////////////////////////////////////////
+		if (mState == LOADING_STATE) {
 			setUiLoadDone();
 		}
 		mState = NORMAL_SATE;
@@ -239,15 +243,15 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected void loadMoreSpotItem() {
 		mState = LOADING_MORE_STATE;
 	}
-	
-	protected void refreshSpotItem(){
+
+	protected void refreshSpotItem() {
 		mState = LOADING_STATE;
 		mFooterView.setVisibility(View.GONE);
 	}
-	
+
 	@Override
 	public void actionPre(RestClientTask task) {
-		if(mState==LOADING_STATE){
+		if (mState == LOADING_STATE) {
 			setUiLoading();
 		}
 	}
