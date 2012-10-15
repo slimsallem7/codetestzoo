@@ -10,14 +10,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.zoostudio.adapter.NgonGridDishMediaAdapter;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.android.image.LocalImage;
 import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.R;
-import com.zoostudio.ngon.RequestCode;
 import com.zoostudio.ngon.utils.OnScanMediaListener;
 import com.zoostudio.ngon.utils.Scanner;
 
@@ -60,7 +58,7 @@ public class ChooseDishMediaActivity extends Activity implements
 				CropImageActivity.class);
 		intent.putExtra(CropImageActivity.MEDIA_PATH, mediaPath);
 		intent.putExtra("SOURCE", CropImageActivity.FROM_GALLERY);
-		startActivityForResult(intent, RequestCode.CROP_IMAGE);
+		startActivity(intent);
 	}
 	
 	@Override
