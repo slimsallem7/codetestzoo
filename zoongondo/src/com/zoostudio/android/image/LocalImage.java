@@ -35,4 +35,8 @@ public class LocalImage implements SmartImage {
 			localImageCache.remove(idMedia);
 		}
 	}
+	
+	public static void clearMemory(Long[] keys){
+		localImageCache.clear(keys);
+	}
 }

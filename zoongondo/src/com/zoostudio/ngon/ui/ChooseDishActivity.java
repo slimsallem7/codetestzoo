@@ -190,11 +190,7 @@ public class ChooseDishActivity extends NgonActivity implements
 
 	@Override
 	public void onClick(View v) {
-		if (v == btnAddDish) {
-			Intent intent = new Intent(this, AddDishActivity.class);
-			intent.putExtra("spot_id", mSpot);
-			startActivityForResult(intent, RequestCode.ADD_DISH);
-		} else if (v == btnDone) {
+		if (v == btnDone) {
 			if (!mTempDish.isEmpty()) {
 				Intent intent = new Intent();
 				intent.putExtra("LIST_DISH", mTempOriginalList);
@@ -237,6 +233,7 @@ public class ChooseDishActivity extends NgonActivity implements
 				gotoAddDish();
 			}
 		});
+		
 		btnUp.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {

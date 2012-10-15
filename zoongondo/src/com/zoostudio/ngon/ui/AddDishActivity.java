@@ -22,7 +22,8 @@ import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
-public class AddDishActivity extends NgonActivity implements OnClickListener, OnPostExecuteDelegate, OnPreExecuteDelegate {
+public class AddDishActivity extends NgonActivity implements OnClickListener,
+		OnPostExecuteDelegate, OnPreExecuteDelegate {
 	protected static final String EXTRA_SPOT = "com.ngon.do.adddishactivity.SPOT";
 	private EditText etDishName;
 	private Button btnAddDish;
@@ -62,7 +63,8 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 	private SpotItem getSpot() {
 		Bundle extras = getIntent().getExtras();
 		if (extras.containsKey(AddDishActivity.EXTRA_SPOT)) {
-			return (SpotItem) extras.getSerializable(AddDishActivity.EXTRA_SPOT);
+			return (SpotItem) extras
+					.getSerializable(AddDishActivity.EXTRA_SPOT);
 		} else {
 			finish();
 			return null;
@@ -75,11 +77,13 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 		case R.id.done:
 			String dish_name = etDishName.getText().toString().trim();
 			if (dish_name.length() > 2) {
-				CreateDishTask addDishTask = new CreateDishTask(this, dish_name, mSpot.getId());
+				CreateDishTask addDishTask = new CreateDishTask(this,
+						dish_name, mSpot.getId());
 				addDishTask.setOnPreExecuteDelegate(this);
 				addDishTask.setOnPostExecuteDelegate(this);
 				addDishTask.execute();
-			} else {}
+			} else {
+			}
 			break;
 		}
 	}
@@ -101,7 +105,8 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 					String dishId = result.getString("dish_id");
 					Intent intent = new Intent();
 					intent.putExtra("dish_id", dishId);
-					intent.putExtra("dish_name", etDishName.getText().toString().trim());
+					intent.putExtra("dish_name", etDishName.getText()
+							.toString().trim());
 					setResult(RESULT_OK, intent);
 					finish();
 				} else {
@@ -139,27 +144,30 @@ public class AddDishActivity extends NgonActivity implements OnClickListener, On
 			public void onClick(View v) {
 				String dish_name = etDishName.getText().toString().trim();
 				if (dish_name.length() > 2) {
-					CreateDishTask addDishTask = new CreateDishTask(AddDishActivity.this, dish_name, mSpot.getId());
+					CreateDishTask addDishTask = new CreateDishTask(
+							AddDishActivity.this, dish_name, mSpot.getId());
 					addDishTask.setOnPreExecuteDelegate(AddDishActivity.this);
 					addDishTask.setOnPostExecuteDelegate(AddDishActivity.this);
 					addDishTask.execute();
-				} else {}
+				} else {
+				}
 			}
 		});
-		
+
 		btnAddAndMore.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 			}
 		});
-		
+
 		mThumb.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				Intent intent = new Intent(getApplicationContext(),
+						ChooseDishMediaActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
-
 }

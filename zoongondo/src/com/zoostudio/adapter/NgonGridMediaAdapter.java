@@ -21,7 +21,7 @@ import com.zoostudio.ngon.views.PhotoToggleButton;
 public class NgonGridMediaAdapter extends ArrayAdapter<MediaItem> {
 	private LayoutInflater inflater;
 	private int SIZE;
-	private RelativeLayout.LayoutParams layoutParams;
+	protected RelativeLayout.LayoutParams layoutParams;
 	private OnItemSelectListener listener;
 
 	public NgonGridMediaAdapter(Context context, int textViewResourceId,
@@ -88,7 +88,7 @@ public class NgonGridMediaAdapter extends ArrayAdapter<MediaItem> {
 
 	}
 
-	private class ViewHolder {
+	class ViewHolder {
 		ZooAjustImageView imageView1;
 		PhotoToggleButton chkSelectImage;
 	}

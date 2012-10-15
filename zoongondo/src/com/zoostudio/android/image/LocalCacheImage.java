@@ -1,21 +1,24 @@
 package com.zoostudio.android.image;
 
-import java.lang.ref.SoftReference;
-import java.util.concurrent.ConcurrentHashMap;
-
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore.Images;
+import android.support.v4.util.LruCache;
 
 public class LocalCacheImage {
-	private ConcurrentHashMap<Long, SoftReference<Bitmap>> memoryCache;
-
+//	private ConcurrentHashMap<Long, SoftReference<Bitmap>> memoryCache;
+	private LruCache<Long, Bitmap> memoryCache;
 	private Context appContext;
 
 	public LocalCacheImage(Context context) {
 		// Set up in-memory cache store
-		memoryCache = new ConcurrentHashMap<Long, SoftReference<Bitmap>>();
+//		memoryCache = new ConcurrentHashMap<Long, SoftReference<Bitmap>>();
+		final int memClass = ((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = 1024 * 1024 * memClass / 8;
+		memoryCache = new LruCache<Long, Bitmap>(cacheSize);
 		// Set up disk cache store
 		appContext = context;
 	}
@@ -51,21 +54,17 @@ public class LocalCacheImage {
 		memoryCache.remove(idMedia);
 	}
 
-	public void clear() {
+	public void clear(Long[] keys) {
 		// Remove everything from memory cache
-		memoryCache.clear();
+		memoryCache.evictAll();
 	}
 
 	private void cacheBitmapToMemory(final long idMedia, final Bitmap bitmap) {
-		memoryCache.put(idMedia, new SoftReference<Bitmap>(bitmap));
+		memoryCache.put(idMedia, bitmap);
 	}
 
 	private Bitmap getBitmapFromMemory(long idMedia) {
-		Bitmap bitmap = null;
-		SoftReference<Bitmap> softRef = memoryCache.get(idMedia);
-		if (softRef != null) {
-			bitmap = softRef.get();
-		}
+		Bitmap bitmap = memoryCache.get(idMedia);
 		return bitmap;
 	}
 

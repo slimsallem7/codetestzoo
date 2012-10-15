@@ -81,7 +81,7 @@ public class ChooseImageActivity extends NgonActivity implements
 		allMedia = new ArrayList<MediaItem>();
 		seletedMedia = new ArrayList<MediaItem>();
 		scanner = new Scanner(this);
-		scanner.setOnBitmapListener(this);
+		scanner.setOnScanMediaListener(this);
 		camera.setOnClickListener(this);
 		imagePager.setOnPageChangeListener(this);
 		btnCheckIn.setOnClickListener(this);

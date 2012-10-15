@@ -3,6 +3,7 @@ package com.zoostudio.ngon.ui.pager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -64,6 +65,8 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected boolean mHasLoadData;
 	protected LayoutInflater mInflater;
 	protected boolean hasRequestLocation;
+	private String mStringError;
+	private String mStringEmpty;
 
 	public NgonHomePager() {
 		hasRequestLocation = false;
@@ -179,6 +182,15 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		return fragment;
 	}
 
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mStringError = activity
+				.getString(R.string.lang_vi_spotlist_error_message);
+		mStringEmpty = activity
+				.getString(R.string.lang_vi_spotlist_nearby_empty_message);
+	}
+
 	protected void setUiLoading() {
 		mRetry.setVisibility(View.GONE);
 		mMessage.setText("");
@@ -187,7 +199,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoadError() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_error_message));
+		mMessage.setText(mStringError);
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.VISIBLE);
 		mProgressBar.stopAnim();
@@ -195,7 +207,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	protected void setUiLoadEmpty() {
-		mMessage.setText(getString(R.string.lang_vi_spotlist_nearby_empty_message));
+		mMessage.setText(mStringEmpty);
 		mMessage.setVisibility(View.VISIBLE);
 		mRetry.setVisibility(View.GONE);
 		mProgressBar.stopAnim();
@@ -225,13 +237,13 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 			mState = NORMAL_SATE;
 			return;
 		}
-		////////////////////////////////////////////////////////
+		// //////////////////////////////////////////////////////
 		mAdapter.clear();
 		for (SpotItem spotItem : data) {
 			mAdapter.add(spotItem);
 		}
 		mAdapter.notifyDataSetChanged();
-		////////////////////////////////////////////////////////
+		// //////////////////////////////////////////////////////
 		if (mState == LOADING_STATE) {
 			setUiLoadDone();
 		}
@@ -239,11 +251,12 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
-	public synchronized void onActionDataError(RestClientTask task, int errorCode) {
+	public synchronized void onActionDataError(RestClientTask task,
+			int errorCode) {
 		if (mState == LOADING_STATE) {
 			mState = ERROR_SATE;
 			setUiLoadError();
-			
+
 		} else if (mState == LOADING_MORE_STATE) {
 			mState = ERROR_LOAD_MORE_SATE;
 		}

@@ -5,22 +5,26 @@ import java.security.NoSuchAlgorithmException;
 
 public class EncryptCore {
 
-    public static String md5Encode(final String input) {
-        try {
-            // Create MD5 Hash
-            final MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(input.getBytes());
-            final byte messageDigest[] = digest.digest();
+	public static String md5(String s) {
+		try {
+			// Create MD5 Hash
+			MessageDigest digest = java.security.MessageDigest
+					.getInstance("MD5");
+			digest.update(s.getBytes());
+			byte messageDigest[] = digest.digest();
+			// Create Hex String
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < messageDigest.length; i++) {
+				String h = Integer.toHexString(0xFF & messageDigest[i]);
+				while (h.length() < 2)
+					h = "0" + h;
+				hexString.append(h);
+			}
+			return hexString.toString();
 
-            // Create Hex String
-            final StringBuffer hexString = new StringBuffer();
-            for (final byte element : messageDigest)
-                hexString.append(Integer.toHexString(0xFF & element));
-            return hexString.toString();
-
-        } catch (final NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
 }
