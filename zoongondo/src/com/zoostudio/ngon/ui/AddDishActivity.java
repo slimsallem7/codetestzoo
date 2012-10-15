@@ -11,8 +11,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.zoostudio.adapter.item.SpotItem;
+import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.WaitingDialog;
@@ -32,10 +34,19 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 	private SpotItem mSpot;
 	private WaitingDialog mWaitingDialog;
 	private ButtonUp mUp;
+	private String mMediaPath;
 
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_add_dish;
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		mMediaPath = intent.getExtras().getString(CropImageActivity.MEDIA_PATH);
+		Toast.makeText(getApplicationContext(), mMediaPath, Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	@Override
