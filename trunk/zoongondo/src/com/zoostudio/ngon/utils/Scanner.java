@@ -74,7 +74,7 @@ public class Scanner {
 
 	}
 
-	public void setOnBitmapListener(OnScanMediaListener listener) {
+	public void setOnScanMediaListener(OnScanMediaListener listener) {
 		this.listener = listener;
 	}
 }

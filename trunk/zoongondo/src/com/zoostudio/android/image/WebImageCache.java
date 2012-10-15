@@ -10,18 +10,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.zoostudio.ngon.R;
-
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.support.v4.util.LruCache;
 
+import com.zoostudio.ngon.R;
 
 public class WebImageCache {
 	private static final String DISK_CACHE_PATH = "/web_image_cache/";
 
-	private ConcurrentHashMap<String, SoftReference<Bitmap>> memoryCache;
+	// private ConcurrentHashMap<String, SoftReference<Bitmap>> memoryCache;
+	private LruCache<String, Bitmap> lruCache;
 	private String diskCachePath;
 	private boolean diskCacheEnabled = false;
 	private ExecutorService writeThread;
@@ -30,8 +32,13 @@ public class WebImageCache {
 
 	public WebImageCache(Context context) {
 		// Set up in-memory cache store
-		memoryCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>();
-
+		// memoryCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>();
+		// OutOfMemory exception.
+		final int memClass = ((ActivityManager) context
+				.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+		// Use 1/8th of the available memory for this memory cache.
+		final int cacheSize = 1024 * 1024 * memClass / 8;
+		lruCache = new LruCache<String, Bitmap>(cacheSize);
 		// Set up disk cache store
 		appContext = context.getApplicationContext();
 
@@ -76,7 +83,8 @@ public class WebImageCache {
 		// Check for image in memory
 		bitmap = getBitmapFromMemory(id);
 		if (bitmap == null) {
-			bitmap = BitmapFactory.decodeStream(appContext.getResources().openRawResource(R.drawable.ic_border_circle));
+			bitmap = BitmapFactory.decodeStream(appContext.getResources()
+					.openRawResource(R.drawable.ic_border_circle));
 			if (bitmap != null) {
 				cacheBitmapToMemory(id, bitmap);
 			}
@@ -90,7 +98,8 @@ public class WebImageCache {
 		}
 
 		// Remove from memory cache
-		memoryCache.remove(getCacheKey(url));
+		// memoryCache.remove(getCacheKey(url));
+		lruCache.remove(getCacheKey(url));
 
 		// Remove from file cache
 		File f = new File(diskCachePath, url);
@@ -99,10 +108,15 @@ public class WebImageCache {
 		}
 	}
 
+	public void clearMemory() {
+		if (null != lruCache)
+			lruCache.evictAll();
+	}
+
 	public void clear() {
 		// Remove everything from memory cache
-		memoryCache.clear();
-
+		// memoryCache.clear();
+		lruCache.evictAll();
 		// Remove everything from file cache
 		File cachedFileDir = new File(diskCachePath);
 		if (cachedFileDir.exists() && cachedFileDir.isDirectory()) {
@@ -116,7 +130,8 @@ public class WebImageCache {
 	}
 
 	private void cacheBitmapToMemory(final String url, final Bitmap bitmap) {
-		memoryCache.put(getCacheKey(url), new SoftReference<Bitmap>(bitmap));
+		// memoryCache.put(getCacheKey(url), new SoftReference<Bitmap>(bitmap));
+		lruCache.put(getCacheKey(url), bitmap);
 	}
 
 	private void cacheBitmapToDisk(final String url, final Bitmap bitmap) {
@@ -148,10 +163,11 @@ public class WebImageCache {
 
 	private Bitmap getBitmapFromMemory(String url) {
 		Bitmap bitmap = null;
-		SoftReference<Bitmap> softRef = memoryCache.get(getCacheKey(url));
-		if (softRef != null) {
-			bitmap = softRef.get();
-		}
+		// SoftReference<Bitmap> softRef = memoryCache.get(getCacheKey(url));
+		bitmap = lruCache.get(getCacheKey(url));
+		// if (softRef != null) {
+		// bitmap = softRef.get();
+		// }
 
 		return bitmap;
 	}

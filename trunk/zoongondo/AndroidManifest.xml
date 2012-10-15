@@ -171,6 +171,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
         </activity>
+        <activity
+            android:name=".ui.ChooseDishMediaActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.NgonDo" >
+        </activity>
     </application>
 
 </manifest>

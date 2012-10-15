@@ -13,7 +13,7 @@ public class WebImage implements SmartImage {
 	protected static final int CONNECT_TIMEOUT = 20000;
 	protected static final int READ_TIMEOUT = 10000;
 
-	protected static WebImageCache webImageCache;
+	public static WebImageCache webImageCache;
 
 	protected String url;
 
@@ -80,4 +80,5 @@ public class WebImage implements SmartImage {
 			webImageCache.remove(url);
 		}
 	}
+	
 }

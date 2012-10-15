@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.viewpagerindicator.TitlePageIndicator;
 import com.zoostudio.adapter.NgonPagerAdapter;
+import com.zoostudio.android.image.WebImage;
 import com.zoostudio.custom.view.ZooHorizontalScrollView;
 import com.zoostudio.custom.view.ZooLinearLayout;
 import com.zoostudio.exception.ZooLocationException;
@@ -68,111 +69,117 @@ public class TabHome extends BaseFragmentActivity implements
 		inflater = this.getLayoutInflater();
 		mPagerIndex = new ArrayList<Integer>();
 		mFragmentManager = this.getSupportFragmentManager();
-		String[] titles = this.getResources().getStringArray(R.array.titles_home_screen);
+		String[] titles = this.getResources().getStringArray(
+				R.array.titles_home_screen);
 		mHomeAdapter = new NgonPagerAdapter(this,
-				this.getSupportFragmentManager(),titles);
+				this.getSupportFragmentManager(), titles);
 	}
 
 	protected void initScreen() {
-//		Display display = this.getWindowManager().getDefaultDisplay();
-//		mScrollView = (ZooHorizontalScrollView) this
-//				.findViewById(R.id.scrollView);
-//		mFooterHome = (LinearLayout) this.findViewById(R.id.footer_home);
-//		MenuFragment fragment = (MenuFragment) mFragmentManager
-//				.findFragmentById(R.id.menuHomeScreen);
-//		mParentMenu = fragment.getParentMenu();
+		// Display display = this.getWindowManager().getDefaultDisplay();
+		// mScrollView = (ZooHorizontalScrollView) this
+		// .findViewById(R.id.scrollView);
+		// mFooterHome = (LinearLayout) this.findViewById(R.id.footer_home);
+		// MenuFragment fragment = (MenuFragment) mFragmentManager
+		// .findFragmentById(R.id.menuHomeScreen);
+		// mParentMenu = fragment.getParentMenu();
 		mCurrentPositionDistance = 0;
-//		mIncMainHome = inflater.inflate(R.layout.inc_main_home_screen, null);
-//		mBarTitle = mIncMainHome.findViewById(R.id.actionbar);
-//		mSearchWrapper = (LinearLayout) mIncMainHome
-//				.findViewById(R.id.search_wrapper);
-//		mBtnCancelSearch = (ImageButton) mIncMainHome
-//				.findViewById(R.id.btn_cancel_search);
-//		mMainPagerContent = (ZooLinearLayout) mIncMainHome
-//				.findViewById(R.id.home_info);
-//		mBtnMenu = (ImageButton) mIncMainHome.findViewById(R.id.btn_menu);
-//		mBtnSearch = (ImageButton) mIncMainHome.findViewById(R.id.btn_search);
+		// mIncMainHome = inflater.inflate(R.layout.inc_main_home_screen, null);
+		// mBarTitle = mIncMainHome.findViewById(R.id.actionbar);
+		// mSearchWrapper = (LinearLayout) mIncMainHome
+		// .findViewById(R.id.search_wrapper);
+		// mBtnCancelSearch = (ImageButton) mIncMainHome
+		// .findViewById(R.id.btn_cancel_search);
+		// mMainPagerContent = (ZooLinearLayout) mIncMainHome
+		// .findViewById(R.id.home_info);
+		// mBtnMenu = (ImageButton) mIncMainHome.findViewById(R.id.btn_menu);
+		// mBtnSearch = (ImageButton)
+		// mIncMainHome.findViewById(R.id.btn_search);
 		mTabsPager = (ViewPager) this.findViewById(R.id.content_pager);
-//		mBtnChangeDistance = (Button) mIncMainHome
-//				.findViewById(R.id.btnChangeDistance);
-//		mLocationAddress = (TextView) this.findViewById(R.id.location_address);
-//		mTextSearch = (EditText) mIncMainHome
-//				.findViewById(R.id.edt_home_search);
-//		mProgressBarSearch = (ProgressBar) mIncMainHome
-//				.findViewById(R.id.home_search_progress);
-//
-//		mBtnSearch.setOnClickListener(this);
-//		mBtnCancelSearch.setOnClickListener(this);
-//		mBtnChangeDistance.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				dw = new ZooSeekBarPopUp(mBarTitle, mCurrentPositionDistance);
-//				dw.setOnChangeListener(new ZooSeekBarPopUp.OnChangeListener() {
-//					@Override
-//					public void onChange(int value) {
-//						mCurrentPositionDistance = value;
-//						value++;
-//						mBtnChangeDistance.setText("" + value + " km");
-//					}
-//				});
-//				dw.showLikePopDownMenu(R.style.Animations_DialogChangeDistanceGrowFromTop);
-//			}
-//		});
-//
-//		mTextSearch.addTextChangedListener(new NgonTextWatcher() {
-//			@Override
-//			public void onTextRelease() {
-//				super.onTextRelease();
-//				mHandler.post(new Runnable() {
-//					@Override
-//					public void run() {
-//						mSearchTask = new GetSearchSpotTask(MainScreen.this,
-//								mTextSearch.getText().toString(), 0, 0);
-//						mSearchTask
-//								.setOnPostExecuteDelegate(new OnSearchResult());
-//						mSearchTask.execute();
-//						mProgressBarSearch.setVisibility(View.VISIBLE);
-//					}
-//				});
-//			}
-//		});
-//		mFooterHome.setOnClickListener(new android.view.View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				locationEdit();
-//			}
-//		});
-//		// Create a transparent view that pushes the other views in the HSV to
-//		// the right.
-//		// This transparent view allows the menu to be shown when the HSV is
-//		// scrolled.
-//		View transparent = new TextView(this);
-//		transparent.setBackgroundColor(Color.parseColor("#00000000"));
-//
-//		final View[] children = new View[] { transparent, mIncMainHome };
-//
-//		// Scroll to app (view[1]) when layout finished.
-//		int scrollToViewIdx = 1;
-//
-//		mListenerForScrolling = new ClickListenerForScrolling(mScrollView,
-//				mParentMenu, display.getWidth()) {
-//			@Override
-//			protected void onClickToSlide() {
-//				mMainPagerContent.changeTouchAble();
-//				boolean enable = !mTextSearch.isEnabled();
-//				mTextSearch.setEnabled(enable);
-//			}
-//		};
-//		mScrollView.initViews(children, scrollToViewIdx,
-//				new SizeCallbackForMenu(mBtnMenu, mListenerForScrolling),
-//				mBtnMenu);
-//
-////		fragment.setClickListenerForScrolling(mListenerForScrolling);
-//		mBtnMenu.setOnClickListener(mListenerForScrolling);
-//
+		// mBtnChangeDistance = (Button) mIncMainHome
+		// .findViewById(R.id.btnChangeDistance);
+		// mLocationAddress = (TextView)
+		// this.findViewById(R.id.location_address);
+		// mTextSearch = (EditText) mIncMainHome
+		// .findViewById(R.id.edt_home_search);
+		// mProgressBarSearch = (ProgressBar) mIncMainHome
+		// .findViewById(R.id.home_search_progress);
+		//
+		// mBtnSearch.setOnClickListener(this);
+		// mBtnCancelSearch.setOnClickListener(this);
+		// mBtnChangeDistance.setOnClickListener(new View.OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// dw = new ZooSeekBarPopUp(mBarTitle, mCurrentPositionDistance);
+		// dw.setOnChangeListener(new ZooSeekBarPopUp.OnChangeListener() {
+		// @Override
+		// public void onChange(int value) {
+		// mCurrentPositionDistance = value;
+		// value++;
+		// mBtnChangeDistance.setText("" + value + " km");
+		// }
+		// });
+		// dw.showLikePopDownMenu(R.style.Animations_DialogChangeDistanceGrowFromTop);
+		// }
+		// });
+		//
+		// mTextSearch.addTextChangedListener(new NgonTextWatcher() {
+		// @Override
+		// public void onTextRelease() {
+		// super.onTextRelease();
+		// mHandler.post(new Runnable() {
+		// @Override
+		// public void run() {
+		// mSearchTask = new GetSearchSpotTask(MainScreen.this,
+		// mTextSearch.getText().toString(), 0, 0);
+		// mSearchTask
+		// .setOnPostExecuteDelegate(new OnSearchResult());
+		// mSearchTask.execute();
+		// mProgressBarSearch.setVisibility(View.VISIBLE);
+		// }
+		// });
+		// }
+		// });
+		// mFooterHome.setOnClickListener(new
+		// android.view.View.OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// locationEdit();
+		// }
+		// });
+		// // Create a transparent view that pushes the other views in the HSV
+		// to
+		// // the right.
+		// // This transparent view allows the menu to be shown when the HSV is
+		// // scrolled.
+		// View transparent = new TextView(this);
+		// transparent.setBackgroundColor(Color.parseColor("#00000000"));
+		//
+		// final View[] children = new View[] { transparent, mIncMainHome };
+		//
+		// // Scroll to app (view[1]) when layout finished.
+		// int scrollToViewIdx = 1;
+		//
+		// mListenerForScrolling = new ClickListenerForScrolling(mScrollView,
+		// mParentMenu, display.getWidth()) {
+		// @Override
+		// protected void onClickToSlide() {
+		// mMainPagerContent.changeTouchAble();
+		// boolean enable = !mTextSearch.isEnabled();
+		// mTextSearch.setEnabled(enable);
+		// }
+		// };
+		// mScrollView.initViews(children, scrollToViewIdx,
+		// new SizeCallbackForMenu(mBtnMenu, mListenerForScrolling),
+		// mBtnMenu);
+		//
+		// // fragment.setClickListenerForScrolling(mListenerForScrolling);
+		// mBtnMenu.setOnClickListener(mListenerForScrolling);
+		//
 		mTabsPager.setAdapter(mHomeAdapter);
-//		mIndicator = (TitlePageIndicator) this.findViewById(R.id.title_pager);
-//		mIndicator.setOnPageChangeListener(this);
+		// mIndicator = (TitlePageIndicator)
+		// this.findViewById(R.id.title_pager);
+		// mIndicator.setOnPageChangeListener(this);
 		mIndicator = (TitlePageIndicator) this.findViewById(R.id.indicator);
 		mIndicator.setOnPageChangeListener(this);
 		mIndicator.setViewPager(mTabsPager);
@@ -186,22 +193,24 @@ public class TabHome extends BaseFragmentActivity implements
 					Toast.LENGTH_SHORT).show();
 		}
 	}
-	
-//	@Override
-//	public void onLocationChange(Location location) {
-//		NgonHomePager pager = getFragmentPager(mCurrentPager);
-//		pager.onLocationChanged(location);
-//
-//		LocationUtil locationAddress = new LocationUtil();
-//		locationAddress.setOnAddressChangedListener(this);
-//		locationAddress.getAddress(getBaseContext(), location);
-//
-//		Log.e(getClass().getName(), "onLocationChange:" + location.toString());
-//	}
+
+	// @Override
+	// public void onLocationChange(Location location) {
+	// NgonHomePager pager = getFragmentPager(mCurrentPager);
+	// pager.onLocationChanged(location);
+	//
+	// LocationUtil locationAddress = new LocationUtil();
+	// locationAddress.setOnAddressChangedListener(this);
+	// locationAddress.getAddress(getBaseContext(), location);
+	//
+	// Log.e(getClass().getName(), "onLocationChange:" + location.toString());
+	// }
 
 	public void locationEdit() {
-		Intent intent = new Intent(getApplicationContext(), ActivitySelectLocationManual.class);
-		intent.putExtra(BaseMapActivity.EXTRA_CURRENT_ADDRESS, mLocationAddress.getText());
+		Intent intent = new Intent(getApplicationContext(),
+				ActivitySelectLocationManual.class);
+		intent.putExtra(BaseMapActivity.EXTRA_CURRENT_ADDRESS,
+				mLocationAddress.getText());
 		double currentLat = -1, currentLong = -1;
 		try {
 			currentLat = NgonLocationManager.getInstance(null)
@@ -214,7 +223,7 @@ public class TabHome extends BaseFragmentActivity implements
 			overridePendingTransition(R.anim.fade_out,
 					R.anim.activity_slide_in_from_bottom);
 			startActivityForResult(intent, RequestCode.REQUEST_LOCATION_MANUAL);
-			
+
 		} catch (ZooLocationException e) {
 			e.printStackTrace();
 		}
@@ -222,7 +231,7 @@ public class TabHome extends BaseFragmentActivity implements
 
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent returnedIntent) {
-		Log.i("Activity","Activity Result");
+		Log.i("Activity", "Activity Result");
 		super.onActivityResult(requestCode, resultCode, returnedIntent);
 		switch (requestCode) {
 
@@ -250,7 +259,8 @@ public class TabHome extends BaseFragmentActivity implements
 	}
 
 	private void updateNewAddress(Intent intent) {
-		String address = intent.getExtras().getString(ActivitySelectLocationManual.RESULT_NEW_ADDRESS);
+		String address = intent.getExtras().getString(
+				ActivitySelectLocationManual.RESULT_NEW_ADDRESS);
 		this.mLocationAddress.setText(address);
 	}
 
@@ -292,16 +302,23 @@ public class TabHome extends BaseFragmentActivity implements
 		fragment.onTabSelected(position);
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (null != WebImage.webImageCache)
+			WebImage.webImageCache.clearMemory();
+	}
+
 	// TODO :@huy Lam animation cho nut search o man hinh MainScreen
 	// XML Neu can thay doi inc_main_home_screen.xml (id = search_wrapper)
-//	@Override
+	// @Override
 	public void onClick(View v) {
-//		if (v.getId() == R.id.btn_search) {
-//			mBtnMenu.setOnClickListener(null);
-//			mSearchWrapper.setVisibility(View.VISIBLE);
-//		} else if (v.getId() == R.id.btn_cancel_search) {
-//			mBtnMenu.setOnClickListener(mListenerForScrolling);
-//			mSearchWrapper.setVisibility(View.GONE);
-//		}
+		// if (v.getId() == R.id.btn_search) {
+		// mBtnMenu.setOnClickListener(null);
+		// mSearchWrapper.setVisibility(View.VISIBLE);
+		// } else if (v.getId() == R.id.btn_cancel_search) {
+		// mBtnMenu.setOnClickListener(mListenerForScrolling);
+		// mSearchWrapper.setVisibility(View.GONE);
+		// }
 	}
 }
