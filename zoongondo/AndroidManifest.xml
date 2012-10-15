@@ -90,7 +90,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
             <intent-filter>
-                <action android:name="com.zoostudio.broadcast.CROP_IMAGE" />
+                <action android:name="com.zoostudio.action.CROP_IMAGE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
