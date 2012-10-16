@@ -380,9 +380,11 @@ public class SpotDetailsActivity extends NgonActivity implements
 	@Override
 	public void onSpotReviewTaskListener(ArrayList<ReviewItem> data) {
 		ArrayList<ReviewItem> reviews = new ArrayList<ReviewItem>();
-		reviews.add(new ReviewItem());
-		reviews.add(new ReviewItem());
-		reviews.add(new ReviewItem());
+		reviews.add(new ReviewItem(1));
+		reviews.add(new ReviewItem(2));
+		reviews.add(new ReviewItem(3));
+		reviews.add(new ReviewItem(4));
+		reviews.add(new ReviewItem(0));
 		mListCommentView.setDatas(reviews);
 	}
 

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -20,12 +21,12 @@ import com.zoostudio.ngon.utils.OnScanMediaListener;
 import com.zoostudio.ngon.utils.Scanner;
 
 public class ChooseDishMediaActivity extends Activity implements
-		OnScanMediaListener, OnItemClickListener {
+		OnScanMediaListener, OnItemClickListener, OnClickListener {
 	private GridView mGridMedia;
-	private ArrayList<MediaItem> mMedia;
 	private Scanner mScanner;
 	private NgonGridDishMediaAdapter mAdapter;
 	private ImageButton mCamera;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +40,16 @@ public class ChooseDishMediaActivity extends Activity implements
 				0, new ArrayList<MediaItem>());
 		mGridMedia.setAdapter(mAdapter);
 		mGridMedia.setOnItemClickListener(this);
+		mCamera.setOnClickListener(this);
 		mScanner.loadMedia();
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		MediaItem item = (MediaItem) intent.getExtras().getSerializable(
+				CropImageActivity.MEDIA_CALL_BACK);
+		mAdapter.insert(item, 0);
 	}
 
 	@Override
@@ -53,14 +63,13 @@ public class ChooseDishMediaActivity extends Activity implements
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
-		String mediaPath = mAdapter.getItem(position).getPathMedia();
 		Intent intent = new Intent(getApplicationContext(),
 				CropImageActivity.class);
-		intent.putExtra(CropImageActivity.MEDIA_PATH, mediaPath);
+		intent.putExtra(CropImageActivity.MEDIA_ITEM, mAdapter.getItem(position));
 		intent.putExtra("SOURCE", CropImageActivity.FROM_GALLERY);
 		startActivity(intent);
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -69,5 +78,12 @@ public class ChooseDishMediaActivity extends Activity implements
 			keys[i] = mAdapter.getItem(i).getIdMedia();
 		}
 		LocalImage.clearMemory(keys);
+	}
+
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent(getApplicationContext(),
+				CameraForSquareActivity.class);
+		startActivity(intent);
 	}
 }

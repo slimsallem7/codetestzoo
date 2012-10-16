@@ -394,12 +394,26 @@ public class ChooseDishActivity extends NgonActivity implements
 		}
 	}
 
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		Logger.e(TAG, "onActivityResult");
+//		if (resultCode == RESULT_OK) {
+//			MenuItem item = (MenuItem) data.getExtras().getSerializable(
+//					EXTRA_MENU_ITEM);
+//			mMenuAdapter.add(item);
+//			mTempOriginalList.add(item);
+//			mMenuAdapter.notifyDataSetChanged();
+//		}
+//	};
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Logger.e(TAG, "onActivityResult");
 		if (resultCode == RESULT_OK) {
 			MenuItem item = (MenuItem) data.getExtras().getSerializable(
 					EXTRA_MENU_ITEM);
 			mMenuAdapter.add(item);
 			mTempOriginalList.add(item);
+			mMenuAdapter.notifyDataSetChanged();
 		}
-	};
+	}
 }

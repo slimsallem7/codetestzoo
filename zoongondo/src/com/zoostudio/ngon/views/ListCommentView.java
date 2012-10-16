@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.Matrix.ScaleToFit;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -73,7 +71,7 @@ public class ListCommentView extends LinearLayout implements OnClickListener {
 
 			ZooAvatarImageView avatar = (ZooAvatarImageView) item
 					.findViewById(R.id.review_avatar);
-			avatar.setImageUrl("http://nr4.upanh.com/b6.s31.d2/710d6f20c05175e12a18c923112c7dfd_49528574.test.png");
+			avatar.setImageUrl(data.getUser().getAvatar());
 			TextView userName = (TextView) item
 					.findViewById(R.id.review_username);
 			userName.setText("vietbq");

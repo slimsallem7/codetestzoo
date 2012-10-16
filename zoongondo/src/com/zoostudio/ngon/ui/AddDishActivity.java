@@ -1,10 +1,10 @@
 package com.zoostudio.ngon.ui;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,19 +13,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.WaitingDialog;
 import com.zoostudio.ngon.task.CreateDishTask;
+import com.zoostudio.ngon.task.callback.OnAddDishListener;
+import com.zoostudio.ngon.utils.ImageUtil;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.restclient.RestClientTask;
-import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
-public class AddDishActivity extends NgonActivity implements OnClickListener,
-		OnPostExecuteDelegate, OnPreExecuteDelegate {
+public class AddDishActivity extends NgonActivity implements
+		 OnPreExecuteDelegate , OnAddDishListener{
 	protected static final String EXTRA_SPOT = "com.ngon.do.adddishactivity.SPOT";
 	private EditText etDishName;
 	private Button btnAddDish;
@@ -34,8 +37,10 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 	private SpotItem mSpot;
 	private WaitingDialog mWaitingDialog;
 	private ButtonUp mUp;
-	private String mMediaPath;
-
+	private int sizeReq;
+	private MediaItem mMediaItem;
+	private String addDishOk;
+	private MenuItem menuItem;
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_add_dish;
@@ -44,9 +49,15 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		mMediaPath = intent.getExtras().getString(CropImageActivity.MEDIA_PATH);
-		Toast.makeText(getApplicationContext(), mMediaPath, Toast.LENGTH_SHORT)
-				.show();
+		mMediaItem = (MediaItem) intent.getExtras().getSerializable(CropImageActivity.MEDIA_ITEM);
+		int size = intent.getExtras().getInt(CropImageActivity.MEDIA_SIZE);
+		Options options = new Options();
+		options.outWidth = size;
+		options.outHeight = options.outWidth;
+		options.inSampleSize = ImageUtil.calculateInSampleSize(options,
+				sizeReq, sizeReq);
+		Bitmap bitmap = BitmapFactory.decodeFile(mMediaItem.getPathMedia(), options);
+		mThumb.setImageBitmap(bitmap);
 	}
 
 	@Override
@@ -68,7 +79,8 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 
 	@Override
 	protected void initVariables() {
-
+		sizeReq = getResources().getDimensionPixelSize(R.dimen.dish_photo_size);
+		addDishOk = getResources().getString(R.string.add_dish_success);
 	}
 
 	private SpotItem getSpot() {
@@ -82,57 +94,11 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 		}
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.done:
-			String dish_name = etDishName.getText().toString().trim();
-			if (dish_name.length() > 2) {
-				CreateDishTask addDishTask = new CreateDishTask(this,
-						dish_name, mSpot.getId());
-				addDishTask.setOnPreExecuteDelegate(this);
-				addDishTask.setOnPostExecuteDelegate(this);
-				addDishTask.execute();
-			} else {
-			}
-			break;
-		}
-	}
 
 	@Override
 	public void onActionPre(RestClientTask task) {
 		mWaitingDialog = new WaitingDialog(this);
 		mWaitingDialog.show();
-	}
-
-	@Override
-	public void actionPost(RestClientTask task, JSONObject result) {
-		if (task instanceof CreateDishTask) {
-			mWaitingDialog.dismiss();
-
-			try {
-				boolean status = result.getBoolean("status");
-				if (status) {
-					String dishId = result.getString("dish_id");
-					Intent intent = new Intent();
-					intent.putExtra("dish_id", dishId);
-					intent.putExtra("dish_name", etDishName.getText()
-							.toString().trim());
-					setResult(RESULT_OK, intent);
-					finish();
-				} else {
-					int errorCode = result.getInt("error_code");
-					doCreateError(errorCode);
-				}
-
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void doCreateError(int errorCode) {
-
 	}
 
 	@Override
@@ -153,12 +119,15 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 		btnAddDish.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				menuItem = new MenuItem();
 				String dish_name = etDishName.getText().toString().trim();
+				menuItem.setName(dish_name);
+				menuItem.setCost("3");
 				if (dish_name.length() > 2) {
 					CreateDishTask addDishTask = new CreateDishTask(
-							AddDishActivity.this, dish_name, mSpot.getId());
+							AddDishActivity.this, dish_name, mSpot.getId(),mMediaItem);
 					addDishTask.setOnPreExecuteDelegate(AddDishActivity.this);
-					addDishTask.setOnPostExecuteDelegate(AddDishActivity.this);
+					addDishTask.setOnAddDishListener(AddDishActivity.this);
 					addDishTask.execute();
 				} else {
 				}
@@ -180,5 +149,18 @@ public class AddDishActivity extends NgonActivity implements OnClickListener,
 				startActivity(intent);
 			}
 		});
+	}
+
+	@Override
+	public void onAddDishListenerSuccess(String urlImageDish) {
+		mWaitingDialog.dismiss();
+		if(!urlImageDish.equals("")){
+			menuItem.setUrlImageThumb(urlImageDish);
+		}
+		Toast.makeText(getApplicationContext(), addDishOk, Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent();
+		intent.putExtra(ChooseDishActivity.EXTRA_MENU_ITEM, menuItem);
+		setResult(RESULT_OK, intent);
+		finish();
 	}
 }
