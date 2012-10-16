@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<dimen name="size_avatar">38px</dimen>
+	<dimen name="size_avatar">40px</dimen>
 	<dimen name="size_picker">14px</dimen>
 	<dimen name="size_thumb">48dip</dimen>
 	<dimen name="size_border">2dip</dimen>

@@ -1,8 +1,136 @@
 <resources>
+
     <string name="setting_logout">Logout</string>
     <string name="string_add_new_dish">THÊM MÓN MỚI</string>
     <string name="title_notification">ngon.đó</string>
     <string name="content_notification_ok">Post ảnh thành công</string>
     <string name="content_notification_fail">Post ảnh lỗi</string>
     <string name="request_location">Đang lấy vị trí</string>
+    <string name="mess_invalid_image">Ảnh phải lớn hơn 256x256</string>
+    <string name="accept">XONG</string>
+    <string name="crop">CẮT ẢNH</string>
+    <string name="cancel">THOÁT</string>
+    <string name="recrop">CẮT LẠI</string>
+    <string name="app_name">ngon.đó</string>
+    <string name="login_type_username">Xin điền tên đăng nhập</string>
+    <string name="login_type_password">Xin điền mật khẩu</string>
+    <string name="login_username_not_valid">Tên đăng nhập không hợp lệ. 
+        Các kí tự cho phép là các chữ cái, số và dấu gạch dưới ( _ ) và có từ 3 đến 50 kí 
+        tự</string>
+    <string name="login_username">Tên đăng nhập</string>
+    <string name="login_password">Mật khẩu</string>
+    <string name="login_show_password">Hiện mật khẩu</string>
+    <string name="login_btn_login">ĐĂNG NHẬP</string>
+    <string name="login_recover_password">Lấy lại mật khẩu</string>
+    <string name="login_btn_register">ĐĂNG KÍ</string>
+    <string name="email_already_exist">Email đã tồn tại,hãy thử 1 địa chỉ email khác.</string>
+    <string name="email_wrong_format">Nhập sai địa chỉ email,hãy thử  1 địa chỉ email khác.</string>
+    <string name="phone_already_exist">Số điện thoại đã tồn tại,hãy thử 1 số điện thoại khác.</string>
+    <string name="phone_wrong_format">Nhập sai số điện thoại,hãy thử  1 số điện thoại khác.</string>
+    <string name="login_password_not_valid">Mật khẩu không hợp lệ. Mật khẩu chỉ được có từ 
+	    5 đến 20 kí tự</string>
+    <string name="login_loggingin">Đang đăng nhập</string>
+    <string name="register_registering">Đang đăng kí</string>
+    <string name="title_btn_view_all_comment">Xem tất cả</string>
+    <string name="string_close">Đóng</string>
+    <string name="string_error">Lỗi</string>
+    <string name="string_error_username_exist">Tên đăng nhập đã tồn tại, hãy thử lại 1 cái tên khác.</string>
+    <string name="dialog_exit_title">Thoát</string>
+    <string name="dialog_exit_msg">Bạn có chăc chắn muốn thoát ứng dụng?</string>
+    <string name="dialog_delete_msg">Bạn có chăc chắn muốn xóa?</string>
+    <string name="string_cancel">Hủy</string>
+    <string name="string_waiting">Đợi một lúc nhé!!!</string>
+    <string name="string_notice">Lưu ý</string>
+    <string name="string_warning_without_review">Bạn chưa viết cảm xúc, bạn có chắc chắn muốn bỏ qua nó ?</string>
+    <string name="string_sure">Chắc chắn</string>
+    <string name="string_error_spot_already_like">Bạn đã thích địa điểm này rồi</string>
+    <string name="error_get_token">Có lỗi xảy ra, bấm thử lại</string>
+    <string name="string_try">Thử lại</string>
+    <string name="string_comment">Nhận xét</string>
+    <string name="string_content_dialog_choose_service">Bạn hãy chọn GPS hoặc 3G/Wifi</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="change_distance_description">Kéo thanh trượt để thay đổi cự ly\n tìm kiếm địa điểm</string>
+    <string name="dialog_no_connection">Không có kết nối mạng. Xin kiểm tra lại kết nối của thiết bị.</string>
+    <string name="error_message_start_location_service">Có lỗi trong quá trình bật serivce. Hãy thử lại</string>
+    <string name="dialog_title_attention">Chú ý!</string>
+    <string name="general_close">Đóng</string>
+    <string name="google_key_macos_vietbq">0_EiDNtkUUkEp4L0iaoiRdahtcLvdaSBbQXVEzw</string>
+    <string name="mapkey_windows">0_EiDNtkUUkGuyy7_IfKBs-lMKcw8aWA6sYE8tA</string>
+    <string name="content_description">content_description</string>
+    <string name="spotdetail_review">NHẬN XÉT</string>
+    <string name="spotdetail_readmore">Xem thêm</string>
+    <string name="spotdetail_addreview">Viết nhận xét</string>
+    <string name="spotdetail_menu">MENU</string>
+    <string name="spotdetail_like">Thèm</string>
+    <string name="search_hint">Tìm kiếm</string>
+    <string name="loadingmore">Đang tải thêm</string>
+
+    <string-array name="titles_home_screen">
+        <item>Gần Nhất</item>
+        <item>Bình Chọn</item>
+        <item>Mới Nhất</item>
+    </string-array>
+    <string-array name="titles_tab_user_profile_screen">
+        <item>Cá Nhân</item>
+    </string-array>
+
+    <string name="user_pager_at">tại</string>
+    <string name="fragment_home_page_message_loading">Đang lấy danh sách địa điểm</string>
+    <string name="fragment_home_page_retry">Thử lại</string>
+    <string name="menu_eat_title">Đã ăn</string>
+    <string name="menu_add_title">Thêm</string>
+    <string name="menu_like_title">Thích</string>
+    <string name="menu_detail_title">Chi tiết</string>
+    <string name="testnumber">17</string>
+    <string name="fooddetail_spotname_title">Nhà hàng</string>
+    <string name="fooddetail_spotaddress_title">Địa chỉ</string>
+    <string name="report">Báo vi phạm</string>
+    <string name="search_filter">LỌC</string>
+    <string name="checkin">CHECKIN</string>
+    <string name="checkin_writereview">Viết cảm nhận</string>
+    <string name="checkin_selected_foodlist">Chọn món</string>
+    <string name="checkin_getting_location">Đang lấy địa chỉ &#8230;</string>
+    <string name="dialog_spotdetail_addphoto">Thêm ảnh</string>
+    <string name="dialog_close">Đóng</string>
+    <string name="dialog_userprofile_removeavatar">Xóa avatar</string>
+    <string name="comment_eat_dish">Ăn món...</string>
+    <string name="comment_dish_count">Đã chọn </string>
+    <string name="comment_label_dish">Món</string>
+    <string name="hint_comment">Viết cảm nhận...</string>
+    <string name="button_done">XONG</string>
+    <string name="dialog_pickphoto_camera">Chụp ảnh</string>
+    <string name="dialog_pickphoto_gallery">Chọn từ máy</string>
+    <string name="selected_dish">Bạn đã chọn</string>
+    <string name="dish">Món</string>
+    <string name="delete">Xóa</string>
+    <string name="notify_default">Hãy là người đầu tiên post ảnh nhé !!!</string>
+    <string name="dialog_searchfilter_title">Lọc tìm kiếm</string>
+    <string name="dialog_searchfilter_distance_title">KHOẢNG CÁCH</string>
+    <string name="dialog_searchfilter_title_title">TIÊU ĐỀ</string>
+    <string name="dialog_searchfilter_distance">Lọc theo khoảng cách</string>
+    <string name="title_photo_checkin">TÙY CHỈNH ẢNH</string>
+    <string name="text_dish_quantity">SỐ MÓN ĐÃ CHỌN</string>
+    <string name="dialog_delete_dish">Bỏ Chọn</string>
+    <string name="imageroll_caption_hint">Viết bình luận cho ảnh</string>
+    <string name="register_title">Đăng kí tài khoản</string>
+    <string name="register_username_hint">Tên đăng nhập</string>
+    <string name="register_password_hint">Mật khẩu</string>
+    <string name="register_email_hint">E-mail</string>
+    <string name="register_btn_register">XONG</string>
+    <string name="recoverpass_title">Lấy lại mật khẩu</string>
+    <string name="recoverpass_phone">Số điện thoại</string>
+    <string name="recoverpass_email">Email (không bắt buộc))</string>
+    <string name="developing">Developing</string>
+    <string name="location_suggest_list">DANH SÁCH ĐỊA ĐIỂM</string>
+    <string name="location_map">XEM BẢN ĐỒ</string>
+    <string name="location_input_address">Nhập địa chỉ</string>
+    <string name="location_title">ĐẶT ĐỊA ĐIỂM</string>
+    <string name="choosedish_emptylist">Bạn chưa chọn món nào</string>
+    <string name="select_photo_all">Tất cả</string>
+    <string name="select_photo_selected">Đã chọn</string>
+    <string name="adddish_name">TÊN MÓN ĂN</string>
+    <string name="adddish_price">GIÁ (VNĐ)</string>
+    <string name="adddish_addmore">THÊM NỮA</string>
+    <string name="adddish_done">XONG</string>
+	<string name="add_dish_success">Đã thêm</string>
 </resources>
