@@ -3,7 +3,6 @@ package com.zoostudio.ngon.ui;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 import org.bookmark.helper.DeviceCore;
 
@@ -17,7 +16,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.SensorManager;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
@@ -27,21 +25,20 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.views.ZooCameraView;
 import com.zoostudio.ngon.views.ZooCheckBoxButtonView;
 import com.zoostudio.ngon.views.ZooImageButtonView;
 import com.zoostudio.ngon.views.ZooImageView;
-import com.zoostudio.ngon.views.ZooTextView;
 
 @TargetApi(9)
-public class CameraActivity extends NgonActivity implements
+public class CameraForSquareActivity extends NgonActivity implements
 		OnCheckedChangeListener, ZooCameraView.OnFocusListener {
 	public static final String IMAGE_IDS = "IMAGE ID CAPTURED";
 	private ZooImageButtonView btnCamera;
@@ -49,38 +46,28 @@ public class CameraActivity extends NgonActivity implements
 	private ZooCheckBoxButtonView checkBox;
 	private ZooCameraView mCameraPreview;
 	private CheckBox mChkFocus;
-	private volatile boolean hasCapture;
-	private Handler handler;
 	private int degree;
 	private MyOrientationEventListener myOrientationEventListener;
-	private ZooTextView countImage;
 	private ZooImageView mBtnChangeCamera;
-	private int numbersImageCaptured;
 	private volatile boolean isCaputring;
 	private PowerManager.WakeLock wl;
-	private ArrayList<MediaItem> mediasCaptured;
-	private ImageButton btnBackToGallery;
+
 
 	@Override
 	protected int setLayoutView() {
-		return R.layout.activity_camera;
+		return R.layout.activity_camera_for_square;
 	}
 
 	@Override
 	protected void initControls() {
-		handler = new Handler();
-		hasCapture = false;
 		btnCamera = (ZooImageButtonView) this.findViewById(R.id.btnCapture);
 		checkBox = (ZooCheckBoxButtonView) this.findViewById(R.id.flash);
-		countImage = (ZooTextView) this.findViewById(R.id.countImageCaptured);
 		mChkFocus = (CheckBox) this.findViewById(R.id.chkFocusCamera);
-		btnBackToGallery = (ImageButton) findViewById(R.id.btnBackToGallery);
-		countImage.setVisibility(View.INVISIBLE);
+
 		mBtnChangeCamera = (ZooImageView) this
 				.findViewById(R.id.btnChangeCamera);
 		mBtnChangeCamera.setVisibility(View.INVISIBLE);
 		checkBox.setOnCheckedChangeListener(this);
-		numbersImageCaptured = 0;
 		mCamera = getCameraInstance();
 
 		myOrientationEventListener = new MyOrientationEventListener(this,
@@ -130,7 +117,7 @@ public class CameraActivity extends NgonActivity implements
 	@Override
 	protected void initVariables() {
 		isCaputring = false;
-		mediasCaptured = new ArrayList<MediaItem>();
+	
 	}
 
 	@Override
@@ -147,13 +134,7 @@ public class CameraActivity extends NgonActivity implements
 				}
 			}
 		});
-		btnBackToGallery.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finishCamera();
-			}
-		});
+	
 	}
 
 	private Camera getCameraInstance() {
@@ -167,7 +148,6 @@ public class CameraActivity extends NgonActivity implements
 	}
 
 	PictureCallback mPicture = new PictureCallback() {
-		private MediaItem item;
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
@@ -195,33 +175,23 @@ public class CameraActivity extends NgonActivity implements
 					e.printStackTrace();
 				}
 
-				item = new MediaItem();
 				long mediaId = ContentUris.parseId(url);
 				Images.Thumbnails.getThumbnail(getContentResolver(), mediaId,
 						Images.Thumbnails.MINI_KIND, null);
-				item.setValue(getRealPathFromURI(url), mediaId, true);
-				mediasCaptured.add(item);
+				String mediaPath = getRealPathFromURI(url);
+				MediaItem item = new MediaItem();
+				item.setValue(mediaPath, mediaId, degree,"image/jpg");
+				
+				Intent intent = new Intent(getApplicationContext(),
+						CropImageActivity.class);
+				intent.putExtra(CropImageActivity.MEDIA_ITEM, item);
+				intent.putExtra("SOURCE", CropImageActivity.FROM_CAMERA);
+				
+				startActivity(intent);
 
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
-			hasCapture = true;
-			try {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (!countImage.isShown()) {
-							countImage.setVisibility(View.VISIBLE);
-						}
-						numbersImageCaptured++;
-						countImage.setText("" + numbersImageCaptured);
-						isCaputring = false;
-					}
-				});
-			} catch (Exception e) {
-			}
-			mCameraPreview.onTakeCameraDone();
-			camera.startPreview();
 		}
 	};
 
@@ -243,22 +213,6 @@ public class CameraActivity extends NgonActivity implements
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		finishCamera();
-	}
-
-	private void finishCamera() {
-		if (hasCapture) {
-			Intent data = new Intent();
-			data.putExtra(IMAGE_IDS, mediasCaptured);
-			this.setResult(RESULT_OK, data);
-		} else {
-			this.setResult(RESULT_CANCELED);
-		}
-		this.finish();
-	}
-
 	class MyOrientationEventListener extends OrientationEventListener {
 
 		public MyOrientationEventListener(Context context, int rate) {
@@ -271,37 +225,26 @@ public class CameraActivity extends NgonActivity implements
 				degree = 90;
 				btnCamera.startAnimation(-90);
 				checkBox.startAnimation(-90);
-				if (countImage.isShown()) {
-					countImage.startAnimation(-90);
-				}
 				mBtnChangeCamera.startAnimation(-90);
 			} else if (arg0 >= 45 && arg0 <= 130) {
 				degree = 180;
 				btnCamera.startAnimation(-degree);
 				checkBox.startAnimation(-degree);
-				if (countImage.isShown())
-					countImage.startAnimation(-degree);
 				mBtnChangeCamera.startAnimation(-degree);
 			} else if (arg0 >= 240 && arg0 <= 300) {
 				degree = 0;
 				btnCamera.startAnimation(degree);
 				checkBox.startAnimation(degree);
-				if (countImage.isShown())
-					countImage.startAnimation(degree);
 				mBtnChangeCamera.startAnimation(degree);
 			} else if (arg0 >= 140 && arg0 <= 220) {
 				degree = 270;
 				btnCamera.startAnimation(90);
 				checkBox.startAnimation(90);
-				if (countImage.isShown())
-					countImage.startAnimation(90);
 				mBtnChangeCamera.startAnimation(90);
 			} else if (arg0 >= 300) {
 				degree = 90;
 				btnCamera.startAnimation(-90);
 				checkBox.startAnimation(-90);
-				if (countImage.isShown())
-					countImage.startAnimation(-90);
 				mBtnChangeCamera.startAnimation(-90);
 			}
 		}

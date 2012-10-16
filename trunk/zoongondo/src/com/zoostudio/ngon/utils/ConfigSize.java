@@ -1,7 +1,6 @@
 package com.zoostudio.ngon.utils;
 
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.zoostudio.ngon.R;
 

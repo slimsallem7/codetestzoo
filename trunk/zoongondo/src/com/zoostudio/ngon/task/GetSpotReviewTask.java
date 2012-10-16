@@ -21,7 +21,7 @@ public class GetSpotReviewTask extends RestClientTask {
 	private int mOffset;
 	private ArrayList<ReviewItem> data;
 	private OnSpotReviewTaskListener mListener;
-
+	
 	public GetSpotReviewTask(Activity activity, String spot_id) {
 		this(activity, spot_id, 0);
 	}

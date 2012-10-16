@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zoostudio.adapter.item.MenuItem;
-import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.adapter.item.ReviewItem;
 import com.zoostudio.adapter.item.SpotItem;
@@ -13,7 +12,7 @@ import com.zoostudio.adapter.item.UserItem;
 public class ParserUtils {
 
     public static ReviewItem parseReview(JSONObject review) throws JSONException {
-        ReviewItem item = new ReviewItem();
+        ReviewItem item = new ReviewItem(1);
         item.setId(review.getString("id"));
         item.setContent(review.getString("content"));
         item.setTimestamp(review.getLong("time"));
