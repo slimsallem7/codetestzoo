@@ -11,7 +11,7 @@ public class LocalImage implements SmartImage {
 	public LocalImage(long idMedia) {
 		this.idMedia = idMedia;
 	}
-	
+
 	@Override
 	public Bitmap getBitmap(Context context) {
 		// Don't leak context
@@ -23,7 +23,7 @@ public class LocalImage implements SmartImage {
 		if (idMedia != -1) {
 			bitmap = localImageCache.get(idMedia);
 			if (bitmap == null) {
-//				bitmap = localImageCache.get(-1);
+				// bitmap = localIma     geCache.get(-1);
 			}
 		}
 
@@ -35,8 +35,9 @@ public class LocalImage implements SmartImage {
 			localImageCache.remove(idMedia);
 		}
 	}
-	
-	public static void clearMemory(Long[] keys){
-		localImageCache.clear(keys);
+
+	public static void clearMemory(Long[] keys) {
+		if (null != localImageCache)
+			localImageCache.clear(keys);
 	}
 }
