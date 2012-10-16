@@ -7,6 +7,8 @@ import java.net.URLConnection;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Matrix;
 
 public class ZooAvatarWebImage extends WebImage {
 	private int size;
@@ -25,8 +27,12 @@ public class ZooAvatarWebImage extends WebImage {
 			conn.setReadTimeout(READ_TIMEOUT);
 			InputStream is = conn.getInputStream();
 			BufferedInputStream bif = new BufferedInputStream(is);
+			Options options = new Options();
+			options.inJustDecodeBounds = true;
 			bitmap = BitmapFactory.decodeStream(bif);
-			bitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
+			Matrix matrix = new Matrix();
+			matrix.postScale(bitmap.getWidth()/size, bitmap.getHeight()/size);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 			is.close();
 			bif.close();
 		} catch (Exception e) {
