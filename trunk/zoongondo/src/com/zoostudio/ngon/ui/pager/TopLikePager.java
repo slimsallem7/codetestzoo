@@ -16,7 +16,6 @@ import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate {
-	private ListView lvSpot;
 	private boolean mFirstDisplay = true;
 	private GetTopLikeSpotTask mLoadNewSpotTask;
 	private GetTopLikeSpotTask mLoadMoreSpotTask;
@@ -24,8 +23,8 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 		super(indexPager);
 	}
 
-	public void onTabSelected(int position) {
-		super.onTabSelected(position);
+	public void onTabSelected() {
+		super.onTabSelected();
 		if (mFirstDisplay) {
 			mFirstDisplay = false;
 			refreshSpotItem();
@@ -40,7 +39,6 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 					new ArrayList<SpotItem>(), null);
 		}
 
-		lvSpot = (ListView) findViewById(R.id.spotlist);
 		View header = mInflater.inflate(R.layout.item_home_search, null);
 		header.setOnClickListener(new OnClickListener() {
 			@Override

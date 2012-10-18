@@ -8,11 +8,11 @@ public class ReviewItem {
     private UserItem user;
     
     private String[] imageDumps = {
-			"http://narutozona-en.com/uploads/fotos/1231169819_naruto_-_gaara_of_the_desert.png",
-			"http://media.wths.net/heimstead/ayalai0727/Images/Naruto_-_Temari.png",
-			"http://3.bp.blogspot.com/-gxGmjqTAC5E/TcQLb4v4duI/AAAAAAAAAEc/5ibdEpWHMuE/s1600/Hatake-Kakashi.png",
-			"http://4.bp.blogspot.com/_Qf5kfbE8tiU/S60jQ6DRaEI/AAAAAAAAAEU/zfbenCvsj_c/s1600/Sasuke.png",
-			"http://download-naruto-episodes.edogo.com/wp-content/uploads/2009/02/akimichi_choji.png"
+			"http://wallpaperscraft.com/image/adele_girl_hair_face_look_9921_128x128.jpg",
+			"http://wallpaperscraft.com/image/girl_eyes_face_makeup_manicure_blue-eyed_44388_128x128.jpg",
+			"http://www.weiboenglish.com/images/face/9/81/145_b.jpg",
+			"http://a.wattpad.net/useravatar/LittleGirlBlue.128.410642.jpg",
+			"http://a.wattpad.net/useravatar/ImOnlyGinger.128.637778.jpg"
 	};
     
     public ReviewItem(int index) {

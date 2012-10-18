@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.test.cache.CacheableBitmapWrapper;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,39 +24,26 @@ public class WebImage implements SmartImage {
 	}
 
 
-	public Bitmap getBitmap(Context context) {
+	public CacheableBitmapWrapper getWrap(Context context) {
 		// Don't leak context
 		if (webImageCache == null) {
 			webImageCache = new WebImageCache(context);
 		}
 
 		// Try getting bitmap from cache first
-		Bitmap bitmap = null;
+		CacheableBitmapWrapper wrapper = null;
 		if (url != null) {
-			bitmap = webImageCache.get(url);
-			if (bitmap == null) {
-				bitmap = getBitmapFromUrl(url);
-				if (bitmap != null) {
-					webImageCache.put(url, bitmap);
+			wrapper = webImageCache.get(url);
+			if (wrapper == null) {
+				Bitmap bitmap = getBitmapFromUrl(url);
+				if(null == bitmap) return null;
+				wrapper = new CacheableBitmapWrapper(url,bitmap);
+				if (wrapper != null) {
+					webImageCache.put(url, wrapper);
 				}
 			}
 		}
-
-		return bitmap;
-	}
-
-	public Bitmap getBorderBitmap(Context context) {
-		// Don't leak context
-		if (webImageCache == null) {
-			webImageCache = new WebImageCache(context);
-		}
-		// Try getting bitmap from cache first
-		Bitmap bitmap = null;
-		if (url != null) {
-			bitmap = webImageCache.getImageBorder(url);
-		}
-
-		return bitmap;
+		return wrapper;
 	}
 
 	protected Bitmap getBitmapFromUrl(String url) {

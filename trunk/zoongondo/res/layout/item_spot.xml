@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="117dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     >
     <View
         android:id="@+id/top"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:background="#c9b082" />
 
     <com.zoostudio.android.image.SmartImageView
         android:id="@+id/imageSpot"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="93dp"
         android:layout_below="@+id/top"
         android:layout_centerVertical="true"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/spot_name"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="25dp"
         android:layout_alignBottom="@id/imageSpot"
         android:background="#CC000000"
@@ -74,7 +74,7 @@
 
     <View
         android:id="@+id/bottom"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:layout_alignRight="@id/imageSpot"
         android:layout_below="@+id/spot_distance"

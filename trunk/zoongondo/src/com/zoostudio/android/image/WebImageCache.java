@@ -1,44 +1,48 @@
 package com.zoostudio.android.image;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 
-import com.zoostudio.ngon.R;
+import com.test.cache.CacheableBitmapWrapper;
+import com.zoostudio.ngon.utils.ConfigSize;
+import com.zoostudio.ngon.utils.ImageUtil;
 
 public class WebImageCache {
 	private static final String DISK_CACHE_PATH = "/web_image_cache/";
 
-	// private ConcurrentHashMap<String, SoftReference<Bitmap>> memoryCache;
-	private LruCache<String, Bitmap> lruCache;
+	private static final String TAG = "WebImageCache";
+
+	private LruCache<String, CacheableBitmapWrapper> lruCache;
 	private String diskCachePath;
 	private boolean diskCacheEnabled = false;
-	private ExecutorService writeThread;
 
 	private Context appContext;
 
+
 	public WebImageCache(Context context) {
 		// Set up in-memory cache store
-		// memoryCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>();
+		// memoryCache = new ConcurrentHashMap<String,
+		// SoftReference<CacheableBitmapWrapper>>();
 		// OutOfMemory exception.
 		final int memClass = ((ActivityManager) context
 				.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
 		// Use 1/8th of the available memory for this memory cache.
 		final int cacheSize = 1024 * 1024 * memClass / 8;
-		lruCache = new LruCache<String, Bitmap>(cacheSize);
+		lruCache = new LruCache<String, CacheableBitmapWrapper>(cacheSize);
 		// Set up disk cache store
 		appContext = context.getApplicationContext();
 
@@ -51,71 +55,49 @@ public class WebImageCache {
 		diskCacheEnabled = outFile.exists();
 
 		// Set up threadpool for image fetching tasks
-		writeThread = Executors.newSingleThreadExecutor();
 	}
 
-	public Bitmap get(final String url) {
-		Bitmap bitmap = null;
+	public CacheableBitmapWrapper get(final String url) {
+		CacheableBitmapWrapper wrapper = null;
 
 		// Check for image in memory
-		bitmap = getBitmapFromMemory(url);
+		wrapper = getBitmapFromMemory(url);
 
 		// Check for image on disk cache
-		if (bitmap == null) {
-			bitmap = getBitmapFromDisk(url);
+		if (wrapper == null) {
+			Log.e("WebImageCache", url + " = NULL");
+			wrapper = getBitmapFromDisk(url);
 
 			// Write bitmap back into memory cache
-			if (bitmap != null) {
-				cacheBitmapToMemory(url, bitmap);
+			if (wrapper != null) {
+				put(url, wrapper);
 			}
 		}
 
-		return bitmap;
+		return wrapper;
 	}
 
-	public void put(String url, Bitmap bitmap) {
-		cacheBitmapToMemory(url, bitmap);
-		cacheBitmapToDisk(url, bitmap);
+	public void put(String url, CacheableBitmapWrapper wrapper) {
+		lruCache.put(url, wrapper);
+		cacheBitmapToDisk(url, wrapper.getBitmap());
 	}
 
-	public Bitmap getImageBorder(String id) {
-		Bitmap bitmap = null;
-		// Check for image in memory
-		bitmap = getBitmapFromMemory(id);
-		if (bitmap == null) {
-			bitmap = BitmapFactory.decodeStream(appContext.getResources()
-					.openRawResource(R.drawable.ic_border_circle));
-			if (bitmap != null) {
-				cacheBitmapToMemory(id, bitmap);
-			}
-		}
-		return bitmap;
-	}
 
 	public void remove(String url) {
 		if (url == null) {
 			return;
 		}
-
+		Log.e("WebImageCache", "Remove " + url + " Khoi memory");
 		// Remove from memory cache
-		// memoryCache.remove(getCacheKey(url));
-		lruCache.remove(getCacheKey(url));
-
-		// Remove from file cache
-		File f = new File(diskCachePath, url);
-		if (f.exists() && f.isFile()) {
-			f.delete();
-		}
+		lruCache.remove(url);
 	}
 
 	public void clearMemory() {
-		if (null != lruCache)
-			lruCache.evictAll();
+		// if (null != lruCache)
+		// lruCache.evictAll();
 	}
 
 	public void clear() {
-		// Remove everything from memory cache
-		// memoryCache.clear();
 		lruCache.evictAll();
 		// Remove everything from file cache
 		File cachedFileDir = new File(diskCachePath);
@@ -129,59 +111,73 @@ public class WebImageCache {
 		}
 	}
 
-	private void cacheBitmapToMemory(final String url, final Bitmap bitmap) {
-		// memoryCache.put(getCacheKey(url), new SoftReference<Bitmap>(bitmap));
-		lruCache.put(getCacheKey(url), bitmap);
-	}
-
 	private void cacheBitmapToDisk(final String url, final Bitmap bitmap) {
-		writeThread.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (diskCacheEnabled) {
-					BufferedOutputStream ostream = null;
-					try {
-						ostream = new BufferedOutputStream(
-								new FileOutputStream(new File(diskCachePath,
-										getCacheKey(url))), 2 * 1024);
-						bitmap.compress(CompressFormat.PNG, 100, ostream);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} finally {
-						try {
-							if (ostream != null) {
-								ostream.flush();
-								ostream.close();
-							}
-						} catch (IOException e) {
-						}
+		if (diskCacheEnabled) {
+			BufferedOutputStream ostream = null;
+			try {
+				Log.e(TAG, "cacheBitmapToDisk url =" + url);
+				ostream = new BufferedOutputStream(new FileOutputStream(
+						new File(diskCachePath, getCacheKey(url))), 2 * 1024);
+				bitmap.compress(CompressFormat.PNG, 100, ostream);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (ostream != null) {
+						ostream.flush();
+						ostream.close();
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
-		});
+		}
 	}
 
-	private Bitmap getBitmapFromMemory(String url) {
-		Bitmap bitmap = null;
-		// SoftReference<Bitmap> softRef = memoryCache.get(getCacheKey(url));
-		bitmap = lruCache.get(getCacheKey(url));
-		// if (softRef != null) {
-		// bitmap = softRef.get();
-		// }
-
-		return bitmap;
+	private CacheableBitmapWrapper getBitmapFromMemory(String url) {
+		CacheableBitmapWrapper wrapper = null;
+		wrapper = lruCache.get(url);
+		if (null == wrapper || wrapper.getBitmap().isRecycled())
+			return null;
+		return wrapper;
 	}
 
-	private Bitmap getBitmapFromDisk(String url) {
+	private CacheableBitmapWrapper getBitmapFromDisk(String url) {
+		CacheableBitmapWrapper wrapper = null;
 		Bitmap bitmap = null;
 		if (diskCacheEnabled) {
+			Log.e(TAG, "getBitmapFromDisk url =" + url);
 			String filePath = getFilePath(url);
 			File file = new File(filePath);
 			if (file.exists()) {
 				bitmap = BitmapFactory.decodeFile(filePath);
+				wrapper = new CacheableBitmapWrapper(getCacheKey(url), bitmap);
+//				 try {
+//				 Options opts = new Options();
+//				 opts.inJustDecodeBounds = true;
+//				 FileInputStream fis = new FileInputStream(file);
+//				 BufferedInputStream bis = new BufferedInputStream(fis);
+//				 bitmap = BitmapFactory.decodeStream(bis, null, opts);
+//				 bis.close();
+//				 fis.close();
+//				 opts.inSampleSize = ImageUtil.calculateInSampleSize(opts,
+//				 ConfigSize.WIDTH_SCREEN);
+//				 opts.inJustDecodeBounds = false;
+//				 FileInputStream fis1 = new FileInputStream(file);
+//				 BufferedInputStream bis1 = new BufferedInputStream(fis1);
+//				if (null == bitmap)
+//					return null;
+//				wrapper = new CacheableBitmapWrapper(getCacheKey(url), bitmap);
+//				 fis1.close();
+//				 bis1.close();
+//				 } catch (FileNotFoundException e) {
+//				 e.printStackTrace();
+//				 } catch (IOException e) {
+//				 e.printStackTrace();
+//				 }
 			}
 		}
-		return bitmap;
+		return wrapper;
 	}
 
 	private String getFilePath(String url) {

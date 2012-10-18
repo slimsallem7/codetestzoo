@@ -102,7 +102,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 			@Override
 			public void run() {
 				mProgressWaiting.dismiss();
-				getFragmentPager(0).onTabSelected(0);
+				getFragmentPager(mCurrentPager).onTabSelected();
 			}
 		});
 	}
@@ -230,8 +230,8 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 	protected NgonHomePager getFragmentPager(int position) {
 		mBuilderTab.append("android:switcher:").append(R.id.content_pager)
 				.append(":").append(position);
-		NgonHomePager fragment = (NgonHomePager) this
-				.getSupportFragmentManager().findFragmentByTag(
+		NgonHomePager fragment = (NgonHomePager) 
+				getSupportFragmentManager().findFragmentByTag(
 						mBuilderTab.toString());
 		mBuilderTab.delete(0, mBuilderTab.length());
 		return fragment;

@@ -17,7 +17,18 @@ public class ImageUtil {
 
 		return scale;
 	}
+	
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+			int reqWidth) {
+		final int width = options.outWidth;
 
+		int scale = 1;
+		while (width / scale / 2 >= reqWidth)
+			scale *= 2;
+
+		return scale;
+	}
+	
 	public static Bitmap decodeSampledBitmapFromResource(Resources res,
 			int resId, int reqWidth, int reqHeight) {
 

@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ListView;
 
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.event.OnSpotitemClick;
@@ -17,7 +16,6 @@ import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
-	private ListView lvSpot;
 	private boolean mFirstDisplay = true;
 	private GetTopNewSpotTask mLoadMoreSpotTask;
 	private GetTopNewSpotTask mLoadNewSpotTask;
@@ -32,8 +30,8 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 		super.onAttach(activity);
 	}
 
-	public void onTabSelected(int position) {
-		super.onTabSelected(position);
+	public void onTabSelected() {
+		super.onTabSelected();
 		if (mFirstDisplay) {
 			refreshSpotItem();
 			mFirstDisplay = false;
@@ -49,7 +47,6 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 //			mMessage.setText(getString(R.string.lang_vi_spotlist_loading_message));
 			
 		}
-		lvSpot = (ListView) findViewById(R.id.spotlist);
 		View header = mInflater.inflate(R.layout.item_home_search, null);
 		header.setOnClickListener(new OnClickListener() {
 			@Override

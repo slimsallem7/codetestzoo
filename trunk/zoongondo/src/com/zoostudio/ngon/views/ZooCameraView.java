@@ -54,10 +54,6 @@ public class ZooCameraView extends SurfaceView implements
 		this.mSaveImageListener = listener;
 		this.mCamera = camera;
 		parameters = this.mCamera.getParameters();
-		List<String> focusMode = parameters.getSupportedFocusModes();
-		for(String mode : focusMode){
-			Log.i("ZooCameraView","MODE = " + mode);
-		}
 		parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
 		List<String> scenemodes = mCamera.getParameters()
