@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.test.cache;
 
+import com.zoostudio.android.image.WebImage;
 import com.zoostudio.ngon.BuildConfig;
 
 import android.graphics.Bitmap;
@@ -26,18 +27,17 @@ public class CacheableBitmapWrapper {
 
 	private final String mUrl;
 	private final Bitmap mBitmap;
-
 	// Number of ImageViews currently showing bitmap
 	private int mImageViewsCount;
 
 	// Number of caches currently referencing the wrapper
 	private int mCacheCount;
 
-	public CacheableBitmapWrapper(Bitmap bitmap) {
+	public CacheableBitmapWrapper(Bitmap bitmap) throws IllegalArgumentException {
 		this(null, bitmap);
 	}
 
-	public CacheableBitmapWrapper(String url, Bitmap bitmap) {
+	public CacheableBitmapWrapper(String url, Bitmap bitmap) throws IllegalArgumentException{
 		if (null == bitmap) {
 			throw new IllegalArgumentException("Bitmap can not be null");
 		}
@@ -83,7 +83,13 @@ public class CacheableBitmapWrapper {
 	 * @return true - if the bitmap has not been recycled.
 	 */
 	public boolean hasValidBitmap() {
-		return !mBitmap.isRecycled();
+		boolean rs = !mBitmap.isRecycled();
+		if(rs){
+			Log.e(LOG_TAG,mUrl + " - Chua bi recylce");
+		}else{
+			Log.e(LOG_TAG,mUrl + " - Da recylce");
+		}
+		return rs;
 	}
 
 	/**
@@ -115,6 +121,7 @@ public class CacheableBitmapWrapper {
 			mImageViewsCount++;
 		} else {
 			mImageViewsCount--;
+			getImageRef();
 		}
 		checkState();
 	}
@@ -127,10 +134,15 @@ public class CacheableBitmapWrapper {
 	private void checkState() {
 		if (mCacheCount <= 0 && mImageViewsCount <= 0 && hasValidBitmap()) {
 			if (BuildConfig.DEBUG) {
-				Log.d(LOG_TAG, "Recycling bitmap with url: " + mUrl);
+				Log.e(LOG_TAG, "San sang cho recyle url: " + mUrl);
 			}
 			mBitmap.recycle();
+			WebImage.webImageCache.remove(mUrl);
 		}
+	}
+
+	public void getImageRef() {
+		Log.e(LOG_TAG, "So luong ImageView ref = " + mImageViewsCount);
 	}
 
 }

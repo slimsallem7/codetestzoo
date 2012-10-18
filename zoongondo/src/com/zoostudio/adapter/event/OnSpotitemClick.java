@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.zoostudio.adapter.item.SpotItem;
+import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.ngon.ui.SpotDetailsActivity;
 
 public class OnSpotitemClick implements OnItemClickListener {
@@ -24,5 +25,6 @@ public class OnSpotitemClick implements OnItemClickListener {
 		Intent intent = new Intent(mActivity, SpotDetailsActivity.class);
 		intent.putExtra(SpotDetailsActivity.EXTRA_SPOT, item);
 		mActivity.startActivity(intent);
+		SmartImageView.cancelAllTasks();
 	}
 }

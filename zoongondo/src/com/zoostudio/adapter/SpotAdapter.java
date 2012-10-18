@@ -1,11 +1,12 @@
 package com.zoostudio.adapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.bookmark.helper.FormatterCore;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,9 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 	private double mLatitude;
 	private IOnRequestMoreListener listener;
 
-	public SpotAdapter(Context context, ArrayList<SpotItem> data,
+	public SpotAdapter(Context context, List<SpotItem> data,
 			Location currentLocation) {
-		super(context, R.id.actionbar, data);
+		super(context, -1, data);
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -36,7 +37,6 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 	public void setCurrentLocation(Location currentLocation) {
 		mLongtitude = currentLocation.getLongitude();
 		mLatitude = currentLocation.getLatitude();
-		notifyDataSetChanged();
 	}
 
 	public void setRequestMoreListener(IOnRequestMoreListener listener) {
@@ -47,10 +47,10 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SpotItem item = getItem(position);
 		ViewHolder viewHolder;
-
-		if (convertView == null) {
+		if (null == convertView) {
+			Log.e("SpotAdapter","Create new View = " + position);
+			convertView = mInflater.inflate(R.layout.item_spot, null);
 			viewHolder = new ViewHolder();
-			convertView = this.mInflater.inflate(R.layout.item_spot, null);
 			viewHolder.tvName = (TextView) convertView
 					.findViewById(R.id.spot_name);
 			viewHolder.tvAddress = (TextView) convertView
@@ -62,7 +62,11 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 
 			convertView.setTag(viewHolder);
 		} else {
+			Log.e("SpotAdapter","Recycle View ="+ position);
 			viewHolder = (ViewHolder) convertView.getTag();
+			String txt = viewHolder.tvName.getText().toString();
+			Log.e("SpotAdapter",txt);
+			viewHolder.imageSpot.setImageBitmap(null);
 		}
 
 		viewHolder.tvName.setText(item.getName());
@@ -79,8 +83,10 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 		if ((position == getCount() - 1) && listener != null) {
 			listener.request();
 		}
+		Log.e("SpotAdapter","Load url = " + item.getUrlImageSpot());
 		viewHolder.imageSpot
 				.setImageUrl(item.getUrlImageSpot());
+		
 		return convertView;
 	}
 

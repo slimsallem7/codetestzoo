@@ -5,10 +5,12 @@ import java.util.concurrent.Executors;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.test.cache.CacheableBitmapWrapper;
 import com.zoostudio.ngon.utils.ImageUtil;
 
 public class SmartImageView extends ImageView {
@@ -20,6 +22,7 @@ public class SmartImageView extends ImageView {
 	private int reqWidth;
 	private int reqHeight;
 	private boolean resize;
+	private CacheableBitmapWrapper mDisplayedBitmapWrapper;
 
 	public SmartImageView(Context context) {
 		super(context);
@@ -45,21 +48,6 @@ public class SmartImageView extends ImageView {
 	public void setImageUrl(String url, final Integer fallbackResource,
 			final Integer loadingResource) {
 		setImage(new WebImage(url), fallbackResource, loadingResource);
-	}
-
-	// Helpers to set image by contact address book id
-	public void setImageContact(long contactId) {
-		setImage(new ContactImage(contactId));
-	}
-
-	public void setImageContact(long contactId, final Integer fallbackResource) {
-		setImage(new ContactImage(contactId), fallbackResource);
-	}
-
-	public void setImageContact(long contactId, final Integer fallbackResource,
-			final Integer loadingResource) {
-		setImage(new ContactImage(contactId), fallbackResource,
-				fallbackResource);
 	}
 
 	// Set image using SmartImage object
@@ -89,9 +77,9 @@ public class SmartImageView extends ImageView {
 		currentTask
 				.setOnCompleteHandler(new SmartImageTask.OnCompleteHandler() {
 					@Override
-					public void onComplete(Bitmap bitmap) {
+					public void onComplete(CacheableBitmapWrapper bitmap) {
 						if (bitmap != null) {
-							setImageBitmap(bitmap);
+							setImageWrap(bitmap);
 						} else {
 							// Set fallback resource
 							if (fallbackResource != null) {
@@ -102,6 +90,29 @@ public class SmartImageView extends ImageView {
 				});
 		// Run the task in a threadpool
 		threadPool.execute(currentTask);
+	}
+
+	@Override
+	public void setImageBitmap(Bitmap bm) {
+		if (null == bm) {
+			if (currentTask != null)
+				currentTask.cancel();
+			resetCachedDrawable();
+		}
+		super.setImageBitmap(bm);
+	}
+
+	public void setImageWrap(CacheableBitmapWrapper wrapper) {
+		if (null != wrapper && wrapper.hasValidBitmap()) {
+			wrapper.setBeingUsed(true);
+			wrapper.getImageRef();
+			setImageBitmap(wrapper.getBitmap());
+		} else {
+			resetCachedDrawable();
+		}
+
+		// Finally, set our new BitmapWrapper
+		mDisplayedBitmapWrapper = wrapper;
 	}
 
 	public static void cancelAllTasks() {
@@ -133,4 +144,21 @@ public class SmartImageView extends ImageView {
 		this.resize = true;
 	}
 
+	@Override
+	protected void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+		Log.e(VIEW_LOG_TAG, "onDetachedFromWindow");
+		resetCachedDrawable();
+	}
+
+	/**
+	 * Called when the current cached bitmap has been removed. This method will
+	 * remove the displayed flag and remove this objects reference to it.
+	 */
+	private void resetCachedDrawable() {
+		if (null != mDisplayedBitmapWrapper) {
+			mDisplayedBitmapWrapper.setBeingUsed(false);
+			mDisplayedBitmapWrapper = null;
+		}
+	}
 }

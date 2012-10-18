@@ -99,7 +99,7 @@ public class GetTopNewSpotTask extends RestClientTask {
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
 				SpotItem spotItem = ParserUtils.parseSpot(item);
-				spotItem.setUrlImageSpot(imageDumps[getRandom()]);
+				spotItem.setUrlImageSpot(imageDumps[i%10]);
 				mData.add(spotItem);
 			}
 			return RestClientNotification.OK;

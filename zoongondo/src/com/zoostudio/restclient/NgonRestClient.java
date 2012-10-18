@@ -205,7 +205,7 @@ public class NgonRestClient {
 
                 InputStream instream = entity.getContent();
                 response = convertStreamToString(instream);
-                Log.e("Response", "data: " + response);
+//                Log.e("Response", "data: " + response);
                 // Closing the input stream will trigger connection release
                 instream.close();
             }

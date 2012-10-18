@@ -99,7 +99,7 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
 				SpotItem spotItem = ParserUtils.parseSpot(item);
-				spotItem.setUrlImageSpot(imageDumps[getRandom()]);
+				spotItem.setUrlImageSpot(imageDumps[i%10]);
 				mData.add(spotItem);
 			}
 			return RestClientNotification.OK;
@@ -107,11 +107,6 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			e.printStackTrace();
 		}
 		return RestClientNotification.ERROR_DATA;
-	}
-
-	private int getRandom() {
-		Random random = new Random();
-		return random.nextInt(9);
 	}
 
 	@Override

@@ -1,9 +1,10 @@
 package com.zoostudio.android.image;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+
+import com.test.cache.CacheableBitmapWrapper;
 
 public class SmartImageTask implements Runnable {
     private static final int BITMAP_READY = 0;
@@ -16,11 +17,11 @@ public class SmartImageTask implements Runnable {
     public static class OnCompleteHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Bitmap bitmap = (Bitmap)msg.obj;
+        	CacheableBitmapWrapper bitmap = (CacheableBitmapWrapper)msg.obj;
             onComplete(bitmap);
         }
 
-        public void onComplete(Bitmap bitmap){};
+        public void onComplete(CacheableBitmapWrapper bitmap){};
     }
 
     public SmartImageTask(Context context, SmartImage image) {
@@ -31,7 +32,7 @@ public class SmartImageTask implements Runnable {
     @Override
     public void run() {
         if(image != null) {
-            complete(image.getBitmap(context));
+            complete(image.getWrap(context));
             context = null;
         }
     }
@@ -44,7 +45,7 @@ public class SmartImageTask implements Runnable {
         cancelled = true;
     }
 
-    public void complete(Bitmap bitmap){
+    public void complete(CacheableBitmapWrapper bitmap){
         if(onCompleteHandler != null && !cancelled) {
             onCompleteHandler.sendMessage(onCompleteHandler.obtainMessage(BITMAP_READY, bitmap));
         }

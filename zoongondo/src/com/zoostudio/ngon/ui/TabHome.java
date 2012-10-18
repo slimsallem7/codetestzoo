@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.viewpagerindicator.TitlePageIndicator;
 import com.zoostudio.adapter.NgonPagerAdapter;
+import com.zoostudio.android.image.SmartImage;
+import com.zoostudio.android.image.SmartImageTask;
+import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.WebImage;
 import com.zoostudio.custom.view.ZooHorizontalScrollView;
 import com.zoostudio.custom.view.ZooLinearLayout;
@@ -68,118 +71,18 @@ public class TabHome extends BaseFragmentActivity implements
 	protected void initVariable() {
 		inflater = this.getLayoutInflater();
 		mPagerIndex = new ArrayList<Integer>();
-		mFragmentManager = this.getSupportFragmentManager();
-		String[] titles = this.getResources().getStringArray(
+		mFragmentManager = getSupportFragmentManager();
+		String[] titles = getResources().getStringArray(
 				R.array.titles_home_screen);
 		mHomeAdapter = new NgonPagerAdapter(this,
 				this.getSupportFragmentManager(), titles);
 	}
 
 	protected void initScreen() {
-		// Display display = this.getWindowManager().getDefaultDisplay();
-		// mScrollView = (ZooHorizontalScrollView) this
-		// .findViewById(R.id.scrollView);
-		// mFooterHome = (LinearLayout) this.findViewById(R.id.footer_home);
-		// MenuFragment fragment = (MenuFragment) mFragmentManager
-		// .findFragmentById(R.id.menuHomeScreen);
-		// mParentMenu = fragment.getParentMenu();
 		mCurrentPositionDistance = 0;
-		// mIncMainHome = inflater.inflate(R.layout.inc_main_home_screen, null);
-		// mBarTitle = mIncMainHome.findViewById(R.id.actionbar);
-		// mSearchWrapper = (LinearLayout) mIncMainHome
-		// .findViewById(R.id.search_wrapper);
-		// mBtnCancelSearch = (ImageButton) mIncMainHome
-		// .findViewById(R.id.btn_cancel_search);
-		// mMainPagerContent = (ZooLinearLayout) mIncMainHome
-		// .findViewById(R.id.home_info);
-		// mBtnMenu = (ImageButton) mIncMainHome.findViewById(R.id.btn_menu);
-		// mBtnSearch = (ImageButton)
-		// mIncMainHome.findViewById(R.id.btn_search);
 		mTabsPager = (ViewPager) this.findViewById(R.id.content_pager);
-		// mBtnChangeDistance = (Button) mIncMainHome
-		// .findViewById(R.id.btnChangeDistance);
-		// mLocationAddress = (TextView)
-		// this.findViewById(R.id.location_address);
-		// mTextSearch = (EditText) mIncMainHome
-		// .findViewById(R.id.edt_home_search);
-		// mProgressBarSearch = (ProgressBar) mIncMainHome
-		// .findViewById(R.id.home_search_progress);
-		//
-		// mBtnSearch.setOnClickListener(this);
-		// mBtnCancelSearch.setOnClickListener(this);
-		// mBtnChangeDistance.setOnClickListener(new View.OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// dw = new ZooSeekBarPopUp(mBarTitle, mCurrentPositionDistance);
-		// dw.setOnChangeListener(new ZooSeekBarPopUp.OnChangeListener() {
-		// @Override
-		// public void onChange(int value) {
-		// mCurrentPositionDistance = value;
-		// value++;
-		// mBtnChangeDistance.setText("" + value + " km");
-		// }
-		// });
-		// dw.showLikePopDownMenu(R.style.Animations_DialogChangeDistanceGrowFromTop);
-		// }
-		// });
-		//
-		// mTextSearch.addTextChangedListener(new NgonTextWatcher() {
-		// @Override
-		// public void onTextRelease() {
-		// super.onTextRelease();
-		// mHandler.post(new Runnable() {
-		// @Override
-		// public void run() {
-		// mSearchTask = new GetSearchSpotTask(MainScreen.this,
-		// mTextSearch.getText().toString(), 0, 0);
-		// mSearchTask
-		// .setOnPostExecuteDelegate(new OnSearchResult());
-		// mSearchTask.execute();
-		// mProgressBarSearch.setVisibility(View.VISIBLE);
-		// }
-		// });
-		// }
-		// });
-		// mFooterHome.setOnClickListener(new
-		// android.view.View.OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// locationEdit();
-		// }
-		// });
-		// // Create a transparent view that pushes the other views in the HSV
-		// to
-		// // the right.
-		// // This transparent view allows the menu to be shown when the HSV is
-		// // scrolled.
-		// View transparent = new TextView(this);
-		// transparent.setBackgroundColor(Color.parseColor("#00000000"));
-		//
-		// final View[] children = new View[] { transparent, mIncMainHome };
-		//
-		// // Scroll to app (view[1]) when layout finished.
-		// int scrollToViewIdx = 1;
-		//
-		// mListenerForScrolling = new ClickListenerForScrolling(mScrollView,
-		// mParentMenu, display.getWidth()) {
-		// @Override
-		// protected void onClickToSlide() {
-		// mMainPagerContent.changeTouchAble();
-		// boolean enable = !mTextSearch.isEnabled();
-		// mTextSearch.setEnabled(enable);
-		// }
-		// };
-		// mScrollView.initViews(children, scrollToViewIdx,
-		// new SizeCallbackForMenu(mBtnMenu, mListenerForScrolling),
-		// mBtnMenu);
-		//
-		// // fragment.setClickListenerForScrolling(mListenerForScrolling);
-		// mBtnMenu.setOnClickListener(mListenerForScrolling);
-		//
+
 		mTabsPager.setAdapter(mHomeAdapter);
-		// mIndicator = (TitlePageIndicator)
-		// this.findViewById(R.id.title_pager);
-		// mIndicator.setOnPageChangeListener(this);
 		mIndicator = (TitlePageIndicator) this.findViewById(R.id.indicator);
 		mIndicator.setOnPageChangeListener(this);
 		mIndicator.setViewPager(mTabsPager);
@@ -299,14 +202,28 @@ public class TabHome extends BaseFragmentActivity implements
 	@Override
 	public void onPageSelected(int position) {
 		NgonHomePager fragment = getFragmentPager(position);
-		fragment.onTabSelected(position);
+		fragment.onTabSelected();
 	}
-
+	
+	@Override
+	protected NgonHomePager getFragmentPager(int position) {
+		NgonHomePager fragment = (NgonHomePager) mHomeAdapter.getFragment(position);
+		return fragment;
+	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
 		if (null != WebImage.webImageCache)
 			WebImage.webImageCache.clearMemory();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		SmartImageView.cancelAllTasks();
+		if (null != WebImage.webImageCache)
+			WebImage.webImageCache.clear();
 	}
 
 	// TODO :@huy Lam animation cho nut search o man hinh MainScreen

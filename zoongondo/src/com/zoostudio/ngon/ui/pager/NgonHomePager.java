@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,9 +45,12 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected TextView mMessage;
 	protected RelativeLayout mFooterView;
 	private NgonProgressView mProgressLoadMore;
+	
 	private boolean mNeedShow;
+	protected ListView lvSpot;
 
 	protected void initControls() {
+		lvSpot = (ListView) findViewById(R.id.spotlist);
 		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
 		mProgressBar.setAutoShow(false);
 		mMessage = (TextView) findViewById(R.id.message);
@@ -96,6 +100,8 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		super.onDestroyView();
 		Log.i("Pager", "onDestroyView");
 		mProgressLoadMore.stopAnim();
+		mAdapter.clear();
+		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -122,7 +128,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		});
 	}
 
-	public void onTabSelected(int position) {
+	public void onTabSelected() {
 		if (mState == ERROR_SATE) {
 			setUiLoadError();
 		} else if (mState == EMPTY_SATE) {

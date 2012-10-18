@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.ListView;
 
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.event.OnSpotitemClick;
@@ -23,7 +22,6 @@ import com.zoostudio.ngon.ui.SearchActivity;
 
 public class NearByPager extends NgonHomePager implements OnClickListener
 		 {
-	private ListView lvSpot;
 	private NgonProgressDialog mProgressLocation;
 	/**
 	 * Dùng để lưu trạng thái đã request more hay chưa. Được đặt true khi bắt
@@ -70,7 +68,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 			}
 		});
 
-		lvSpot = (ListView) mView.findViewById(R.id.spotlist);
+		
 		View header = mInflater.inflate(R.layout.item_home_search, null);
 
 		header.setOnClickListener(new OnClickListener() {
@@ -124,8 +122,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 	private void getSpotData(Location location) {
 		mLongitude = location.getLongitude();
 		mLatitude = location.getLatitude();
-		mAdapter.clear();
-		mAdapter.notifyDataSetChanged();
 		refreshSpotItem();
 	}
 

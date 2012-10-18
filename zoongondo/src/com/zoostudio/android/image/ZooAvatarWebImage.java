@@ -32,7 +32,7 @@ public class ZooAvatarWebImage extends WebImage {
 			bitmap = BitmapFactory.decodeStream(bif);
 			Matrix matrix = new Matrix();
 			matrix.postScale(bitmap.getWidth()/size, bitmap.getHeight()/size);
-			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+			bitmap = Bitmap.createScaledBitmap(bitmap, size, size, false);
 			is.close();
 			bif.close();
 		} catch (Exception e) {

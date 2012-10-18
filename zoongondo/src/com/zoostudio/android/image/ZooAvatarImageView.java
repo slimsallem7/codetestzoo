@@ -16,6 +16,7 @@ import com.zoostudio.ngon.utils.ConfigSize;
 public class ZooAvatarImageView extends SmartImageView {
 	protected  Paint paint;
 	protected WebImage border;
+	private static Bitmap bitmapBorder;
 	private static Bitmap bitmapAvatarDefault;
 	private static Bitmap bitmapBgCircle;
 
@@ -60,6 +61,11 @@ public class ZooAvatarImageView extends SmartImageView {
 			bitmapBgCircle = BitmapFactory.decodeStream(getContext()
 					.getResources().openRawResource(R.drawable.ic_bg_circle));
 		}
+		
+		if(null == bitmapBorder){
+			bitmapBorder = BitmapFactory.decodeStream(getContext()
+					.getResources().openRawResource(R.drawable.ic_border_circle));
+		}
 		setImageBitmap(bitmapAvatarDefault);
 	}
 
@@ -90,8 +96,7 @@ public class ZooAvatarImageView extends SmartImageView {
 	}
 
 	protected void drawCircleBorder(Canvas canvas) {
-		Bitmap bitmap = border.getBorderBitmap(getContext());
-		canvas.drawBitmap(bitmap, 0, 0, paint);
+		canvas.drawBitmap(bitmapBorder, 0, 0, paint);
 	}
 
 }

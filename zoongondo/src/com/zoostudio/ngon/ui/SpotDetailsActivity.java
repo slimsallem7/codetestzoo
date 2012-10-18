@@ -2,10 +2,6 @@ package com.zoostudio.ngon.ui;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -28,6 +24,7 @@ import com.zoostudio.adapter.SpotPhotoAdapter;
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.adapter.item.ReviewItem;
 import com.zoostudio.adapter.item.SpotItem;
+import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
@@ -47,7 +44,6 @@ import com.zoostudio.ngon.task.callback.OnSpotPhotoTaskListener;
 import com.zoostudio.ngon.task.callback.OnSpotReviewTaskListener;
 import com.zoostudio.ngon.task.callback.OnSpotTaskListener;
 import com.zoostudio.ngon.task.callback.OnUploadPhotoTask;
-import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.ngon.views.ButtonCaptionedIcon;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.ListCommentView;
@@ -128,6 +124,12 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mHandler = new Handler();
 		Bundle bundle = this.getIntent().getExtras();
 		mSpot = (SpotItem) bundle.getSerializable(EXTRA_SPOT);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		SmartImageView.cancelAllTasks();
 	}
 
 	@Override
@@ -354,8 +356,9 @@ public class SpotDetailsActivity extends NgonActivity implements
 	}
 
 	@Override
-	public synchronized void onActionDataError(RestClientTask task, int errorCode) {
-		if(null != mWaitingDialog && mWaitingDialog.isShowing()){
+	public synchronized void onActionDataError(RestClientTask task,
+			int errorCode) {
+		if (null != mWaitingDialog && mWaitingDialog.isShowing()) {
 			mWaitingDialog.dismiss();
 		}
 	}
