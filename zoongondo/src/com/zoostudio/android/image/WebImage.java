@@ -10,6 +10,7 @@ import com.test.cache.CacheableBitmapWrapper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 
 public class WebImage implements SmartImage {
 	protected static final int CONNECT_TIMEOUT = 20000;
@@ -53,14 +54,13 @@ public class WebImage implements SmartImage {
 			conn.setConnectTimeout(CONNECT_TIMEOUT);
 			conn.setReadTimeout(READ_TIMEOUT);
 			InputStream is = conn.getInputStream();
-			BufferedInputStream buf = new BufferedInputStream(is);			
+			BufferedInputStream buf = new BufferedInputStream(is);	
 			bitmap = BitmapFactory.decodeStream(buf);
 			is.close();
 			buf.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return bitmap;
 	}
 

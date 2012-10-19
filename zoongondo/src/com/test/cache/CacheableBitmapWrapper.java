@@ -15,11 +15,10 @@
  *******************************************************************************/
 package com.test.cache;
 
-import com.zoostudio.android.image.WebImage;
-import com.zoostudio.ngon.BuildConfig;
-
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import com.zoostudio.ngon.BuildConfig;
 
 public class CacheableBitmapWrapper {
 
@@ -100,7 +99,7 @@ public class CacheableBitmapWrapper {
 	 *            - true if the wrapper has been added to a cache, false if
 	 *            removed.
 	 */
-	void setCached(boolean added) {
+	public void setCached(boolean added) {
 		if (added) {
 			mCacheCount++;
 		} else {
@@ -131,12 +130,13 @@ public class CacheableBitmapWrapper {
 	 * displayed. If neither of those conditions are met then the bitmap is
 	 * recycled and freed.
 	 */
-	private void checkState() {
+	private synchronized void checkState() {
 		if (mCacheCount <= 0 && mImageViewsCount <= 0 && hasValidBitmap()) {
 			if (BuildConfig.DEBUG) {
 				Log.e(LOG_TAG, "San sang cho recyle url: " + mUrl);
 			}
 			mBitmap.recycle();
+			System.gc();
 		}
 	}
 
