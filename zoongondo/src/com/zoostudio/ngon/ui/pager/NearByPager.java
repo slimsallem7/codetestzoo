@@ -20,8 +20,8 @@ import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
 
-public class NearByPager extends NgonHomePager implements OnClickListener
-		 {
+public class NearByPager extends NgonHomePager implements OnClickListener {
+	private boolean mFirstDisplay = true;
 	private NgonProgressDialog mProgressLocation;
 	/**
 	 * Dùng để lưu trạng thái đã request more hay chưa. Được đặt true khi bắt
@@ -44,11 +44,19 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 	}
 
 	@Override
+	public void onTabSelected() {
+		super.onTabSelected();
+		if (mFirstDisplay) {
+			mFirstDisplay = false;
+			refreshSpotItem();
+		}
+	}
+
+	@Override
 	public void initControls() {
 		super.initControls();
 		mProgressLocation = new NgonProgressDialog(this.getActivity());
 		mProgressLocation.setCancelable(true);
-
 		mProgressLocation.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
@@ -68,7 +76,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 			}
 		});
 
-		
 		View header = mInflater.inflate(R.layout.item_home_search, null);
 
 		header.setOnClickListener(new OnClickListener() {
@@ -130,7 +137,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 		if (null != mProgressLocation && mProgressLocation.isShowing())
 			mProgressLocation.dismiss();
 		mAdapter.setCurrentLocation(location);
-		getSpotData(location);
+//		getSpotData(location);
 	}
 
 	@Override
@@ -145,7 +152,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener
 		});
 
 	}
-
 
 	@Override
 	protected void loadMoreSpotItem() {

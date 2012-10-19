@@ -44,8 +44,6 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 		if (null == mAdapter) {
 			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
 					null);
-//			mMessage.setText(getString(R.string.lang_vi_spotlist_loading_message));
-			
 		}
 		View header = mInflater.inflate(R.layout.item_home_search, null);
 		header.setOnClickListener(new OnClickListener() {

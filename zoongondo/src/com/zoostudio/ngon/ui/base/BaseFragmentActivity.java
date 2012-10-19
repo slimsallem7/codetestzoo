@@ -1,7 +1,5 @@
 package com.zoostudio.ngon.ui.base;
 
-import java.util.ArrayList;
-
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -37,11 +35,9 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 	protected ScreenManager mManagerScreen;
 	protected IOnBackPressed mListener;
 	protected int mCurrentService;
-	protected ArrayList<Integer> mPagerIndex;
 	private boolean isFirtTimeLoad;
 	protected int mCurrentPager;
 	protected ClickListenerForScrolling mListenerForScrolling;
-	private StringBuilder mBuilderTab;
 	protected int mCurrentPositionDistance;
 	private String mContentError;
 	protected int mCurrentRequestType;
@@ -53,6 +49,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		this.setContentView(getLayoutId());
+		mCurrentPager = 0;
 		mContentError = this.getResources().getString(
 				R.string.error_message_start_location_service);
 		mContentChooseDialogService = this.getResources().getString(
@@ -60,7 +57,6 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 		NgonLocationManager.getInstance(this);
 		mHandler = new Handler();
 		mProgressWaiting = new NgonProgressDialog(this);
-		mBuilderTab = new StringBuilder(128);
 		initVariable();
 		initScreen();
 	}
@@ -217,25 +213,12 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements
 	protected abstract void initVariable();
 
 	public void setCurrentPager(int myPagerId) {
-		if (!mPagerIndex.contains(myPagerId)) {
-			mPagerIndex.add(myPagerId);
-		}
-		if (isFirtTimeLoad) {
-			isFirtTimeLoad = false;
-			this.mCurrentPager = myPagerId;
-		}
+		this.mCurrentPager = myPagerId;
 
 	}
 
-	protected NgonHomePager getFragmentPager(int position) {
-		mBuilderTab.append("android:switcher:").append(R.id.content_pager)
-				.append(":").append(position);
-		NgonHomePager fragment = (NgonHomePager) 
-				getSupportFragmentManager().findFragmentByTag(
-						mBuilderTab.toString());
-		mBuilderTab.delete(0, mBuilderTab.length());
-		return fragment;
-	}
+	protected abstract NgonHomePager getFragmentPager(int position);
+	
 
 //	@Override
 //	public void onBackPressed() {

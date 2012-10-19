@@ -1,9 +1,8 @@
 package com.zoostudio.android.image;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,13 +12,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.test.cache.CacheableBitmapWrapper;
-import com.zoostudio.ngon.utils.ConfigSize;
-import com.zoostudio.ngon.utils.ImageUtil;
 
 public class WebImageCache {
 	private static final String DISK_CACHE_PATH = "/web_image_cache/";
@@ -70,7 +66,7 @@ public class WebImageCache {
 
 			// Write bitmap back into memory cache
 			if (wrapper != null) {
-				put(url, wrapper);
+				lruCache.put(url, wrapper);
 			}
 		}
 
@@ -82,14 +78,13 @@ public class WebImageCache {
 		cacheBitmapToDisk(url, wrapper.getBitmap());
 	}
 
-
 	public void remove(String url) {
 		if (url == null) {
 			return;
 		}
-		Log.e("WebImageCache", "Remove " + url + " Khoi memory");
+//		Log.e("WebImageCache", "Remove " + url + " Khoi memory");
 		// Remove from memory cache
-		lruCache.remove(url);
+//		lruCache.remove(url);
 	}
 
 	public void clearMemory() {
@@ -100,26 +95,32 @@ public class WebImageCache {
 	public void clear() {
 		lruCache.evictAll();
 		// Remove everything from file cache
-		File cachedFileDir = new File(diskCachePath);
-		if (cachedFileDir.exists() && cachedFileDir.isDirectory()) {
-			File[] cachedFiles = cachedFileDir.listFiles();
-			for (File f : cachedFiles) {
-				if (f.exists() && f.isFile()) {
-					f.delete();
-				}
-			}
-		}
+		
+//		File cachedFileDir = new File(diskCachePath);
+//		if (cachedFileDir.exists() && cachedFileDir.isDirectory()) {
+//			File[] cachedFiles = cachedFileDir.listFiles();
+//			for (File f : cachedFiles) {
+//				if (f.exists() && f.isFile()) {
+//					f.delete();
+//				}
+//			}
+//		}
 	}
 
 	private void cacheBitmapToDisk(final String url, final Bitmap bitmap) {
 		if (diskCacheEnabled) {
 			BufferedOutputStream ostream = null;
 			try {
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				Log.e(TAG, "cacheBitmapToDisk url =" + url);
 				ostream = new BufferedOutputStream(new FileOutputStream(
 						new File(diskCachePath, getCacheKey(url))), 2 * 1024);
-				bitmap.compress(CompressFormat.PNG, 100, ostream);
+//				bitmap.compress(CompressFormat.PNG, 100, ostream);
+				bitmap.compress(CompressFormat.PNG, 100, bytes);
+				ostream.write(bytes.toByteArray());
 			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
 				try {
@@ -137,8 +138,11 @@ public class WebImageCache {
 	private CacheableBitmapWrapper getBitmapFromMemory(String url) {
 		CacheableBitmapWrapper wrapper = null;
 		wrapper = lruCache.get(url);
-		if (null == wrapper || wrapper.getBitmap().isRecycled())
+		if (null == wrapper || wrapper.getBitmap().isRecycled()){
+			lruCache.remove(url);
 			return null;
+		}
+			
 		return wrapper;
 	}
 
@@ -146,11 +150,15 @@ public class WebImageCache {
 		CacheableBitmapWrapper wrapper = null;
 		Bitmap bitmap = null;
 		if (diskCacheEnabled) {
-			Log.e(TAG, "getBitmapFromDisk url =" + url);
 			String filePath = getFilePath(url);
 			File file = new File(filePath);
 			if (file.exists()) {
 				bitmap = BitmapFactory.decodeFile(filePath);
+				if (null == bitmap){
+					Log.e(TAG, "Khong the lay  url tu Disk =" + url);
+					return null;
+				}
+				Log.e(TAG, "Url tu Disk =" + url);
 				wrapper = new CacheableBitmapWrapper(getCacheKey(url), bitmap);
 //				 try {
 //				 Options opts = new Options();
@@ -175,6 +183,9 @@ public class WebImageCache {
 //				 } catch (IOException e) {
 //				 e.printStackTrace();
 //				 }
+			}
+			else{
+				Log.e(TAG, "Khong the lay tu Disk =" + url);
 			}
 		}
 		return wrapper;
