@@ -5,7 +5,6 @@ import java.util.concurrent.Executors;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
@@ -95,8 +94,6 @@ public class SmartImageView extends ImageView {
 	@Override
 	public void setImageBitmap(Bitmap bm) {
 		if (null == bm) {
-			if (currentTask != null)
-				currentTask.cancel();
 			resetCachedDrawable();
 		}
 		super.setImageBitmap(bm);

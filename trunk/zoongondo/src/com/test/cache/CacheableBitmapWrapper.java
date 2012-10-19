@@ -137,7 +137,6 @@ public class CacheableBitmapWrapper {
 				Log.e(LOG_TAG, "San sang cho recyle url: " + mUrl);
 			}
 			mBitmap.recycle();
-			WebImage.webImageCache.remove(mUrl);
 		}
 	}
 

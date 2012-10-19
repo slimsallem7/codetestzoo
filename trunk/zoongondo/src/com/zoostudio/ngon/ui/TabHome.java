@@ -70,7 +70,6 @@ public class TabHome extends BaseFragmentActivity implements
 
 	protected void initVariable() {
 		inflater = this.getLayoutInflater();
-		mPagerIndex = new ArrayList<Integer>();
 		mFragmentManager = getSupportFragmentManager();
 		String[] titles = getResources().getStringArray(
 				R.array.titles_home_screen);

@@ -45,7 +45,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected TextView mMessage;
 	protected RelativeLayout mFooterView;
 	private NgonProgressView mProgressLoadMore;
-	
+
 	private boolean mNeedShow;
 	protected ListView lvSpot;
 
@@ -107,8 +107,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.i("Pager", "onStart");
-		mParent.setCurrentPager(getPagerIndex());
+		Log.i("" + this.getClass().getName(), "onStart");
 	}
 
 	/**
@@ -129,6 +128,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	public void onTabSelected() {
+		mParent.setCurrentPager(getPagerIndex());
 		if (mState == ERROR_SATE) {
 			setUiLoadError();
 		} else if (mState == EMPTY_SATE) {
@@ -138,11 +138,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		}
 		if (mNeedShow)
 			mProgressLoadMore.startAnim();
-		mParent.setCurrentPager(getPagerIndex());
-		if (!hasRequestLocation) {
-			hasRequestLocation = true;
-			NgonLocationManager.getInstance(mParent).requestLocation(this);
-		}
+		NgonLocationManager.getInstance(mParent).requestLocation(this);
 	}
 
 	@Override

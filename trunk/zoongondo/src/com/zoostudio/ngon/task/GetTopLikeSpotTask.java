@@ -29,10 +29,17 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/brownie%20pie.jpeg",
 			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_09_26-bakewell4.jpg",
 			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_06_04-Berries.jpeg",
-			"http://www.thekitchn.com/dessert-recipe-baked-nutella-cream-cheese-sandwich-recipes-from-the-kitchn-177279",
+			"http://i-cdn.apartmenttherapy.com/uimages/kitchen/2012_09_18-DSC_7825.jpg",
 			"http://img.foodnetwork.com/FOOD/2010/03/25/FNM_050110-Weeknight-Dinners-032_s4x3_lg.jpg",
 			"http://img.foodnetwork.com/FOOD/2011/11/14/FNM_120111-WN-Dinners-009_s4x3_lg.jpg",
-			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg" };
+			"http://img.foodnetwork.com/FOOD/2012/05/04/FNM_060112-50-Things-to-Grill-in-Foil-Jerk-Chicken_s4x3_lg.jpg",
+			"http://www.petertsaiphotography.com/blog/wp-content/uploads/2011/12/2011-12-24-momofuku-ramen-food.jpg",
+			"http://2.bp.blogspot.com/_rUW6DgdRSGc/TEHO8xcv04I/AAAAAAAADEs/HRB0sZwOrYw/s400/Cevapi.jpg",
+			"http://thumbs.ifood.tv/files/Lasagna_2.jpg",
+			"http://farm3.static.flickr.com/2406/2255631989_23c199238c.jpg",
+			"https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-ash3/560190_3852084182478_1297075997_n.jpg",
+			"http://4.bp.blogspot.com/-jY1FrTeotw0/TWgagTIDuZI/AAAAAAAAABs/FI7a7FXVoHg/s1600/1001+Food+Shots.jpg"
+			};
 	private OnSpotItemListener mListener;
 
 	public GetTopLikeSpotTask(Activity activity, Location loc, int limit,
@@ -99,7 +106,7 @@ public class GetTopLikeSpotTask extends RestClientTask {
 			for (int i = 0; i < size; i++) {
 				JSONObject item = spotData.getJSONObject(i);
 				SpotItem spotItem = ParserUtils.parseSpot(item);
-				spotItem.setUrlImageSpot(imageDumps[i%10]);
+				spotItem.setUrlImageSpot(imageDumps[i%16]);
 				mData.add(spotItem);
 			}
 			return RestClientNotification.OK;
