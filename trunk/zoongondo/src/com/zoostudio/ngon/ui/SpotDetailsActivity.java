@@ -90,6 +90,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	private View mAddReView;
 
+	private ArrayList<String> dataTest;
+
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_spot_details_new;
@@ -356,6 +358,19 @@ public class SpotDetailsActivity extends NgonActivity implements
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		if (null != dataTest)
+			mSlideImageView.setDatas(dataTest);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mSlideImageView.releaseBitmap();
+	}
+
+	@Override
 	public synchronized void onActionDataError(RestClientTask task,
 			int errorCode) {
 		if (null != mWaitingDialog && mWaitingDialog.isShowing()) {
@@ -400,7 +415,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	public void onSpotPhotoTaskListener(ArrayList<PhotoItem> data) {
-		ArrayList<String> dataTest = new ArrayList<String>();
+		dataTest = new ArrayList<String>();
 		dataTest.add("");
 		dataTest.add("");
 		dataTest.add("");

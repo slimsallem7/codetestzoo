@@ -108,4 +108,8 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 			}
 		}
 	}
+
+	public void releaseBitmap() {
+		mMainPhoto.setImageBitmap(null);
+	}
 }

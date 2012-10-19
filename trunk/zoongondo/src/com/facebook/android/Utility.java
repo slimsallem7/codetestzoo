@@ -131,7 +131,6 @@ public class Utility extends Application {
                     srcBitmap.getHeight(), matrix, true);
         }
 
-//        String type = context.getContentResolver().getType(photoUri);
         String type = item.getMineType();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if (type.equals("image/png")) {
@@ -141,6 +140,7 @@ public class Utility extends Application {
         }
         byte[] bMapArray = baos.toByteArray();
         baos.close();
+        srcBitmap.recycle();
         return bMapArray;
     }
     
