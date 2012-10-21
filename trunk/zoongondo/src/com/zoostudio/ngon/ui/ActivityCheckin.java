@@ -579,6 +579,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 									mSpotId, checkinId);
 							uploadPhoto.execute();
 						}
+						ActivityCheckin.this.finish();
 					} else {
 						Toast.makeText(getApplicationContext(), "Thu lai",
 								Toast.LENGTH_SHORT).show();
