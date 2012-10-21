@@ -394,8 +394,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 		ArrayList<ReviewItem> reviews = new ArrayList<ReviewItem>();
 		reviews.add(new ReviewItem(1));
 		reviews.add(new ReviewItem(2));
-		reviews.add(new ReviewItem(3));
-		reviews.add(new ReviewItem(4));
 		reviews.add(new ReviewItem(0));
 		mListCommentView.setDatas(reviews);
 	}

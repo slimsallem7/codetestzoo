@@ -104,8 +104,8 @@ public class CropImageActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_crop_image);
 		mSource = getIntent().getIntExtra("SOURCE", -1);
-		minHeight = 256;
-		minWidth = 256;
+		minHeight = 240;
+		minWidth = 240;
 
 		if (mCurrentUri == null) {
 			mCurrentUri = this.getIntent().getData();

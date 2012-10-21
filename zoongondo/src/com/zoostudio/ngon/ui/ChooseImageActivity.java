@@ -103,6 +103,12 @@ public class ChooseImageActivity extends NgonActivity implements
 		super.onResume();
 
 	}
+	@Override
+	protected void onStop() {
+		super.onStop();
+		adapter.clear();
+		adapter.notifyDataSetChanged();
+	}
 
 	@Override
 	protected void initActions() {

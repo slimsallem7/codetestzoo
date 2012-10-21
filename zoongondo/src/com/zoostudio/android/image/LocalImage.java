@@ -1,9 +1,8 @@
 package com.zoostudio.android.image;
 
-import com.test.cache.CacheableBitmapWrapper;
-
 import android.content.Context;
-import android.graphics.Bitmap;
+
+import com.test.cache.CacheableBitmapWrapper;
 
 public class LocalImage implements SmartImage {
 
@@ -22,13 +21,8 @@ public class LocalImage implements SmartImage {
 		}
 		// Try getting bitmap from cache first
 		CacheableBitmapWrapper wrapper=null;
-		Bitmap bitmap = null;
 		if (idMedia != -1) {
-			bitmap = localImageCache.get(idMedia);
-			if (bitmap != null) {
-				// bitmap = localIma     geCache.get(-1);
-				wrapper = new CacheableBitmapWrapper(""+idMedia, bitmap);
-			}
+			wrapper = localImageCache.get(idMedia);
 		}
 
 		return wrapper;
@@ -36,7 +30,7 @@ public class LocalImage implements SmartImage {
 
 	public static void removeFromCache(long idMedia) {
 		if (localImageCache != null) {
-			localImageCache.remove(idMedia);
+			localImageCache.remove(""+idMedia);
 		}
 	}
 
