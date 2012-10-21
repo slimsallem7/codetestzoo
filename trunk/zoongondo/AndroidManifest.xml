@@ -193,6 +193,10 @@
             android:theme="@style/Theme.NgonDo"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name=".ui.ActivityMapSpot"
+            android:theme="@style/Theme.NgonDo" >
+        </activity>
     </application>
 
 </manifest>

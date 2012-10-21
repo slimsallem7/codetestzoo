@@ -53,7 +53,7 @@ public class ActivityHostScreen extends TabActivity {
 			public void onClick(View v) {
 //				Intent intent = new Intent(getApplicationContext(), ActivityMapSpot.class);
 				
-				Intent intent = new Intent(getApplicationContext(), ActivitySelectLocationManual.class);
+				Intent intent = new Intent(getApplicationContext(), ActivityMapSpot.class);
 				intent.putExtra(ActivitySelectLocationManual.EXTRA_CURRENT_ADDRESS, "");
 				
 				double currentLat = -1, currentLong = -1;
