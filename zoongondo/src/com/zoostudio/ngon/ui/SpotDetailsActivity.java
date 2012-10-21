@@ -365,12 +365,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		mSlideImageView.releaseBitmap();
-	}
-
-	@Override
 	public synchronized void onActionDataError(RestClientTask task,
 			int errorCode) {
 		if (null != mWaitingDialog && mWaitingDialog.isShowing()) {

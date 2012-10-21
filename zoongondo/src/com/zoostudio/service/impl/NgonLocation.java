@@ -4,8 +4,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import com.zoostudio.ngon.utils.Logger;
 
 import android.app.Service;
 import android.content.Context;
@@ -38,7 +38,6 @@ public class NgonLocation extends Service {
 
 	public int mErrorCode = 2;
 	private final IBinder mBinder = new LocalBinder();
-	private Handler mHandler;
 	private int mCurrentTypeRequest;
 
 	private long mLastCheck = 0;
@@ -59,8 +58,6 @@ public class NgonLocation extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.i("NgonLocation", "onStart");
-		mHandler = new Handler();
 	}
 
 	@Override
@@ -88,19 +85,19 @@ public class NgonLocation extends Service {
 
 	private void requestGPS() {
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				0, 0, locationListenerGps);
+				0, 5, locationListenerGps);
 	}
 
 	private void requestNetwork() {
-		mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				Log.i("NgonLocation", "Request Network");
-				mLocationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 5000, 0,
+		// mHandler.post(new Runnable() {
+		// @Override
+		// public void run() {
+		Log.i("NgonLocation", "Request Network");
+		mLocationManager
+				.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 5,
 						locationListenerNetwork);
-			}
-		});
+		// }
+		// });
 	}
 
 	public void unRegisterUpdateLocation() {
@@ -144,14 +141,14 @@ public class NgonLocation extends Service {
 	LocationListener locationListenerGps = new LocationListener() {
 		@Override
 		public void onLocationChanged(Location location) {
-			boolean rs = isBetterLocation(location, mCurrentLocation);
-			if (rs) {
-				mCurrentLocation = location;
-				if (mLocationListener != null) {
-					mLocationListener.onLocationReceiver(mCurrentLocation);
-					Log.i("NgonLocation", "onLocationChange");
-				}
+			// boolean rs = isBetterLocation(location, mCurrentLocation);
+			// if (rs) {
+			mCurrentLocation = location;
+			if (mLocationListener != null) {
+				mLocationListener.onLocationReceiver(mCurrentLocation);
+				Log.i("NgonLocation", "onLocationChange");
 			}
+			// }
 		}
 
 		@Override
@@ -174,19 +171,19 @@ public class NgonLocation extends Service {
 	LocationListener locationListenerNetwork = new LocationListener() {
 		@Override
 		public void onLocationChanged(Location location) {
-			boolean rs = isBetterLocation(location, mCurrentLocation);
-			if (rs) {
-				mCurrentLocation = location;
-				if (mLocationListener != null) {
-					Log.e(getClass().getName(), "current mLocationListener:"
-							+ mLocationListener.toString());
+			// boolean rs = isBetterLocation(location, mCurrentLocation);
+			// if (rs) {
+			mCurrentLocation = location;
+			if (mLocationListener != null) {
+				Log.e(getClass().getName(), "current mLocationListener:"
+						+ mLocationListener.toString());
 
-					mLocationListener.onLocationReceiver(location);
-				} else {
-					Log.e(getClass().getName(),
-							"Error@onLocationChanged: mLocationListener is null");
-				}
+				mLocationListener.onLocationReceiver(location);
+			} else {
+				Log.e(getClass().getName(),
+						"Error@onLocationChanged: mLocationListener is null");
 			}
+			// }
 		}
 
 		@Override
@@ -206,14 +203,13 @@ public class NgonLocation extends Service {
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 			Toast.makeText(getApplicationContext(),
-					"onStatusChanged -  " + status, Toast.LENGTH_SHORT)
-					.show();
+					"onStatusChanged -  " + status, Toast.LENGTH_SHORT).show();
 		}
 	};
 
 	public void requestLocation(int type) {
 		//
-		Log.i("NgonLocation","get Location type");
+		Log.i("NgonLocation", "get Location type");
 		if (mLocationManager == null)
 			mLocationManager = (LocationManager) this
 					.getSystemService(Context.LOCATION_SERVICE);
@@ -225,6 +221,7 @@ public class NgonLocation extends Service {
 		if (mNetworkEnable)
 			mLastNetLocation = mLocationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		
 		// if there are both values use the latest one
 		if (mLastGPSLocation != null && mLastNetLocation != null) {
 			if (mLastGPSLocation.getTime() > mLastNetLocation.getTime()) {
@@ -245,7 +242,7 @@ public class NgonLocation extends Service {
 			Log.i(getClass().getName(),
 					"getLastLocation:" + mCurrentLocation.toString());
 		}
-		Log.i("NgonLocation","get Type Location done");
+		Log.i("NgonLocation", "get Type Location done");
 		startThread(type);
 	}
 
@@ -297,7 +294,6 @@ public class NgonLocation extends Service {
 		return mGpsEnabled;
 	}
 
-
 	private static final int TWO_MINUTES = 1000 * 60 * 2;;
 
 	/**
@@ -317,14 +313,14 @@ public class NgonLocation extends Service {
 			return true;
 		}
 
-		double distance = gps2m((float) location.getLatitude(),
-				(float) location.getLongitude(),
-				(float) currentBestLocation.getLatitude(),
-				(float) currentBestLocation.getLongitude());
-
-		if (distance < LocationConfig.getInstance().minDistance) {
-			return false;
-		}
+		// double distance = gps2m((float) location.getLatitude(),
+		// (float) location.getLongitude(),
+		// (float) currentBestLocation.getLatitude(),
+		// (float) currentBestLocation.getLongitude());
+		//
+		// if (distance < LocationConfig.getInstance().minDistance) {
+		// return false;
+		// }
 
 		DateFormat format = new SimpleDateFormat("MMddyyHHmmss");
 		try {
@@ -355,27 +351,28 @@ public class NgonLocation extends Service {
 		}
 
 		// Check whether the new location fix is more or less accurate
-		int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation
-				.getAccuracy());
-		boolean isLessAccurate = accuracyDelta > 0;
-		boolean isMoreAccurate = accuracyDelta < 0;
-		boolean isSignificantlyLessAccurate = accuracyDelta > 200;
-
-		// Check if the old and new location are from the same provider
-		boolean isFromSameProvider = isSameProvider(location.getProvider(),
-				currentBestLocation.getProvider());
-
-		// Determine location quality using a combination of timeliness and
-		// accuracy
-
-		if (isMoreAccurate) {
-			return true;
-		} else if (isNewer && !isLessAccurate) {
-			return true;
-		} else if (isNewer && !isSignificantlyLessAccurate
-				&& isFromSameProvider) {
-			return true;
-		}
+		// int accuracyDelta = (int) (location.getAccuracy() -
+		// currentBestLocation
+		// .getAccuracy());
+		// boolean isLessAccurate = accuracyDelta > 0;
+		// boolean isMoreAccurate = accuracyDelta < 0;
+		// boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+		//
+		// // Check if the old and new location are from the same provider
+		// boolean isFromSameProvider = isSameProvider(location.getProvider(),
+		// currentBestLocation.getProvider());
+		//
+		// // Determine location quality using a combination of timeliness and
+		// // accuracy
+		//
+		// if (isMoreAccurate) {
+		// return true;
+		// } else if (isNewer && !isLessAccurate) {
+		// return true;
+		// } else if (isNewer && !isSignificantlyLessAccurate
+		// && isFromSameProvider) {
+		// return true;
+		// }
 		return false;
 	}
 
@@ -417,7 +414,7 @@ public class NgonLocation extends Service {
 	}
 
 	public void unRequestLocation() {
-		Log.i("NgonLocation", "unRequestLocation");
+		Logger.e("NgonLocation", "unRequestLocation");
 		mCurrentLocationAuto = mCurrentLocation;
 		if (mCurrentTypeRequest == REQUEST_GPS) {
 			mLocationManager.removeUpdates(locationListenerGps);
@@ -441,20 +438,14 @@ public class NgonLocation extends Service {
 	}
 
 	public void requestGetLocaiton() {
-		Log.i("NgonLocation","requestLocation");
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				if (mCurrentLocation != null) {
-					if (mLocationListener != null) {
-						mLocationListener.onLocationReceiver(mCurrentLocation);
-					}
-				} else {
-					if (mLocationListener != null) {
-						mLocationListener.onGettingLocation();
-					}
-				}
+		if (mCurrentLocation != null) {
+			if (mLocationListener != null) {
+				mLocationListener.onLocationReceiver(mCurrentLocation);
 			}
-		}).start();
+		} else {
+			if (mLocationListener != null) {
+				mLocationListener.onGettingLocation();
+			}
+		}
 	}
 }

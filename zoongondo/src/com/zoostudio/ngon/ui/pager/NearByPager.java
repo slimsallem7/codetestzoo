@@ -48,7 +48,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 		super.onTabSelected();
 		if (mFirstDisplay) {
 			mFirstDisplay = false;
-			refreshSpotItem();
+//			refreshSpotItem();
 		}
 	}
 
@@ -137,7 +137,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 		if (null != mProgressLocation && mProgressLocation.isShowing())
 			mProgressLocation.dismiss();
 		mAdapter.setCurrentLocation(location);
-//		getSpotData(location);
+		getSpotData(location);
 	}
 
 	@Override

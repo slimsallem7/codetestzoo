@@ -3,6 +3,7 @@ package com.zoostudio.ngon.ui;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.ui.base.BaseMapActivity;
+import com.zoostudio.service.impl.NgonLocationManager;
 
 public class ActivityHostScreen extends TabActivity {
 	protected static final String TAG = "ActivityHostScreen";
@@ -50,21 +53,21 @@ public class ActivityHostScreen extends TabActivity {
 			public void onClick(View v) {
 //				Intent intent = new Intent(getApplicationContext(), ActivityMapSpot.class);
 				
-//				Intent intent = new Intent(getApplicationContext(), ActivitySelectLocationManual.class);
-//				intent.putExtra(ActivitySelectLocationManual.EXTRA_CURRENT_ADDRESS, "");
-//				
-//				double currentLat = -1, currentLong = -1;
-//				try {
-//					currentLat = NgonLocationManager.getInstance(null)
-//							.getCurrentLocation().getLatitude();
-//					currentLong = NgonLocationManager.getInstance(null)
-//							.getCurrentLocation().getLongitude();
-//					intent.putExtra(BaseMapActivity.EXTRA_CURRENT_LAT, currentLat);
-//					intent.putExtra(BaseMapActivity.EXTRA_CURRENT_LONG, currentLong);
-//					startActivity(intent);
-//				} catch (Exception e) {
-//					Log.e(TAG, "Error:" + e.getMessage());
-//				}
+				Intent intent = new Intent(getApplicationContext(), ActivitySelectLocationManual.class);
+				intent.putExtra(ActivitySelectLocationManual.EXTRA_CURRENT_ADDRESS, "");
+				
+				double currentLat = -1, currentLong = -1;
+				try {
+					currentLat = NgonLocationManager.getInstance(null)
+							.getCurrentLocation().getLatitude();
+					currentLong = NgonLocationManager.getInstance(null)
+							.getCurrentLocation().getLongitude();
+					intent.putExtra(BaseMapActivity.EXTRA_CURRENT_LAT, currentLat);
+					intent.putExtra(BaseMapActivity.EXTRA_CURRENT_LONG, currentLong);
+					startActivity(intent);
+				} catch (Exception e) {
+					Log.e(TAG, "Error:" + e.getMessage());
+				}
 			}
 		});
 	}
