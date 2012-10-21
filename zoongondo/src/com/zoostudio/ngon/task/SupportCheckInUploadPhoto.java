@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,25 +20,23 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.facebook.android.Utility;
-import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.adapter.item.MenuItem;
 import com.zoostudio.adapter.item.ShareItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.restclient.NgonRestClient;
 
-public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer> {
+public class SupportCheckInUploadPhoto extends AsyncTask<Void, ItemUpload, Integer> {
 	private ArrayList<MediaItem> medias;
 	private String mSpotId;
 	private ArrayList<ShareItem> shareItem;
 	private String comment;
-	private boolean imageUpload;
+	private volatile boolean mUpLoadStatus;
 	private int imageIndex;
 	private String checkinId;
 	private Activity mActivity;
 	private Context mContext;
-	private boolean mIsNeedAuth;
 	private NgonRestClient restClient;
-	private final static int NOTIFI_UPLOAD_IMAGE = 0;
 	
 	public SupportCheckInUploadPhoto(Activity activity,
 			ArrayList<MediaItem> medias, String spotId,
@@ -64,7 +61,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		ArrayList<MenuItem> dishItems;
 		StringBuffer buffer = new StringBuffer(1024);
 		for (MediaItem media : medias) {
-			imageUpload = false;
+			ItemUpload upload = new ItemUpload();
 			ShareItem shareItem = new ShareItem();
 			shareItem.setTitle("Title ZooStudio");
 			try {
@@ -89,11 +86,13 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 						NgonTaskUtil.convertByteToByteArrayBody(mSpotId, media.getMineType(),photoData));
 				try {
 					JSONObject result = new JSONObject(restClient.getResponse());
-					if (imageUpload = result.getBoolean("status")) {
+					if (mUpLoadStatus = result.getBoolean("status")) {
 						// String linkURl = result.getString("image_url");
 						// shareItem.setLink(linkURl);
 					}
-					publishProgress(imageIndex);
+					upload.id = imageIndex;
+					upload.status = mUpLoadStatus;
+					publishProgress(upload);
 					imageIndex++;
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -106,7 +105,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 	}
 
 	@Override
-	protected void onProgressUpdate(Integer... values) {
+	protected void onProgressUpdate(ItemUpload... values) {
 		NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(
 						Context.NOTIFICATION_SERVICE);
 		CharSequence tickerText = mActivity.getResources().getString(R.string.title_notification);
@@ -115,7 +114,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		RemoteViews remoteViews = new RemoteViews(mActivity
 				.getPackageName(), R.layout.layout_notification);
 		int icon;
-		if (imageUpload) {
+		if (values[0].status) {
 			contentTitle = mActivity.getResources().getString(R.string.content_notification_ok);
 			icon = R.drawable.icon_notifi_ok;
 			remoteViews.setImageViewResource(R.id.img_notification,
@@ -131,7 +130,7 @@ public class SupportCheckInUploadPhoto extends AsyncTask<Void, Integer, Integer>
 		updateComplete.contentView = remoteViews;
 		updateComplete.contentIntent = PendingIntent.getActivity(mActivity.getApplicationContext(), 1, new Intent(), PendingIntent.FLAG_CANCEL_CURRENT);
 		updateComplete.flags = Notification.FLAG_AUTO_CANCEL;
-		notificationManager.notify(values[0], updateComplete);
+		notificationManager.notify(values[0].id, updateComplete);
 	}
 	
 
