@@ -1,7 +1,5 @@
 package com.zoostudio.ngon.ui;
 
-import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,8 +17,6 @@ import android.widget.Toast;
 
 import com.viewpagerindicator.TitlePageIndicator;
 import com.zoostudio.adapter.NgonPagerAdapter;
-import com.zoostudio.android.image.SmartImage;
-import com.zoostudio.android.image.SmartImageTask;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.WebImage;
 import com.zoostudio.custom.view.ZooHorizontalScrollView;

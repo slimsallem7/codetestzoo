@@ -21,6 +21,7 @@ import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.callback.OnSpotItemListener;
+import com.zoostudio.ngon.ui.ActivityMapSpot;
 import com.zoostudio.ngon.ui.base.BaseFragmentScreen;
 import com.zoostudio.ngon.views.NgonProgressView;
 import com.zoostudio.restclient.RestClientTask;
@@ -243,6 +244,8 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		mAdapter.clear();
 		for (SpotItem spotItem : data) {
 			mAdapter.add(spotItem);
+			// TEST ACTIVITYMAPSPOT
+			ActivityMapSpot.spotList.add(spotItem);
 		}
 		mAdapter.notifyDataSetChanged();
 		// //////////////////////////////////////////////////////
