@@ -1,5 +1,7 @@
 package com.zoostudio.android.image;
 
+import com.test.cache.CacheableBitmapWrapper;
+
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,48 +10,42 @@ import android.provider.MediaStore.Images;
 import android.support.v4.util.LruCache;
 
 public class LocalCacheImage {
-//	private ConcurrentHashMap<Long, SoftReference<Bitmap>> memoryCache;
-	private LruCache<Long, Bitmap> memoryCache;
+	private LruCache<String, CacheableBitmapWrapper> memoryCache;
 	private Context appContext;
 
 	public LocalCacheImage(Context context) {
-		// Set up in-memory cache store
-//		memoryCache = new ConcurrentHashMap<Long, SoftReference<Bitmap>>();
-		final int memClass = ((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = 1024 * 1024 * memClass / 8;
-		memoryCache = new LruCache<Long, Bitmap>(cacheSize);
+		final int memClass = ((ActivityManager) context
+				.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+		// Use 1/8th of the available memory for this memory cache.
+		final int cacheSize = 1024 * 1024 * memClass / 8;
+		memoryCache = new LruCache<String, CacheableBitmapWrapper>(cacheSize);
 		// Set up disk cache store
 		appContext = context;
 	}
 
-	public Bitmap get(final long idMedia) {
-		Bitmap bitmap = null;
+	public CacheableBitmapWrapper get(final long idMedia) {
+		CacheableBitmapWrapper wrapper = null;
 
 		// Check for image in memory
-		bitmap = getBitmapFromMemory(idMedia);
+		wrapper = getBitmapFromMemory(""+idMedia);
 
 		// Check for image on disk cache
-		if (bitmap == null) {
-			bitmap = getBitmapFromLocal(idMedia);
+		if (wrapper == null) {
+			wrapper = getBitmapFromLocal(idMedia);
 			// Write bitmap back into memory cache
-			if (bitmap != null) {
-				cacheBitmapToMemory(idMedia, bitmap);
+			if (wrapper != null) {
+				cacheBitmapToMemory(""+idMedia, wrapper);
 			}
 		}
 
-		return bitmap;
+		return wrapper;
 	}
 
-	public void put(long idMedia, Bitmap bitmap) {
-		cacheBitmapToMemory(idMedia, bitmap);
+	public void put(long idMedia, CacheableBitmapWrapper bitmap) {
+		cacheBitmapToMemory(""+idMedia, bitmap);
 	}
 
-	public void remove(long idMedia) {
-		if (idMedia == -1) {
-			return;
-		}
-
+	public void remove(String idMedia) {
 		// Remove from memory cache
 		memoryCache.remove(idMedia);
 	}
@@ -59,16 +55,18 @@ public class LocalCacheImage {
 		memoryCache.evictAll();
 	}
 
-	private void cacheBitmapToMemory(final long idMedia, final Bitmap bitmap) {
+	private void cacheBitmapToMemory(String idMedia, CacheableBitmapWrapper bitmap) {
 		memoryCache.put(idMedia, bitmap);
 	}
 
-	private Bitmap getBitmapFromMemory(long idMedia) {
-		Bitmap bitmap = memoryCache.get(idMedia);
-		return bitmap;
+	private CacheableBitmapWrapper getBitmapFromMemory(String idMedia) {
+		CacheableBitmapWrapper wrapper = memoryCache.get(idMedia);
+		if (null == wrapper || wrapper.getBitmap().isRecycled())
+			return null;
+		return wrapper;
 	}
 
-	private Bitmap getBitmapFromLocal(long idMedia) {
+	private CacheableBitmapWrapper getBitmapFromLocal(long idMedia) {
 		Bitmap bitmap = null;
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inDither = false;
@@ -76,7 +74,8 @@ public class LocalCacheImage {
 		bitmap = Images.Thumbnails.getThumbnail(
 				appContext.getContentResolver(), idMedia,
 				Images.Thumbnails.MINI_KIND, options);
-		return bitmap;
+		CacheableBitmapWrapper wrapper = new CacheableBitmapWrapper(""+idMedia, bitmap);
+		return wrapper;
 	}
 
 }

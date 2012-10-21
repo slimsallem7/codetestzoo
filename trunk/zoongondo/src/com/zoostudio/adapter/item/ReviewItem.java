@@ -10,8 +10,6 @@ public class ReviewItem {
     private String[] imageDumps = {
 			"http://wallpaperscraft.com/image/adele_girl_hair_face_look_9921_128x128.jpg",
 			"http://wallpaperscraft.com/image/girl_eyes_face_makeup_manicure_blue-eyed_44388_128x128.jpg",
-			"http://www.weiboenglish.com/images/face/9/81/145_b.jpg",
-			"http://a.wattpad.net/useravatar/LittleGirlBlue.128.410642.jpg",
 			"http://a.wattpad.net/useravatar/ImOnlyGinger.128.637778.jpg"
 	};
     

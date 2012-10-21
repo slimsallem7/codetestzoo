@@ -2,8 +2,6 @@ package com.zoostudio.android.image;
 
 import java.io.InputStream;
 
-import com.zoostudio.ngon.R;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -49,11 +47,6 @@ public class ZooAjustImageView extends SmartImageView {
 	
 	public void setImageId(long idMedia, int fallbackResId) {
 		setImage(new LocalImage(idMedia), fallbackResId);
-	}
-
-	@Override
-	public void setImageBitmap(Bitmap bm) {
-		super.setImageBitmap(bm);
 	}
 
 	public static int calculateInSampleSize(BitmapFactory.Options options,

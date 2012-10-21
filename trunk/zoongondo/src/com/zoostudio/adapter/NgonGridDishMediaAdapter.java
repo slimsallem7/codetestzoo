@@ -29,25 +29,18 @@ public class NgonGridDishMediaAdapter extends ArrayAdapter<MediaItem> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		MediaItem item = this.getItem(position);
-		ViewHolder holder;
 		if(null == convertView){
-			holder = new ViewHolder();
-			holder.imageView1 = new ZooAjustImageView(getContext());
-			holder.imageView1.setScaleType(ScaleType.CENTER_CROP);
-			holder.imageView1.setLayoutParams(layoutParams);
-			convertView = holder.imageView1;
-			convertView.setTag(holder);
-			
+			convertView = new ZooAjustImageView(getContext());
+			((ZooAjustImageView) convertView).setScaleType(ScaleType.CENTER_CROP);
+			((ZooAjustImageView) convertView).setLayoutParams(layoutParams);
 		}else{
-			holder = (ViewHolder) convertView.getTag();
+			((ZooAjustImageView) convertView).setImageBitmap(null);
 		}
+		
 		if (item.getIdMedia() != -1) {
-			holder.imageView1.setImageId(item.getIdMedia());
+			((ZooAjustImageView) convertView).setImageId(item.getIdMedia());
 		}
 		return convertView;
 	}
 	
-	class ViewHolder {
-		ZooAjustImageView imageView1;
-	}
 }
