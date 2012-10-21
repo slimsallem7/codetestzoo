@@ -23,6 +23,7 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.callback.OnSpotItemListener;
 import com.zoostudio.ngon.ui.ActivityMapSpot;
 import com.zoostudio.ngon.ui.base.BaseFragmentScreen;
+import com.zoostudio.ngon.utils.Logger;
 import com.zoostudio.ngon.views.NgonProgressView;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
@@ -39,6 +40,10 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected final static int ERROR_LOAD_MORE_SATE = 3;
 	protected final static int LOADING_MORE_STATE = 4;
 	protected final static int NORMAL_SATE = -1;
+
+	private final static String KEY_STATE = "KEY STATE";
+	private final static String KEY_ARRAY_SPOT = "KEY ARRAY SPOT";
+
 	private int mState = NORMAL_SATE;
 	protected SpotAdapter mAdapter;
 	protected NgonProgressView mProgressBar;
@@ -46,7 +51,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	protected TextView mMessage;
 	protected RelativeLayout mFooterView;
 	private NgonProgressView mProgressLoadMore;
-
+	protected ArrayList<SpotItem> mDataBackup;
 	private boolean mNeedShow;
 	protected ListView lvSpot;
 
@@ -64,7 +69,11 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		mFooterView.setVisibility(mNeedShow ? View.VISIBLE : View.GONE);
 	}
 
-	public abstract void initVariables();
+	public void initVariables() {
+		mDataBackup = new ArrayList<SpotItem>();
+		mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
+				null);
+	}
 
 	protected int mIndexPager;
 	protected boolean mHasLoadData;
@@ -83,10 +92,24 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	}
 
 	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(KEY_STATE, mState);
+		outState.putSerializable(KEY_ARRAY_SPOT, mDataBackup);
+		Logger.e(this.getClass().getName(), "onSaveInstanceState");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		this.mInflater = inflater;
 		mView = mInflater.inflate(R.layout.fragment_home_page, null);
+		if(null != savedInstanceState){
+			mState = savedInstanceState.getInt(KEY_STATE);
+			mDataBackup = (ArrayList<SpotItem>) savedInstanceState
+					.getSerializable(KEY_ARRAY_SPOT);
+		}
 		return mView;
 	}
 
@@ -101,6 +124,10 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		super.onDestroyView();
 		Log.i("Pager", "onDestroyView");
 		mProgressLoadMore.stopAnim();
+		for (int i = 0, n = mAdapter.getCount(); i < n; i++) {
+			SpotItem item = mAdapter.getItem(i);
+			mDataBackup.add(item);
+		}
 		mAdapter.clear();
 		mAdapter.notifyDataSetChanged();
 	}

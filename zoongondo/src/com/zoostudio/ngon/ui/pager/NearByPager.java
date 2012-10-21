@@ -1,7 +1,5 @@
 package com.zoostudio.ngon.ui.pager;
 
-import java.util.ArrayList;
-
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -19,6 +17,7 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.task.GetNearbySpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
+import com.zoostudio.ngon.ui.TabHome;
 
 public class NearByPager extends NgonHomePager implements OnClickListener {
 	private boolean mFirstDisplay = true;
@@ -48,10 +47,9 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 		super.onTabSelected();
 		if (mFirstDisplay) {
 			mFirstDisplay = false;
-//			refreshSpotItem();
 		}
 	}
-
+	
 	@Override
 	public void initControls() {
 		super.initControls();
@@ -64,10 +62,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 			}
 		});
 
-		if (null == mAdapter) {
-			mAdapter = new SpotAdapter(getActivity(),
-					new ArrayList<SpotItem>(), null);
-		}
 		mAdapter.setRequestMoreListener(new SpotAdapter.IOnRequestMoreListener() {
 			@Override
 			public void request() {
@@ -102,12 +96,20 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 
 			}
 		});
-
+		
+		if(!mDataBackup.isEmpty()){
+			for(SpotItem item : mDataBackup){
+				mAdapter.add(item);
+			}
+			mDataBackup.clear();
+		}
+		
 		lvSpot.setAdapter(mAdapter);
 	}
 
 	@Override
 	public void initVariables() {
+		super.initVariables();
 	}
 
 	@Override
@@ -136,6 +138,7 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 	public void onLocationChanged(Location location) {
 		if (null != mProgressLocation && mProgressLocation.isShowing())
 			mProgressLocation.dismiss();
+		((TabHome)mParent).onLocationChange(location);
 		mAdapter.setCurrentLocation(location);
 		getSpotData(location);
 	}
