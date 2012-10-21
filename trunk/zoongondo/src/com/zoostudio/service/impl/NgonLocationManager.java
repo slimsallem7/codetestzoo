@@ -22,6 +22,7 @@ public class NgonLocationManager {
 	public final static int AUTO = 0;
 	public final static int MANUAL = 1;
 	private int mCurrentType = AUTO;
+	public static boolean sIsFirtTime;
 	
 	public static NgonLocationManager getInstance(Activity activity){
 		if(null == instance){
@@ -32,6 +33,7 @@ public class NgonLocationManager {
 	
 	public NgonLocationManager(Activity activity) {
 		this.activity = activity;
+		this.sIsFirtTime = true;
 	}
 	public void resetActivity(Activity activity){
 		this.activity = activity;
@@ -170,6 +172,9 @@ public class NgonLocationManager {
 
 	public void requestLocation(NgonLocationListener listener) {
 		mNgonLocation.setLocationListener(listener);
-		mNgonLocation.requestGetLocaiton();
+		if(sIsFirtTime){
+			mNgonLocation.requestGetLocaiton();
+			sIsFirtTime = false;
+		}
 	}
 }
