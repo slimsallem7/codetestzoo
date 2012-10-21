@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.viewpagerindicator.TitlePageIndicator;
 import com.zoostudio.adapter.NgonPagerAdapter;
+import com.zoostudio.adapter.PagerUtils;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.WebImage;
 import com.zoostudio.custom.view.ZooHorizontalScrollView;
@@ -29,6 +32,7 @@ import com.zoostudio.ngon.task.GetSearchSpotTask;
 import com.zoostudio.ngon.ui.base.BaseFragmentActivity;
 import com.zoostudio.ngon.ui.base.BaseMapActivity;
 import com.zoostudio.ngon.ui.pager.NgonHomePager;
+import com.zoostudio.ngon.utils.LocationUtil;
 import com.zoostudio.ngon.utils.OnAddressChanged;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
@@ -57,7 +61,6 @@ public class TabHome extends BaseFragmentActivity implements
 	private ImageButton mBtnCancelSearch;
 	private Button mBtnChangeDistance;
 	private LinearLayout mFooterHome;
-
 	private View mBarTitle;
 
 	protected int getLayoutId() {
@@ -75,12 +78,14 @@ public class TabHome extends BaseFragmentActivity implements
 
 	protected void initScreen() {
 		mCurrentPositionDistance = 0;
-		mTabsPager = (ViewPager) this.findViewById(R.id.content_pager);
-
+		mCurrentPager = PagerUtils.NEAR_BY;
+		mLocationAddress = (TextView) findViewById(R.id.location_address);
+		mTabsPager = (ViewPager) findViewById(R.id.content_pager);
 		mTabsPager.setAdapter(mHomeAdapter);
-		mIndicator = (TitlePageIndicator) this.findViewById(R.id.indicator);
-		mIndicator.setOnPageChangeListener(this);
+		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
 		mIndicator.setViewPager(mTabsPager);
+		mIndicator.setCurrentItem(mCurrentPager);
+		mIndicator.setOnPageChangeListener(this);
 	}
 
 	private class OnSearchResult implements OnPostExecuteDelegate {
@@ -92,17 +97,13 @@ public class TabHome extends BaseFragmentActivity implements
 		}
 	}
 
-	// @Override
-	// public void onLocationChange(Location location) {
-	// NgonHomePager pager = getFragmentPager(mCurrentPager);
-	// pager.onLocationChanged(location);
-	//
-	// LocationUtil locationAddress = new LocationUtil();
-	// locationAddress.setOnAddressChangedListener(this);
-	// locationAddress.getAddress(getBaseContext(), location);
-	//
-	// Log.e(getClass().getName(), "onLocationChange:" + location.toString());
-	// }
+	public void onLocationChange(Location location) {
+		LocationUtil locationAddress = new LocationUtil();
+		locationAddress.setOnAddressChangedListener(this);
+		locationAddress.getAddress(getBaseContext(), location);
+
+		Log.e(getClass().getName(), "onLocationChange:" + location.toString());
+	}
 
 	public void locationEdit() {
 		Intent intent = new Intent(getApplicationContext(),
@@ -221,9 +222,7 @@ public class TabHome extends BaseFragmentActivity implements
 			WebImage.webImageCache.clear();
 	}
 
-	// TODO :@huy Lam animation cho nut search o man hinh MainScreen
-	// XML Neu can thay doi inc_main_home_screen.xml (id = search_wrapper)
-	// @Override
+	
 	public void onClick(View v) {
 		// if (v.getId() == R.id.btn_search) {
 		// mBtnMenu.setOnClickListener(null);

@@ -17,7 +17,7 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.ui.base.BaseMapActivity;
 import com.zoostudio.service.impl.NgonLocationManager;
 
-public class ActivityHostScreen extends TabActivity {
+public class ActivityHostScreen extends TabActivity{
 	protected static final String TAG = "ActivityHostScreen";
 	private TabHost tabHost;
 	private TabWidget tabWidget;
@@ -27,7 +27,6 @@ public class ActivityHostScreen extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_host);
 		mMap = (ImageButton) findViewById(R.id.map);
-		
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		tabHost.setup();
 
@@ -71,7 +70,7 @@ public class ActivityHostScreen extends TabActivity {
 			}
 		});
 	}
-
+	
 	private void createIndicator(TabSpec tabSpec, int drawableId) {
 		View tabIndicator = LayoutInflater.from(getApplicationContext()).inflate(
 				R.layout.tab_indicator, tabWidget, false);
@@ -80,4 +79,5 @@ public class ActivityHostScreen extends TabActivity {
 		tabSpec.setIndicator(tabIndicator);
 		tabHost.addTab(tabSpec);
 	}
+
 }

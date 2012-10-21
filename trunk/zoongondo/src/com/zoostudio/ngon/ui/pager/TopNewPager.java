@@ -1,22 +1,18 @@
 package com.zoostudio.ngon.ui.pager;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.event.OnSpotitemClick;
-import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.task.GetTopNewSpotTask;
 import com.zoostudio.ngon.ui.SearchActivity;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
-	private boolean mFirstDisplay = true;
+	private boolean mFirstDisplay;
 	private GetTopNewSpotTask mLoadMoreSpotTask;
 	private GetTopNewSpotTask mLoadNewSpotTask;
 
@@ -41,10 +37,6 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 	@Override
 	public void initControls() {
 		super.initControls();
-		if (null == mAdapter) {
-			mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
-					null);
-		}
 		View header = mInflater.inflate(R.layout.item_home_search, null);
 		header.setOnClickListener(new OnClickListener() {
 			@Override
@@ -61,7 +53,10 @@ public class TopNewPager extends NgonHomePager implements OnPreExecuteDelegate{
 
 	@Override
 	public void initVariables() {
+		super.initVariables();
+		mFirstDisplay = true;
 	}
+	
 
 	@Override
 	protected int getPagerIndex() {

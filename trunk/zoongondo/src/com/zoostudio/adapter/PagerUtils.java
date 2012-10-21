@@ -10,8 +10,8 @@ import com.zoostudio.ngon.ui.pager.TopLikePager;
 import com.zoostudio.ngon.ui.pager.TopNewPager;
 
 public class PagerUtils {
-	public final static int NEAR_BY = 0;
-	public final static int TOP_NEW = 1;
+	public final static int TOP_NEW = 0;
+	public final static int NEAR_BY = 1;
 	public final static int TOP_LIKE = 2;
 
 	public final static int CHECKED_IN = 0;
@@ -27,20 +27,14 @@ public class PagerUtils {
 //		String tag = builder.toString();
 
 		switch (position) {
-		case NEAR_BY:
-			fragment = new NearByPager(NEAR_BY);
-			// fragment = NearByPager.findOrCreateNgonPager(fm, tag, NEAR_BY,
-			// NearByPager.class);
-			break;
 		case TOP_NEW:
 			fragment = new TopNewPager(TOP_NEW);
-			// fragment = TopNewPager.findOrCreateNgonPager(fm, tag, TOP_NEW,
-			// TopNewPager.class);
+			break;
+		case NEAR_BY:
+			fragment = new NearByPager(NEAR_BY);
 			break;
 		case TOP_LIKE:
 			fragment = new TopLikePager(TOP_LIKE);
-			// fragment = TopLikePager.findOrCreateNgonPager(fm, tag, TOP_LIKE,
-			// TopLikePager.class);
 			break;
 		}
 		return fragment;

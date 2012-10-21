@@ -29,6 +29,7 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 			refreshSpotItem();
 		}
 	}
+	
 
 	@Override
 	public void initControls() {
@@ -55,6 +56,7 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 
 	@Override
 	public void initVariables() {
+		super.initVariables();
 	}
 
 	@Override
