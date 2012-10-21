@@ -131,6 +131,22 @@ public abstract class BaseMapActivity extends MapActivity implements
 		watcherAddress();
 	}
 
+	protected void drawSpotLocation(MapView mapView, Canvas canvas) {
+		if (null != mCurrentGeoPoint) {
+
+			// ---translate the GeoPoint to screen pixels---
+			Point screenPts = new Point();
+			mapView.getProjection().toPixels(mCurrentGeoPoint, screenPts);
+
+			// ---add the marker---
+			// TODO: @DUYNT Sua anh Marker cho map
+			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+					R.drawable.pushpin);
+
+			canvas.drawBitmap(bmp, screenPts.x - 7, screenPts.y - 26, null);
+		}
+	}
+	
 	protected void loadLocation() {
 		mCurrentAddress = this.getIntent().getExtras()
 				.getString(EXTRA_CURRENT_ADDRESS);
@@ -214,19 +230,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 						screenPts.y - ConfigSize.SIZE_PICKER, null);
 			}
 
-			if (null != mCurrentGeoPoint) {
-
-				// ---translate the GeoPoint to screen pixels---
-				Point screenPts = new Point();
-				mapView.getProjection().toPixels(mCurrentGeoPoint, screenPts);
-
-				// ---add the marker---
-				// TODO: @DUYNT Sua anh Marker cho map
-				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-						R.drawable.pushpin);
-
-				canvas.drawBitmap(bmp, screenPts.x - 7, screenPts.y - 26, null);
-			}
+			drawSpotLocation(mapView, canvas);
 			return true;
 		}
 
