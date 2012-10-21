@@ -66,9 +66,9 @@
     <string name="loadingmore">Đang tải thêm</string>
 
     <string-array name="titles_home_screen">
+        <item>Mới Nhất</item>
         <item>Gần Nhất</item>
         <item>Bình Chọn</item>
-        <item>Mới Nhất</item>
     </string-array>
     <string-array name="titles_tab_user_profile_screen">
         <item>Cá Nhân</item>

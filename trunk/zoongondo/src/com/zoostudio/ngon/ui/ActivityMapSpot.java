@@ -15,10 +15,10 @@ import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.ui.base.BaseMapActivity;
 
 /**
- * Dùng để hiển thị các địa điểm trên bản đồ. Mỗi địa điểm có một ảnh minh họa.
- * Khi ấn vào mỗi điểm thì vào trang chi tiết của địa điểm đó.
- * Danh sách địa điểm giống trang xem dạng list, cần có thêm nút để chọn giữa 3 danh sách: 
- * nearby, top rated và top new.
+ * DÃ¹ng Ä‘á»ƒ hiá»ƒn thá»‹ cÃ¡c Ä‘á»‹a Ä‘iá»ƒm trÃªn báº£n Ä‘á»“. Má»—i Ä‘á»‹a Ä‘iá»ƒm cÃ³ má»™t áº£nh minh há»�a.
+ * Khi áº¥n vÃ o má»—i Ä‘iá»ƒm thÃ¬ vÃ o trang chi tiáº¿t cá»§a Ä‘á»‹a Ä‘iá»ƒm Ä‘Ã³.
+ * Danh sÃ¡ch Ä‘á»‹a Ä‘iá»ƒm giá»‘ng trang xem dáº¡ng list, cáº§n cÃ³ thÃªm nÃºt Ä‘á»ƒ chá»�n giá»¯a 3 danh sÃ¡ch: 
+ * nearby, top rated vÃ  top new.
  * @author ThaiDuy
  *
  */
@@ -49,6 +49,10 @@ public class ActivityMapSpot extends BaseMapActivity {
 	@Override
 	protected int getMapViewId() {
 		return R.id.mapView;
+	}
+	
+	@Override
+	protected void watcherAddress() {
 	}
 
 	@Override
