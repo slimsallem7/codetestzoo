@@ -83,6 +83,7 @@ public class TwitterSupport {
 	public void postStatus(String status, GeoLocation location) {
 		AsynTwitterPostStatus asynTwitterPostStatus = new AsynTwitterPostStatus(
 				listener, status, location);
+		asynTwitterPostStatus.setName("Twitter-Thread");
 		asynTwitterPostStatus.start();
 	}
 
@@ -219,20 +220,20 @@ public class TwitterSupport {
 				twitter.setOAuthAccessToken(a);
 				twitter.updateStatus(status);
 
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						listener.onUpdateTwitterFinish();
-					}
-				});
+//				handler.post(new Runnable() {
+//					@Override
+//					public void run() {
+//						listener.onUpdateTwitterFinish();
+//					}
+//				});
 			} catch (TwitterException e) {
 				e.printStackTrace();
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						listener.onUpdateTwitterError();
-					}
-				});
+//				handler.post(new Runnable() {
+//					@Override
+//					public void run() {
+//						listener.onUpdateTwitterError();
+//					}
+//				});
 			}
 		}
 	}

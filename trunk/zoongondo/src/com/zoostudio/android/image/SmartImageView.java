@@ -13,7 +13,7 @@ import com.test.cache.CacheableBitmapWrapper;
 import com.zoostudio.ngon.utils.ImageUtil;
 
 public class SmartImageView extends ImageView {
-	private static final int LOADING_THREADS = 4;
+	protected static  int LOADING_THREADS = 4;
 	private static ExecutorService threadPool = Executors
 			.newFixedThreadPool(LOADING_THREADS);
 
@@ -101,6 +101,7 @@ public class SmartImageView extends ImageView {
 
 	public void setImageWrap(CacheableBitmapWrapper wrapper) {
 		if (null != wrapper && wrapper.hasValidBitmap()) {
+			wrapper.setPendding(false);
 			wrapper.setBeingUsed(true);
 			wrapper.getImageRef();
 			setImageBitmap(wrapper.getBitmap());

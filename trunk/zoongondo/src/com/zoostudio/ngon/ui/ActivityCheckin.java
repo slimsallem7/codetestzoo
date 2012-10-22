@@ -1,17 +1,11 @@
 package com.zoostudio.ngon.ui;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,9 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.BaseRequestListener;
 import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
 import com.facebook.android.SessionEvents;
 import com.facebook.android.SessionEvents.AuthListener;
 import com.facebook.android.SessionEvents.LogoutListener;
@@ -48,20 +40,20 @@ import com.zoostudio.ngon.dialog.NgonDialog.Builder;
 import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.task.CheckinTask;
 import com.zoostudio.ngon.task.SupportCheckInUploadPhoto;
+import com.zoostudio.ngon.task.callback.OnCheckinTaskListener;
 import com.zoostudio.ngon.ui.base.BaseMapActivity;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.HorizontalPager;
 import com.zoostudio.ngon.views.VerticalImageThumbView;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
-import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class ActivityCheckin extends BaseMapActivity implements
 		HorizontalPager.OnItemChangeListener,
 		HorizontalPager.OnScreenSwitchListener,
 		android.view.View.OnClickListener, OnTwitterListener,
-		OnPreExecuteDelegate, OnDataErrorDelegate {
+		OnPreExecuteDelegate, OnDataErrorDelegate, OnCheckinTaskListener {
 	private HorizontalPager pagerDish;
 	private VerticalImageThumbView mImageThumbViews;
 	private static final int CHOOSE_DISH = 0;
@@ -101,6 +93,7 @@ public class ActivityCheckin extends BaseMapActivity implements
 	private SpotItem mSpotItem;
 	private final static String CALL_BACK_URL = "zoostudio-ngon-do-checkin://callback";
 	private final static String CALL_BACK_SCHEME = "zoostudio-ngon-do-checkin";
+	private CheckinTask mCheckinTask;
 
 	@Override
 	protected int getLayoutId() {
@@ -131,9 +124,9 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 	@Override
 	protected void loadLocation() {
-		mSpotItem = (SpotItem) getIntent().getExtras()
-				.getSerializable(SpotDetailsActivity.EXTRA_SPOT);
-		mCurrentAddress = mSpotItem.getAddress();
+		mSpotItem = (SpotItem) getIntent().getExtras().getSerializable(
+				SpotDetailsActivity.EXTRA_SPOT);
+		mCurrentAddress = mSpotItem.getName();
 		mCurrentLat = mSpotItem.getLocation().getLatitude();
 		mCurrentLong = mSpotItem.getLocation().getLongtitude();
 		mSpotId = mSpotItem.getId();
@@ -329,12 +322,6 @@ public class ActivityCheckin extends BaseMapActivity implements
 
 		} else if (v == btnCheckIn) {
 			postCheckIn();
-			// if (checkFB) {
-			// postStatus();
-			// }
-			// if (checkTW) {
-			// postTwitter();
-			// }
 		} else {
 			Intent intent = new Intent(this, ChooseDishActivity.class);
 			intent.putExtra("LIST_DISH", mDishseOriginal);
@@ -416,7 +403,6 @@ public class ActivityCheckin extends BaseMapActivity implements
 			}
 		}
 	};
-	private CheckinTask mCheckinTask;
 
 	/*
 	 * The Callback for notifying the application when log out starts and
@@ -452,66 +438,25 @@ public class ActivityCheckin extends BaseMapActivity implements
 		}
 	}
 
-	/*
-	 * callback for the photo upload
-	 */
-	public class PhotoUploadListener extends BaseRequestListener {
-
-		@Override
-		public void onComplete(final String response, final Object state) {
-			mHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					// new UploadPhotoResultDialog(Checkin.this,
-					// "Upload Photo executed", response).show();
-					Toast.makeText(getApplicationContext(), "Post Done !!!",
-							Toast.LENGTH_SHORT).show();
-				}
-			});
-		}
-
-		public void onFacebookError(FacebookError error) {
-			Toast.makeText(getApplicationContext(),
-					"Facebook Error: " + error.getMessage(), Toast.LENGTH_LONG)
-					.show();
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void postPhoto(MediaItem item) {
-		try {
-			Bundle params = new Bundle();
-			Uri photoUri = Uri.fromFile(new File(item.getPathMedia()));
-			params.putByteArray("photo",
-					Utility.scaleImage(getApplicationContext(), photoUri, item));
-			params.putString("caption", mEditWriteReview.getText().toString());
-			params.putString("place", "252812541444808");
-			// JSONObject coordinates = new JSONObject();
-			// coordinates.put("latitude", mCurrentLat);
-			// coordinates.put("longitude", mCurrentLong);
-			// params.putString("coordinates",coordinates.toString());
-			Utility.mAsyncRunner.request("me/photos", params, "POST",
-					new PhotoUploadListener(), null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void postStatus() {
-		String mess = mEditWriteReview.getText().toString();
-		Bundle params = new Bundle();
-		params.putString("name", "Chipa - Chipa");
-		params.putString("message", mess);
-		params.putString("link", "http://ngon.do/spot/1");
-		String dish = "";
-		for (MenuItem item : mDishseSelected) {
-			dish += item.getTitle();
-			dish += " \r\n";
-		}
-		params.putString("description", dish);
-		Utility.mAsyncRunner.request("me/feed", params, "POST",
-				new PhotoUploadListener(), null);
-	}
+	// @SuppressWarnings("unused")
+	// private void postPhoto(MediaItem item) {
+	// try {
+	// Bundle params = new Bundle();
+	// Uri photoUri = Uri.fromFile(new File(item.getPathMedia()));
+	// params.putByteArray("photo",
+	// Utility.scaleImage(getApplicationContext(), photoUri, item));
+	// params.putString("caption", mEditWriteReview.getText().toString());
+	// params.putString("place", "252812541444808");
+	// // JSONObject coordinates = new JSONObject();
+	// // coordinates.put("latitude", mCurrentLat);
+	// // coordinates.put("longitude", mCurrentLong);
+	// // params.putString("coordinates",coordinates.toString());
+	// Utility.mAsyncRunner.request("me/photos", params, "POST",
+	// new PhotoUploadListener(), null);
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	@Override
 	public void onAuthTwitterSuccess() {
@@ -545,11 +490,6 @@ public class ActivityCheckin extends BaseMapActivity implements
 				Toast.LENGTH_SHORT).show();
 	}
 
-	private void postTwitter() {
-		String mess = mEditWriteReview.getText().toString();
-		twitterSupport.postStatus(mess, null);
-	}
-
 	private void postCheckIn() {
 		ArrayList<String> dishList = new ArrayList<String>();
 		if (mDishseSelected.size() > 0) {
@@ -558,37 +498,11 @@ public class ActivityCheckin extends BaseMapActivity implements
 			}
 		}
 		final String mess = mEditWriteReview.getText().toString();
-		mCheckinTask = new CheckinTask(ActivityCheckin.this,
-				mSpotId, mess, dishList);
+		mCheckinTask = new CheckinTask(ActivityCheckin.this, mSpotId, mess,
+				dishList);
 		mCheckinTask.setOnPreExecuteDelegate(this);
 		mCheckinTask.setOnDataErrorDelegate(this);
-		mCheckinTask.setOnPostExecuteDelegate(new OnPostExecuteDelegate() {
-			@Override
-			public void actionPost(RestClientTask task, JSONObject result) {
-				try {
-					if (mWaitingDialog.isShowing())
-						mWaitingDialog.dismiss();
-					if (result.getBoolean("status")) {
-						Toast.makeText(getApplicationContext(),
-								"Check in Zoo Done", Toast.LENGTH_SHORT).show();
-						// String checkinId = result.getString("checkin_id");
-						String checkinId = "010101";
-						if (!mMediaSelected.isEmpty()) {
-							SupportCheckInUploadPhoto uploadPhoto = new SupportCheckInUploadPhoto(
-									ActivityCheckin.this, mMediaSelected,
-									mSpotId, checkinId);
-							uploadPhoto.execute();
-						}
-						ActivityCheckin.this.finish();
-					} else {
-						Toast.makeText(getApplicationContext(), "Thu lai",
-								Toast.LENGTH_SHORT).show();
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		mCheckinTask.setOnCheckinTaskListener(this);
 		mCheckinTask.execute();
 
 	}
@@ -610,7 +524,34 @@ public class ActivityCheckin extends BaseMapActivity implements
 	public void onActionDataError(RestClientTask task, int errorCode) {
 		if (mWaitingDialog.isShowing())
 			mWaitingDialog.dismiss();
-		Toast.makeText(getApplicationContext(), "" + errorCode,
+		Toast.makeText(getApplicationContext(), "Check in fail" + errorCode,
 				Toast.LENGTH_SHORT).show();
 	}
+
+	/*
+	 * Call back khi check in thanh cong. Server tra ve Id(non-Javadoc)
+	 * 
+	 * @see
+	 * com.zoostudio.ngon.task.callback.OnCheckinTaskListener#onCheckinTaskListener
+	 * (java.lang.String)
+	 */
+	@Override
+	public void onCheckinTaskListener(String checkinId) {
+		Toast.makeText(getApplicationContext(), "Check in Zoo Done",
+				Toast.LENGTH_SHORT).show();
+		// String checkinId = result.getString("checkin_id");
+		checkinId = "010101";
+		SupportCheckInUploadPhoto uploadPhoto = new SupportCheckInUploadPhoto(
+				ActivityCheckin.this, mMediaSelected, mSpotId, checkinId);
+		String mess = mEditWriteReview.getText().toString();
+		if (checkFB)
+			uploadPhoto.setFacebookShare(mess, mCurrentAddress);
+		if (checkTW)
+			uploadPhoto.setTwitterShare(mess, twitterSupport);
+		uploadPhoto.execute();
+		if (mWaitingDialog.isShowing())
+			mWaitingDialog.dismiss();
+		finish();
+	}
+
 }

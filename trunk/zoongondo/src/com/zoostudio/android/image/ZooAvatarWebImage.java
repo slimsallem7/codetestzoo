@@ -1,7 +1,10 @@
 package com.zoostudio.android.image;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -35,7 +38,11 @@ public class ZooAvatarWebImage extends WebImage {
 			bitmap = Bitmap.createScaledBitmap(bitmap, size, size, false);
 			is.close();
 			bif.close();
-		} catch (Exception e) {
+		} catch (SocketTimeoutException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return bitmap;

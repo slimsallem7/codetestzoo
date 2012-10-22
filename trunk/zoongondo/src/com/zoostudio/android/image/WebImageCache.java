@@ -182,30 +182,6 @@ public class WebImageCache {
 				}
 				Log.e(TAG, "Url tu Disk =" + url);
 				wrapper = new CacheableBitmapWrapper(getCacheKey(url), bitmap);
-				// try {
-				// Options opts = new Options();
-				// opts.inJustDecodeBounds = true;
-				// FileInputStream fis = new FileInputStream(file);
-				// BufferedInputStream bis = new BufferedInputStream(fis);
-				// bitmap = BitmapFactory.decodeStream(bis, null, opts);
-				// bis.close();
-				// fis.close();
-				// opts.inSampleSize = ImageUtil.calculateInSampleSize(opts,
-				// ConfigSize.WIDTH_SCREEN);
-				// opts.inJustDecodeBounds = false;
-				// FileInputStream fis1 = new FileInputStream(file);
-				// BufferedInputStream bis1 = new BufferedInputStream(fis1);
-				// if (null == bitmap)
-				// return null;
-				// wrapper = new CacheableBitmapWrapper(getCacheKey(url),
-				// bitmap);
-				// fis1.close();
-				// bis1.close();
-				// } catch (FileNotFoundException e) {
-				// e.printStackTrace();
-				// } catch (IOException e) {
-				// e.printStackTrace();
-				// }
 			} else {
 				Log.e(TAG, "Khong the lay tu Disk =" + url);
 			}

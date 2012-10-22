@@ -28,15 +28,18 @@ public class CacheableBitmapWrapper {
 	private final Bitmap mBitmap;
 	// Number of ImageViews currently showing bitmap
 	private int mImageViewsCount;
+	private volatile boolean pendding = false;
 
 	// Number of caches currently referencing the wrapper
 	private int mCacheCount;
 
-	public CacheableBitmapWrapper(Bitmap bitmap) throws IllegalArgumentException {
+	public CacheableBitmapWrapper(Bitmap bitmap)
+			throws IllegalArgumentException {
 		this(null, bitmap);
 	}
 
-	public CacheableBitmapWrapper(String url, Bitmap bitmap) throws IllegalArgumentException{
+	public CacheableBitmapWrapper(String url, Bitmap bitmap)
+			throws IllegalArgumentException {
 		if (null == bitmap) {
 			throw new IllegalArgumentException("Bitmap can not be null");
 		}
@@ -83,10 +86,10 @@ public class CacheableBitmapWrapper {
 	 */
 	public boolean hasValidBitmap() {
 		boolean rs = !mBitmap.isRecycled();
-		if(rs){
-			Log.e(LOG_TAG,mUrl + " - Chua bi recylce");
-		}else{
-			Log.e(LOG_TAG,mUrl + " - Da recylce");
+		if (rs) {
+			Log.e(LOG_TAG, mUrl + " - Chua bi recylce");
+		} else {
+			Log.e(LOG_TAG, mUrl + " - Da recylce");
 		}
 		return rs;
 	}
@@ -99,13 +102,18 @@ public class CacheableBitmapWrapper {
 	 *            - true if the wrapper has been added to a cache, false if
 	 *            removed.
 	 */
-	public void setCached(boolean added) {
+	public synchronized void setCached(boolean added) {
 		if (added) {
 			mCacheCount++;
 		} else {
 			mCacheCount--;
 		}
-		checkState();
+		if (!pendding)
+			checkState();
+	}
+	
+	public void setPendding(boolean pendding) {
+		this.pendding = pendding;
 	}
 
 	/**
@@ -115,7 +123,7 @@ public class CacheableBitmapWrapper {
 	 * @param beingUsed
 	 *            - true if being used, false if not.
 	 */
-	public void setBeingUsed(boolean beingUsed) {
+	public synchronized void setBeingUsed(boolean beingUsed) {
 		if (beingUsed) {
 			mImageViewsCount++;
 		} else {
@@ -130,7 +138,7 @@ public class CacheableBitmapWrapper {
 	 * displayed. If neither of those conditions are met then the bitmap is
 	 * recycled and freed.
 	 */
-	private synchronized void checkState() {
+	private void checkState() {
 		if (mCacheCount <= 0 && mImageViewsCount <= 0 && hasValidBitmap()) {
 			if (BuildConfig.DEBUG) {
 				Log.e(LOG_TAG, "San sang cho recyle url: " + mUrl);

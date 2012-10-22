@@ -70,16 +70,17 @@ public class ChooseDishMediaActivity extends Activity implements
 		intent.putExtra("SOURCE", CropImageActivity.FROM_GALLERY);
 		startActivity(intent);
 	}
-
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		SmartImageView.cancelAllTasks();
+	}
+	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Long[] keys = new Long[mAdapter.getCount()];
-		for (int i = 0, n = mAdapter.getCount(); i < n; i++) {
-			keys[i] = mAdapter.getItem(i).getIdMedia();
-		}
-		LocalImage.clearMemory(keys);
-		SmartImageView.cancelAllTasks();
+		LocalImage.clearMemory(null);
 	}
 
 	@Override

@@ -247,7 +247,7 @@ public class AsyncFacebookRunner {
                         final String httpMethod,
                         final RequestListener listener,
                         final Object state) {
-        new Thread() {
+        new Thread("Facebook-Thread") {
             @Override public void run() {
                 try {
                     String resp = fb.request(graphPath, parameters, httpMethod);

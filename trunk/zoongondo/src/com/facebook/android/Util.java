@@ -96,7 +96,7 @@ public final class Util {
             sb.append(URLEncoder.encode(key) + "=" +
                       URLEncoder.encode(parameters.getString(key)));
         }
-        return sb.toString();
+        return  sb.toString();
     }
 
     public static Bundle decodeUrl(String s) {
@@ -182,7 +182,7 @@ public final class Util {
                     URLDecoder.decode(params.getString("access_token"));
                 params.putString("access_token", decoded_token);
             }
-
+            conn.setConnectTimeout(20000);
             conn.setRequestMethod("POST");
             conn.setRequestProperty(
                     "Content-Type",

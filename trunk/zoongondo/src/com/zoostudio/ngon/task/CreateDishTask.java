@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.facebook.android.Utility;
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.exception.ZooException;
 import com.zoostudio.ngon.task.callback.OnAddDishListener;
 import com.zoostudio.restclient.RestClientNotification;
 import com.zoostudio.restclient.RestClientTask;
@@ -73,6 +74,7 @@ public class CreateDishTask extends RestClientTask {
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
+			mErrorCode = ZooException.JSON.JSON_PARSE_ERROR;
 			return RestClientNotification.ERROR_DATA;
 		} 
 		catch (IOException e) {
