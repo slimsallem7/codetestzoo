@@ -71,7 +71,7 @@ public class ZooAvatarImageView extends SmartImageView {
 
 	@Override
 	public void setImageBitmap(Bitmap source) {
-		if (null == source)
+		if (null == source || source.getWidth() <=0 || source.getHeight() <=0)
 			return;
 		Bitmap result = makeCircleImage(source);
 		super.setImageBitmap(result);

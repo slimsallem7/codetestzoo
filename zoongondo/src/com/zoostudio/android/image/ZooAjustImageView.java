@@ -9,7 +9,7 @@ import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 
 public class ZooAjustImageView extends SmartImageView {
-
+	
 	public ZooAjustImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initView(context);
@@ -26,6 +26,7 @@ public class ZooAjustImageView extends SmartImageView {
 	}
 
 	private void initView(Context context) {
+		LOADING_THREADS = 6;
 //		setScaleType(ScaleType.CENTER_CROP);
 //		setLayoutParams(new RelativeLayout.LayoutParams(NgonGridMediaAdapter.SIZE, NgonGridMediaAdapter.SIZE));
 	}

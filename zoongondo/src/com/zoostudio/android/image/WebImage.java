@@ -5,12 +5,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.test.cache.CacheableBitmapWrapper;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
+
+import com.test.cache.CacheableBitmapWrapper;
 
 public class WebImage implements SmartImage {
 	protected static final int CONNECT_TIMEOUT = 20000;
@@ -40,6 +39,7 @@ public class WebImage implements SmartImage {
 				if(null == bitmap) return null;
 				wrapper = new CacheableBitmapWrapper(url,bitmap);
 				if (wrapper != null) {
+					wrapper.setPendding(true);
 					webImageCache.put(url, wrapper);
 				}
 			}

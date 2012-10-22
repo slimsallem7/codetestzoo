@@ -51,6 +51,7 @@ public class ZooImageThumb extends ZooAvatarImageView {
 	public void setImageBitmap(Bitmap source) {
 		width = source.getWidth();
 		height = source.getHeight();
+		if(width <=0 || height <=0) return;
 
 		ratio = calculateRatio(width, height, ConfigSize.SIZE_THUMB,
 				ConfigSize.SIZE_THUMB);

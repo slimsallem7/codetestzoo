@@ -96,8 +96,7 @@ public abstract class RestClientTask extends AsyncTask<Void, Void, Integer> {
 		}
 		try {
 			result = new JSONObject(restClient.getResponse());
-			parseJSONToObject(result);
-			return RestClientNotification.OK;
+			return parseJSONToObject(result);
 		} catch (JSONException e) {
 			e.fillInStackTrace();
 			mErrorCode = ZooException.JSON.JSON_PARSE_ERROR;

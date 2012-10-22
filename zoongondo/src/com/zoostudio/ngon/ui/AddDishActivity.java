@@ -25,10 +25,11 @@ import com.zoostudio.ngon.task.callback.OnAddDishListener;
 import com.zoostudio.ngon.utils.ImageUtil;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.restclient.RestClientTask;
+import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class AddDishActivity extends NgonActivity implements
-		 OnPreExecuteDelegate , OnAddDishListener{
+		 OnPreExecuteDelegate , OnAddDishListener, OnDataErrorDelegate{
 	protected static final String EXTRA_SPOT = "com.ngon.do.adddishactivity.SPOT";
 	private EditText etDishName;
 	private Button btnAddDish;
@@ -128,6 +129,7 @@ public class AddDishActivity extends NgonActivity implements
 							AddDishActivity.this, dish_name, mSpot.getId(),mMediaItem);
 					addDishTask.setOnPreExecuteDelegate(AddDishActivity.this);
 					addDishTask.setOnAddDishListener(AddDishActivity.this);
+					addDishTask.setOnDataErrorDelegate(AddDishActivity.this);
 					addDishTask.execute();
 				} else {
 				}
@@ -162,5 +164,11 @@ public class AddDishActivity extends NgonActivity implements
 		intent.putExtra(ChooseDishActivity.EXTRA_MENU_ITEM, menuItem);
 		setResult(RESULT_OK, intent);
 		finish();
+	}
+
+	@Override
+	public void onActionDataError(RestClientTask task, int errorCode) {
+		mWaitingDialog.dismiss();
+		Toast.makeText(getApplicationContext(),"Thêm mới thất bại", Toast.LENGTH_SHORT).show();
 	}
 }
