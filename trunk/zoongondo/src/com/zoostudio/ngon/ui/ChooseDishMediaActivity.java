@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 
 import com.zoostudio.adapter.NgonGridDishMediaAdapter;
 import com.zoostudio.adapter.item.MediaItem;
-import com.zoostudio.android.image.LocalImage;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.R;
@@ -66,21 +65,21 @@ public class ChooseDishMediaActivity extends Activity implements
 			long arg3) {
 		Intent intent = new Intent(getApplicationContext(),
 				CropImageActivity.class);
-		intent.putExtra(CropImageActivity.MEDIA_ITEM, mAdapter.getItem(position));
+		intent.putExtra(CropImageActivity.MEDIA_ITEM,
+				mAdapter.getItem(position));
 		intent.putExtra("SOURCE", CropImageActivity.FROM_GALLERY);
 		startActivity(intent);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		SmartImageView.cancelAllTasks();
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
-		LocalImage.clearMemory(null);
 	}
 
 	@Override

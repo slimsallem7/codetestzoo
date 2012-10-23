@@ -539,10 +539,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 	public void onCheckinTaskListener(String checkinId) {
 		Toast.makeText(getApplicationContext(), "Check in Zoo Done",
 				Toast.LENGTH_SHORT).show();
-		// String checkinId = result.getString("checkin_id");
-		checkinId = "010101";
 		SupportCheckInUploadPhoto uploadPhoto = new SupportCheckInUploadPhoto(
-				ActivityCheckin.this, mMediaSelected, mSpotId, checkinId);
+				ActivityCheckin.this, mMediaSelected, mSpotItem, checkinId);
 		String mess = mEditWriteReview.getText().toString();
 		if (checkFB)
 			uploadPhoto.setFacebookShare(mess, mCurrentAddress);

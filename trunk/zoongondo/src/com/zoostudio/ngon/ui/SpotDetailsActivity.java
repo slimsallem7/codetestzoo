@@ -89,7 +89,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private TextView mMenu;
 
 	private View mAddReView;
-
+	private volatile boolean hasLoadReview;
 	private ArrayList<String> dataTest;
 
 	@Override
@@ -278,11 +278,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 		infoTask.setOnPreExecuteDelegate(this);
 		infoTask.execute();
 
-		// Load Spot Review
-		reviewTask = new GetSpotReviewTask(this, mSpot.getId());
-		reviewTask.setOnSpotReviewTaskListener(this);
-		reviewTask.execute();
-
 		// load photo
 		photoTask = new GetSpotPhotoTask(this, mSpot.getId());
 		photoTask.setOnSpotPhotoTaskListener(this);
@@ -360,8 +355,20 @@ public class SpotDetailsActivity extends NgonActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (null != dataTest)
-			mSlideImageView.setDatas(dataTest);
+		// Load Spot Review
+		if (!hasLoadReview) {
+			reviewTask = new GetSpotReviewTask(this, mSpot.getId());
+			reviewTask.setOnSpotReviewTaskListener(this);
+			reviewTask.execute();
+		}
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (null != reviewTask && reviewTask.isLoading())
+			reviewTask.cancel(true);
 	}
 
 	@Override
@@ -391,6 +398,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	public void onSpotReviewTaskListener(ArrayList<ReviewItem> data) {
+		hasLoadReview = true;
 		ArrayList<ReviewItem> reviews = new ArrayList<ReviewItem>();
 		reviews.add(new ReviewItem(1));
 		reviews.add(new ReviewItem(2));

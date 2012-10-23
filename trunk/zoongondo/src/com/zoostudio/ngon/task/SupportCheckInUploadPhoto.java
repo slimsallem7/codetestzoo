@@ -24,8 +24,13 @@ import com.facebook.android.BaseRequestListener;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Utility;
 import com.twitter.android.TwitterSupport;
+import com.zoostudio.adapter.PagerUtils;
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.adapter.item.PhotoItem;
+import com.zoostudio.adapter.item.SpotItem;
+import com.zoostudio.ngon.Config;
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.NgonRestClient;
 
 public class SupportCheckInUploadPhoto extends
@@ -37,22 +42,24 @@ public class SupportCheckInUploadPhoto extends
 	private Activity mActivity;
 	private Context mContext;
 	private NgonRestClient restClient;
-	private ArrayList<String> mUrlImage;
+	private ArrayList<PhotoItem> mUrlImage;
 	private String mCheckinId;
 	private boolean shareTwitter;
 	private String message;
 	private TwitterSupport twitterSupport;
 	private String address;
 	private boolean shareFacebook;
+	private SpotItem spotItem;
 
 	public SupportCheckInUploadPhoto(Activity activity,
-			ArrayList<MediaItem> medias, String spotId, String checkinId) {
+			ArrayList<MediaItem> medias, SpotItem spotItem, String checkinId) {
 		mActivity = activity;
 		mContext = activity.getApplicationContext();
 		this.medias = medias;
-		this.mSpotId = spotId;
-		mUrlImage = new ArrayList<String>();
+		mUrlImage = new ArrayList<PhotoItem>();
 		imageIndex = 0;
+		this.spotItem = spotItem;
+		mSpotId = this.spotItem.getId();
 		mCheckinId = checkinId;
 		SharedPreferences pref = activity.getSharedPreferences("account",
 				Context.MODE_PRIVATE);
@@ -72,16 +79,14 @@ public class SupportCheckInUploadPhoto extends
 				byte[] photoData = Utility
 						.scaleImage(mContext, photoUri, media);
 				restClient.addParam("checkin_id", mCheckinId);
-				restClient.postMultiPart(
-						"/photo",
-						"photo",
-						NgonTaskUtil.convertByteToByteArrayBody(mSpotId,
+				restClient.addParam("spot_id", mSpotId);
+				restClient.postMultiPart("/photo", "photo", NgonTaskUtil
+						.convertByteToByteArrayBody(mCheckinId,
 								media.getMineType(), photoData));
 				try {
 					JSONObject result = new JSONObject(restClient.getResponse());
 					if (mUpLoadStatus = result.getBoolean("status")) {
-						// String linkURl = result.getString("image_url");
-						String linkURl = "";
+						PhotoItem linkURl = ParserUtils.parsePhoto(result);
 						mUrlImage.add(linkURl);
 					}
 					upload.id = imageIndex;
@@ -99,13 +104,13 @@ public class SupportCheckInUploadPhoto extends
 			postFacebook();
 		return 0;
 	}
-	
+
 	@Override
 	protected void onPostExecute(Integer result) {
 		if (shareTwitter)
 			postTwitter();
 	}
-	
+
 	@Override
 	protected void onProgressUpdate(ItemUpload... values) {
 		NotificationManager notificationManager = (NotificationManager) mContext
@@ -152,11 +157,15 @@ public class SupportCheckInUploadPhoto extends
 		params.putString("message", message);
 		params.putString("link",
 				"https://play.google.com/store/apps/details?id=com.bookmark.money&hl=en");
-		params.putString(
-				"picture",
-				"http://imgs.mi9.com/uploads/female-celebrities/4700/lisha-cuthbert-sexy-girl-wallpaper_1280x1024_84356.jpg");
-		String dish = "description";
-		params.putString("description", dish);
+		String picture;
+		
+		if(!mUrlImage.isEmpty()){
+			picture = mUrlImage.get(0).getPath();
+		}else{
+			picture = Config.LINK_DEFAULT;
+		}
+		params.putString("picture", picture);
+		params.putString("description", spotItem.getAddress());
 		Utility.mAsyncRunner.request("me/feed", params, "POST",
 				new PhotoUploadListener(), null);
 	}

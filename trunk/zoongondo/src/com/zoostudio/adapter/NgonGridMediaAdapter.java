@@ -55,7 +55,6 @@ public class NgonGridMediaAdapter extends ArrayAdapter<MediaItem> {
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
-//			holder.imageView1.setImageId(0, R.drawable.picker_checkmark_hint);
 			holder.imageView1.setImageBitmap(null);
 			holder.chkSelectImage.setOnCheckedChangeListener(null);
 		}
@@ -65,7 +64,7 @@ public class NgonGridMediaAdapter extends ArrayAdapter<MediaItem> {
 				position, item.getIdMedia()));
 
 		if (item.getIdMedia() != -1) {
-			holder.imageView1.setImageId(item.getIdMedia());
+			holder.imageView1.setImagePath(item.getPathMedia());
 		}
 		return convertView;
 	}

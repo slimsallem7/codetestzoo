@@ -197,8 +197,6 @@ public class CameraActivity extends NgonActivity implements
 
 				item = new MediaItem();
 				long mediaId = ContentUris.parseId(url);
-				Images.Thumbnails.getThumbnail(getContentResolver(), mediaId,
-						Images.Thumbnails.MINI_KIND, null);
 				item.setValue(getRealPathFromURI(url), mediaId, true);
 				mediasCaptured.add(item);
 

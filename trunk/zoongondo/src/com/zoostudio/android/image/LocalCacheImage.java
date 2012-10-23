@@ -1,83 +1,73 @@
 package com.zoostudio.android.image;
 
-import com.test.cache.CacheableBitmapWrapper;
+import java.lang.ref.WeakReference;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.app.ActivityManager;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
-import android.provider.MediaStore.Images;
 import android.support.v4.util.LruCache;
 
+import com.test.cache.CacheableBitmapWrapper;
+
 public class LocalCacheImage {
-	private LruCache<String, CacheableBitmapWrapper> memoryCache;
-	private Context appContext;
-	private ContentResolver contentResolver;
-	private Options options;
+	ConcurrentHashMap<String, WeakReference<CacheableBitmapWrapper>> concurrentHashMap;
+//	private LruCache<String, CacheableBitmapWrapper> memoryCache;
+	private static LocalCacheImage cacheImage;
+
+	public static LocalCacheImage getInstance(Context context) {
+		if (null == cacheImage) {
+			synchronized (LocalCacheImage.class) {
+				cacheImage = new LocalCacheImage(context);
+			}
+		}
+		return cacheImage;
+	}
 
 	public LocalCacheImage(Context context) {
 		final int memClass = ((ActivityManager) context
 				.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
-		// Use 1/8th of the available memory for this memory cache.
-		final int cacheSize = 1024 * 1024 * memClass / 4;
-		memoryCache = new LruCache<String, CacheableBitmapWrapper>(cacheSize);
-		// Set up disk cache store
-		appContext = context;
-		contentResolver = appContext.getContentResolver();
-		options = new BitmapFactory.Options();
-		options.inDither = false;
-		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		final int cacheSize = 1024 * 1024 * memClass / 8;
+//		memoryCache = new LruCache<String, CacheableBitmapWrapper>(cacheSize);
+		concurrentHashMap = new ConcurrentHashMap<String, WeakReference<CacheableBitmapWrapper>>();
 	}
 
-	public CacheableBitmapWrapper get(final long idMedia) {
+	public CacheableBitmapWrapper get(final String pathMedia) {
 		CacheableBitmapWrapper wrapper = null;
 		// Check for image in memory
-		wrapper = getBitmapFromMemory("" + idMedia);
-		// Check for image on disk cache
-		if (wrapper == null) {
-			wrapper = getBitmapFromLocal(idMedia);
-			// Write bitmap back into memory cache
-			if (wrapper != null) {
-				cacheBitmapToMemory("" + idMedia, wrapper);
-			}
-		}
+		wrapper = getBitmapFromMemory(pathMedia);
 		return wrapper;
-	}
-
-	public void put(long idMedia, CacheableBitmapWrapper bitmap) {
-		cacheBitmapToMemory("" + idMedia, bitmap);
 	}
 
 	public void remove(String idMedia) {
 		// Remove from memory cache
-		memoryCache.remove(idMedia);
+		// memoryCache.remove(idMedia);
 	}
 
 	public void clear(Long[] keys) {
 		// Remove everything from memory cache
-		memoryCache.evictAll();
+		// memoryCache.evictAll();
 	}
 
-	private void cacheBitmapToMemory(String idMedia,
+	public void cacheBitmapToMemory(String idMedia,
 			CacheableBitmapWrapper bitmap) {
-		memoryCache.put(idMedia, bitmap);
+		WeakReference<CacheableBitmapWrapper> reference = new WeakReference<CacheableBitmapWrapper>(
+				bitmap);
+		concurrentHashMap.put(idMedia, reference);
+		// memoryCache.put(idMedia, bitmap);
 	}
 
-	private CacheableBitmapWrapper getBitmapFromMemory(String idMedia) {
-		CacheableBitmapWrapper wrapper = memoryCache.get(idMedia);
-		if (null == wrapper || wrapper.getBitmap().isRecycled())
+	public CacheableBitmapWrapper getBitmapFromMemory(String idMedia) {
+		// CacheableBitmapWrapper wrapper = memoryCache.get(idMedia);
+		CacheableBitmapWrapper wrapper = null;
+		WeakReference<CacheableBitmapWrapper> reference = concurrentHashMap
+				.get(idMedia);
+		if (reference != null) {
+			wrapper = reference.get();
+		} else {
 			return null;
-		return wrapper;
-	}
-
-	private CacheableBitmapWrapper getBitmapFromLocal(long idMedia) {
-		Bitmap bitmap = null;
-		bitmap = Images.Thumbnails.getThumbnail(contentResolver, idMedia,
-				Images.Thumbnails.MINI_KIND, options);
-		CacheableBitmapWrapper wrapper = new CacheableBitmapWrapper(""
-				+ idMedia, bitmap);
+		}
+		if (null== wrapper ||wrapper.getBitmap().isRecycled())
+			return null;
 		return wrapper;
 	}
 

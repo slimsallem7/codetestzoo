@@ -108,10 +108,11 @@ public class CacheableBitmapWrapper {
 		} else {
 			mCacheCount--;
 		}
-		if (!pendding)
-			checkState();
+		if (pendding)
+			return;
+		checkState();
 	}
-	
+
 	public void setPendding(boolean pendding) {
 		this.pendding = pendding;
 	}
@@ -144,7 +145,6 @@ public class CacheableBitmapWrapper {
 				Log.e(LOG_TAG, "San sang cho recyle url: " + mUrl);
 			}
 			mBitmap.recycle();
-			System.gc();
 		}
 	}
 

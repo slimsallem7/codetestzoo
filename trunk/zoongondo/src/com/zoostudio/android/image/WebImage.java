@@ -14,7 +14,7 @@ import com.test.cache.CacheableBitmapWrapper;
 public class WebImage implements SmartImage {
 	protected static final int CONNECT_TIMEOUT = 20000;
 	protected static final int READ_TIMEOUT = 10000;
-
+	private boolean cancel;
 	public static WebImageCache webImageCache;
 
 	protected String url;
@@ -53,6 +53,7 @@ public class WebImage implements SmartImage {
 			URLConnection conn = new URL(url).openConnection();
 			conn.setConnectTimeout(CONNECT_TIMEOUT);
 			conn.setReadTimeout(READ_TIMEOUT);
+			if(cancel) return null;
 			InputStream is = conn.getInputStream();
 			BufferedInputStream buf = new BufferedInputStream(is);	
 			bitmap = BitmapFactory.decodeStream(buf);
@@ -64,4 +65,9 @@ public class WebImage implements SmartImage {
 		return bitmap;
 	}
 
+
+	@Override
+	public void cancel() {
+		cancel = true;
+	}
 }

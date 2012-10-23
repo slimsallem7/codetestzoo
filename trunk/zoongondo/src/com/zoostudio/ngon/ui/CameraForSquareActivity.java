@@ -176,8 +176,6 @@ public class CameraForSquareActivity extends NgonActivity implements
 				}
 
 				long mediaId = ContentUris.parseId(url);
-				Images.Thumbnails.getThumbnail(getContentResolver(), mediaId,
-						Images.Thumbnails.MINI_KIND, null);
 				String mediaPath = getRealPathFromURI(url);
 				MediaItem item = new MediaItem();
 				item.setValue(mediaPath, mediaId, degree,"image/jpg");

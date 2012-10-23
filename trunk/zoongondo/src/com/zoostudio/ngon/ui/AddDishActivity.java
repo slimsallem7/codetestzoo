@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,7 +30,7 @@ import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
 
 public class AddDishActivity extends NgonActivity implements
-		 OnPreExecuteDelegate , OnAddDishListener, OnDataErrorDelegate{
+		OnPreExecuteDelegate, OnAddDishListener, OnDataErrorDelegate {
 	protected static final String EXTRA_SPOT = "com.ngon.do.adddishactivity.SPOT";
 	private EditText etDishName;
 	private Button btnAddDish;
@@ -42,6 +43,7 @@ public class AddDishActivity extends NgonActivity implements
 	private MediaItem mMediaItem;
 	private String addDishOk;
 	private MenuItem menuItem;
+
 	@Override
 	protected int setLayoutView() {
 		return R.layout.activity_add_dish;
@@ -50,14 +52,18 @@ public class AddDishActivity extends NgonActivity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		mMediaItem = (MediaItem) intent.getExtras().getSerializable(CropImageActivity.MEDIA_ITEM);
+		mMediaItem = (MediaItem) intent.getExtras().getSerializable(
+				CropImageActivity.MEDIA_ITEM);
 		int size = intent.getExtras().getInt(CropImageActivity.MEDIA_SIZE);
 		Options options = new Options();
 		options.outWidth = size;
 		options.outHeight = options.outWidth;
 		options.inSampleSize = ImageUtil.calculateInSampleSize(options,
 				sizeReq, sizeReq);
-		Bitmap bitmap = BitmapFactory.decodeFile(mMediaItem.getPathMedia(), options);
+		Log.e("AddDishActivity","Path =" + mMediaItem.getPathMedia());
+		menuItem.setImagePathLocal(mMediaItem.getPathMedia());
+		Bitmap bitmap = BitmapFactory.decodeFile(mMediaItem.getPathMedia(),
+				options);
 		mThumb.setImageBitmap(bitmap);
 	}
 
@@ -80,6 +86,7 @@ public class AddDishActivity extends NgonActivity implements
 
 	@Override
 	protected void initVariables() {
+		menuItem = new MenuItem();
 		sizeReq = getResources().getDimensionPixelSize(R.dimen.dish_photo_size);
 		addDishOk = getResources().getString(R.string.add_dish_success);
 	}
@@ -94,7 +101,6 @@ public class AddDishActivity extends NgonActivity implements
 			return null;
 		}
 	}
-
 
 	@Override
 	public void onActionPre(RestClientTask task) {
@@ -120,13 +126,13 @@ public class AddDishActivity extends NgonActivity implements
 		btnAddDish.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				menuItem = new MenuItem();
 				String dish_name = etDishName.getText().toString().trim();
 				menuItem.setName(dish_name);
 				menuItem.setCost("3");
 				if (dish_name.length() > 2) {
 					CreateDishTask addDishTask = new CreateDishTask(
-							AddDishActivity.this, dish_name, mSpot.getId(),mMediaItem);
+							AddDishActivity.this, dish_name, mSpot.getId(),
+							mMediaItem);
 					addDishTask.setOnPreExecuteDelegate(AddDishActivity.this);
 					addDishTask.setOnAddDishListener(AddDishActivity.this);
 					addDishTask.setOnDataErrorDelegate(AddDishActivity.this);
@@ -154,12 +160,10 @@ public class AddDishActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void onAddDishListenerSuccess(String urlImageDish) {
+	public void onAddDishListenerSuccess() {
 		mWaitingDialog.dismiss();
-		if(!urlImageDish.equals("")){
-			menuItem.setUrlImageThumb(urlImageDish);
-		}
-		Toast.makeText(getApplicationContext(), addDishOk, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), addDishOk, Toast.LENGTH_SHORT)
+				.show();
 		Intent intent = new Intent();
 		intent.putExtra(ChooseDishActivity.EXTRA_MENU_ITEM, menuItem);
 		setResult(RESULT_OK, intent);
@@ -169,6 +173,7 @@ public class AddDishActivity extends NgonActivity implements
 	@Override
 	public void onActionDataError(RestClientTask task, int errorCode) {
 		mWaitingDialog.dismiss();
-		Toast.makeText(getApplicationContext(),"Thêm mới thất bại", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), "Thêm mới thất bại",
+				Toast.LENGTH_SHORT).show();
 	}
 }

@@ -57,7 +57,7 @@ public class GalleryPagerAdapter extends PagerAdapter {
 		imageView = (ZooAjustImageView) view.findViewById(R.id.imageMedia);
 		button = (PhotoToggleButton) view.findViewById(R.id.check_image);
 
-		imageView.setImageId(data.get(position).getIdMedia());
+		imageView.setImagePath(data.get(position).getPathMedia());
 		button.setChecked(data.get(position).isSelected());
 		button.setOnCheckedChangeListener(new ZooMediaCheck(position, data
 				.get(position).getIdMedia()));

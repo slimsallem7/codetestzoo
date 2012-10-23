@@ -42,6 +42,7 @@ public class SmartImageTask implements Runnable {
     }
 
     public void cancel() {
+    	image.cancel();
         cancelled = true;
     }
 
