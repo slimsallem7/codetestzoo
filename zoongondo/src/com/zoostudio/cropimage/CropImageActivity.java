@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,14 +32,13 @@ import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.cropimage.imagelayer.LayerCrop;
 import com.zoostudio.ngon.R;
 
-
 public class CropImageActivity extends Activity implements
 		OnReleaseTouchListener {
 
 	/** Called when the activity is first created. */
 	// private static final int DISK_CACHE_SIZE = 1024 * 1024 * 5; // 10MB
 	// private static final String DISK_CACHE_SUBDIR = "thumbnails";
-//	public final static String MEDIA_PATH = "com.zoostudio.cropimage.media";
+	// public final static String MEDIA_PATH = "com.zoostudio.cropimage.media";
 	public final static String DESC_ERROR = "com.zoostudio.cropimage.error";
 	public static final String CROP_IMAGE_ACTION = "com.zoostudio.action.CROP_IMAGE";
 	public static final String IMAGE_CANCEL_CROP_FROM_CAMERA_ACTION = "com.zoostudio.action.CANCEL_CROP_FROM_CAMERA";
@@ -77,7 +77,7 @@ public class CropImageActivity extends Activity implements
 	public static final String MEDIA_CALL_BACK = "com.zoostudio.cropimage.mediacallback";
 	public static final String MEDIA_SIZE = "com.zoostudio.cropimage.size";
 	public static final String MEDIA_ITEM = "com.zoostudio.cropimage.mediaitem";
-	
+
 	private MediaItem mMediaItem;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -112,7 +112,8 @@ public class CropImageActivity extends Activity implements
 		}
 		layoutControl = findViewById(R.id.layout_control);
 		mErrorInvalid = getString(R.string.mess_invalid_image);
-		mMediaItem = (MediaItem) getIntent().getExtras().getSerializable(MEDIA_ITEM);
+		mMediaItem = (MediaItem) getIntent().getExtras().getSerializable(
+				MEDIA_ITEM);
 		mediaPath = mMediaItem.getPathMedia();
 		mParent = (RelativeLayout) this.findViewById(R.id.parent);
 		mCropImage = (ImageView) this.findViewById(R.id.resultCrop);
@@ -285,11 +286,12 @@ public class CropImageActivity extends Activity implements
 					photo.delete();
 					BufferedOutputStream outputStream = new BufferedOutputStream(
 							new FileOutputStream(photo));
-					mbitmapCroped.compress(Bitmap.CompressFormat.JPEG, 80,
+					mbitmapCroped.compress(Bitmap.CompressFormat.JPEG, 90,
 							outputStream);
+
 					mMediaItem = new MediaItem();
 					mediaPath = photo.getPath();
-					mMediaItem.setValue(mediaPath, -1, 0, "image/jpg");
+					mMediaItem.setValue(mediaPath, -1, 0, "image/jpeg");
 					outputStream.flush();
 					outputStream.close();
 					handler.sendEmptyMessage(RESULT_OK);
@@ -321,7 +323,7 @@ public class CropImageActivity extends Activity implements
 	public static File createTemporaryFile(String part, String ext)
 			throws IOException {
 		File tempDir = Environment.getExternalStorageDirectory();
-		tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+		tempDir = new File(tempDir.getAbsolutePath() + "/temp/");
 		if (!tempDir.exists()) {
 			tempDir.mkdir();
 		}

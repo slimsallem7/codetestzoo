@@ -38,19 +38,19 @@ public class VerticalImageThumbView extends RelativeLayout {
 			return;
 
 		item = this.datas.get(0);
-		thumb1.setImageId(item.getIdMedia());
+		thumb1.setImagePath(item.getPathMedia());
 
 		if (n == 1)
 			return;
 
 		item = this.datas.get(1);
-		thumb2.setImageId(item.getIdMedia());
+		thumb2.setImagePath(item.getPathMedia());
 
 		if (n == 2)
 			return;
 
 		item = this.datas.get(2);
-		thumb3.setImageId(item.getIdMedia());
+		thumb3.setImagePath(item.getPathMedia());
 	}
 
 	public void initViews() {

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.zoostudio.adapter.GalleryPagerAdapter;
 import com.zoostudio.adapter.NgonGridMediaAdapter;
 import com.zoostudio.adapter.item.MediaItem;
+import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.utils.OnScanMediaListener;
@@ -91,7 +92,7 @@ public class ChooseImageActivity extends NgonActivity implements
 		btnBackToGallery.setOnClickListener(this);
 		galleryPagerAdapter = new GalleryPagerAdapter(
 				ChooseImageActivity.this, new ArrayList<MediaItem>());
-		imagePager.setAdapter(galleryPagerAdapter);
+//		imagePager.setAdapter(galleryPagerAdapter);
 		galleryPagerAdapter.setOnItemSelectListener(this);
 		scanner.loadMedia();
 		
@@ -139,6 +140,7 @@ public class ChooseImageActivity extends NgonActivity implements
 		if (v == btnBackToGallery) {
 			backToGridLayout();
 		} else if (v == btnCheckIn) {
+			SmartImageView.cancelAllTasks();
 			Intent data = new Intent();
 			data.putExtra(MEDIA_SELECTED, seletedMedia);
 			this.setResult(RESULT_OK, data);

@@ -33,6 +33,11 @@ public class ZooImageThumb extends ZooAvatarImageView {
 		super(context);
 	}
 
+	// Helpers to set image by URL
+	public void setImagePath(String pathMedia) {
+		setImage(new LocalImage(pathMedia));
+	}
+
 	@Override
 	protected void initVariables() {
 		super.initVariables();
@@ -51,7 +56,8 @@ public class ZooImageThumb extends ZooAvatarImageView {
 	public void setImageBitmap(Bitmap source) {
 		width = source.getWidth();
 		height = source.getHeight();
-		if(width <=0 || height <=0) return;
+		if (width <= 0 || height <= 0)
+			return;
 
 		ratio = calculateRatio(width, height, ConfigSize.SIZE_THUMB,
 				ConfigSize.SIZE_THUMB);

@@ -16,7 +16,7 @@ import com.zoostudio.android.image.ZooAjustImageView;
 public class NgonGridDishMediaAdapter extends ArrayAdapter<MediaItem> {
 	private GridView.LayoutParams layoutParams;
 	private int SIZE;
-	
+
 	public NgonGridDishMediaAdapter(Context context, int textViewResourceId,
 			ArrayList<MediaItem> objects) {
 		super(context, textViewResourceId, objects);
@@ -25,22 +25,21 @@ public class NgonGridDishMediaAdapter extends ArrayAdapter<MediaItem> {
 		SIZE = manager.getDefaultDisplay().getWidth() / 3;
 		layoutParams = new GridView.LayoutParams(SIZE, SIZE);
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		MediaItem item = this.getItem(position);
-		if(null == convertView){
+		if (null == convertView) {
 			convertView = new ZooAjustImageView(getContext());
-			((ZooAjustImageView) convertView).setScaleType(ScaleType.CENTER_CROP);
+			((ZooAjustImageView) convertView)
+					.setScaleType(ScaleType.CENTER_CROP);
 			((ZooAjustImageView) convertView).setLayoutParams(layoutParams);
-		}else{
+		} else {
 			((ZooAjustImageView) convertView).setImageBitmap(null);
 		}
-		
-		if (item.getIdMedia() != -1) {
-			((ZooAjustImageView) convertView).setImageId(item.getIdMedia());
-		}
+
+		((ZooAjustImageView) convertView).setImagePath(item.getPathMedia());
 		return convertView;
 	}
-	
+
 }

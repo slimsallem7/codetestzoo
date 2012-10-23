@@ -14,4 +14,9 @@ public class BitmapImage implements SmartImage {
     public CacheableBitmapWrapper getWrap(Context context) {
         return bitmap;
     }
+
+	@Override
+	public void cancel() {
+		
+	}
 }

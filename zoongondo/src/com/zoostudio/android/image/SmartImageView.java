@@ -13,15 +13,15 @@ import com.test.cache.CacheableBitmapWrapper;
 import com.zoostudio.ngon.utils.ImageUtil;
 
 public class SmartImageView extends ImageView {
-	protected static  int LOADING_THREADS = 4;
-	private static ExecutorService threadPool = Executors
+	protected static int LOADING_THREADS = 3;
+	protected static ExecutorService threadPool = Executors
 			.newFixedThreadPool(LOADING_THREADS);
 
-	private SmartImageTask currentTask;
+	protected SmartImageTask currentTask;
 	private int reqWidth;
 	private int reqHeight;
 	private boolean resize;
-	private CacheableBitmapWrapper mDisplayedBitmapWrapper;
+	protected CacheableBitmapWrapper mDisplayedBitmapWrapper;
 
 	public SmartImageView(Context context) {
 		super(context);
@@ -101,9 +101,9 @@ public class SmartImageView extends ImageView {
 
 	public void setImageWrap(CacheableBitmapWrapper wrapper) {
 		if (null != wrapper && wrapper.hasValidBitmap()) {
-			wrapper.setPendding(false);
 			wrapper.setBeingUsed(true);
 			wrapper.getImageRef();
+			wrapper.setPendding(false);
 			setImageBitmap(wrapper.getBitmap());
 		} else {
 			resetCachedDrawable();
@@ -153,7 +153,7 @@ public class SmartImageView extends ImageView {
 	 * Called when the current cached bitmap has been removed. This method will
 	 * remove the displayed flag and remove this objects reference to it.
 	 */
-	private void resetCachedDrawable() {
+	protected void resetCachedDrawable() {
 		if (null != mDisplayedBitmapWrapper) {
 			mDisplayedBitmapWrapper.setBeingUsed(false);
 			mDisplayedBitmapWrapper = null;

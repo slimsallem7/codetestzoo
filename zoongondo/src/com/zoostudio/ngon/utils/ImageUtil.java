@@ -47,4 +47,7 @@ public class ImageUtil {
 		options.inPreferredConfig = Config.ARGB_8888;
 		return BitmapFactory.decodeResource(res, resId, options);
 	}
+	public static String makeFullPathImage(String url){
+		return com.zoostudio.ngon.Config.URL_IMAGE + url;
+	}
 }

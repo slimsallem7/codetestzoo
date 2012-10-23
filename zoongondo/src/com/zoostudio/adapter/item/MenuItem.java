@@ -13,6 +13,7 @@ public class MenuItem implements Serializable {
 	private String spot_id;
 	private boolean selected;
 	private boolean deleted;
+	private String imagePathLocal;
 	
 	public MenuItem() {
 		selected = false;
@@ -104,5 +105,13 @@ public class MenuItem implements Serializable {
 	
 	public String getSpotId() {
 		return spot_id;
+	}
+	
+	public void setImagePathLocal(String imagePathLocal) {
+		this.imagePathLocal = imagePathLocal;
+	}
+	
+	public String getImagePathLocal() {
+		return imagePathLocal;
 	}
 }

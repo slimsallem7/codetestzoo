@@ -25,7 +25,7 @@ public class CreateDishTask extends RestClientTask {
 	private Context mContext;
 	private MediaItem mMediaItem;
 	private OnAddDishListener dishListener;
-	private String dishImageUrl ="";
+	private String dishImageUrl = "";
 
 	public CreateDishTask(Activity activity, String dish_name, String spot_id,
 			MediaItem mediaItem) {
@@ -49,8 +49,9 @@ public class CreateDishTask extends RestClientTask {
 			boolean status = jsonObject.getBoolean("status");
 			if (status) {
 				mDishId = result.getString("dish_id");
-				if(null==mMediaItem) return RestClientNotification.OK;
-				
+				publishProgress();
+				if (null == mMediaItem)
+					return RestClientNotification.OK;
 				Uri photoUri = Uri
 						.fromFile(new File(mMediaItem.getPathMedia()));
 				Log.e("SupportCheckIn", " doInBackground Context =" + mContext);
@@ -58,13 +59,13 @@ public class CreateDishTask extends RestClientTask {
 						mMediaItem);
 				restClient.addParam("dish_id", mDishId);
 				restClient.postMultiPart("/photo", "photo", NgonTaskUtil
-						.convertByteToByteArrayBody(mSpotId,
+						.convertByteToByteArrayBody(mDishId,
 								mMediaItem.getMineType(), photoData));
 				JSONObject result = new JSONObject(restClient.getResponse());
 				if (result.getBoolean("status")) {
 					dishImageUrl = result.getString("image_url");
 					return RestClientNotification.OK;
-				}else{
+				} else {
 					mErrorCode = result.getInt("error_code");
 					return RestClientNotification.ERROR;
 				}
@@ -76,21 +77,23 @@ public class CreateDishTask extends RestClientTask {
 			e.printStackTrace();
 			mErrorCode = ZooException.JSON.JSON_PARSE_ERROR;
 			return RestClientNotification.ERROR_DATA;
-		} 
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return RestClientNotification.ERROR_DATA;
 		}
 	}
 
 	@Override
+	protected void onProgressUpdate(Void... values) {
+		super.onProgressUpdate(values);
+		dishListener.onAddDishListenerSuccess();
+
+	}
+
+	@Override
 	protected void onPostExecute(Integer status) {
-		if (status == RestClientNotification.OK) {
-			dishListener.onAddDishListenerSuccess(dishImageUrl);
-		} else {
-			if (null != onDataErrorDelegate) {
-				onDataErrorDelegate.onActionDataError(this, mErrorCode);
-			}
+		if (null != onDataErrorDelegate) {
+			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
 

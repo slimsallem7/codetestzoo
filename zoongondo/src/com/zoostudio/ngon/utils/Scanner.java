@@ -48,8 +48,9 @@ public class Scanner {
 						String mineType;
 						MediaItem item = null;
 						if (cursor.getCount() > 0) {
-							cursor.moveToFirst();
-							while (!cursor.isAfterLast()) {
+
+							cursor.moveToLast();
+							while (!cursor.isBeforeFirst()) {
 								mediaId = cursor.getLong(cursor
 										.getColumnIndex(Images.Media._ID));
 								pathMedia = cursor.getString(cursor
@@ -58,7 +59,8 @@ public class Scanner {
 										.getColumnIndex(Images.ImageColumns.ORIENTATION));
 								mineType = cursor.getString(cursor
 										.getColumnIndex(Images.Media.MIME_TYPE));
-								cursor.moveToNext();
+								
+								cursor.moveToPrevious();
 								item = new MediaItem();
 								item.setValue(pathMedia, mediaId, orient,mineType);
 								mediaIds.add(item);
