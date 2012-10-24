@@ -230,8 +230,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 	@Override
 	public void onItemClick() {
 		Intent intent = new Intent(this, ChooseDishActivity.class);
-		intent.putExtra("LIST_DISH", mDishseOriginal);
-		intent.putExtra("LIST_SELECTED", mDishseSelected);
+		intent.putExtra(ChooseDishActivity.EXTRA_DISH_ORIGIN, mDishseOriginal);
+		intent.putExtra(ChooseDishActivity.EXTRA_DISH_SELECTED, mDishseSelected);
 		intent.putExtra(ChooseDishActivity.EXTRA_SPOT, mSpotItem);
 		startActivityForResult(intent, CHOOSE_DISH);
 	}
@@ -324,8 +324,8 @@ public class ActivityCheckin extends BaseMapActivity implements
 			postCheckIn();
 		} else {
 			Intent intent = new Intent(this, ChooseDishActivity.class);
-			intent.putExtra("LIST_DISH", mDishseOriginal);
-			intent.putExtra("LIST_SELECTED", mDishseSelected);
+			intent.putExtra(ChooseDishActivity.EXTRA_DISH_ORIGIN, mDishseOriginal);
+			intent.putExtra(ChooseDishActivity.EXTRA_DISH_SELECTED, mDishseSelected);
 			intent.putExtra(ChooseDishActivity.EXTRA_SPOT, mSpotItem);
 			startActivityForResult(intent, CHOOSE_DISH);
 		}

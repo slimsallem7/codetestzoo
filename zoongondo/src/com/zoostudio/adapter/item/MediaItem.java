@@ -9,7 +9,7 @@ public class MediaItem implements Serializable {
 	 */
 	private static final long serialVersionUID = -2966177523387393551L;
 	private long idMedia;
-	private String pathMedia;
+	private String pathMedia = "";
 	private int orient;
 
 	private boolean isSelected;

@@ -60,7 +60,7 @@ public class AddDishActivity extends NgonActivity implements
 		options.outHeight = options.outWidth;
 		options.inSampleSize = ImageUtil.calculateInSampleSize(options,
 				sizeReq, sizeReq);
-		Log.e("AddDishActivity","Path =" + mMediaItem.getPathMedia());
+		Log.e("AddDishActivity", "Path =" + mMediaItem.getPathMedia());
 		menuItem.setImagePathLocal(mMediaItem.getPathMedia());
 		Bitmap bitmap = BitmapFactory.decodeFile(mMediaItem.getPathMedia(),
 				options);
@@ -172,8 +172,9 @@ public class AddDishActivity extends NgonActivity implements
 
 	@Override
 	public void onActionDataError(RestClientTask task, int errorCode) {
-		mWaitingDialog.dismiss();
-		Toast.makeText(getApplicationContext(), "Thêm mới thất bại",
+		if (mWaitingDialog.isShowing())
+			mWaitingDialog.dismiss();
+		Toast.makeText(getApplicationContext(), "Thêm ảnh thất bại",
 				Toast.LENGTH_SHORT).show();
 	}
 }

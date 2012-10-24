@@ -70,12 +70,10 @@ public class SupportCheckInUploadPhoto extends
 
 	@Override
 	protected Integer doInBackground(Void... params) {
-		Log.e("UploadPhoto", "Upload image");
 		for (MediaItem media : medias) {
 			ItemUpload upload = new ItemUpload();
 			try {
 				Uri photoUri = Uri.fromFile(new File(media.getPathMedia()));
-				Log.e("SupportCheckIn", " doInBackground Context =" + mContext);
 				byte[] photoData = Utility
 						.scaleImage(mContext, photoUri, media);
 				restClient.addParam("checkin_id", mCheckinId);

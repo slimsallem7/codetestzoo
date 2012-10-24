@@ -170,6 +170,7 @@ public class CameraForSquareActivity extends NgonActivity implements
 						url);
 				try {
 					imageOut.write(data);
+					imageOut.flush();
 					imageOut.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -184,9 +185,7 @@ public class CameraForSquareActivity extends NgonActivity implements
 						CropImageActivity.class);
 				intent.putExtra(CropImageActivity.MEDIA_ITEM, item);
 				intent.putExtra("SOURCE", CropImageActivity.FROM_CAMERA);
-				
 				startActivity(intent);
-
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}

@@ -4,7 +4,10 @@ public class ZooException {
 	public class JSON{
 		public final static int JSON_PARSE_ERROR = 101;
 		public final static String JSON_PARSE_DESC = "Lỗi parse JSON";
-		public static final int ERROR_UPLOAD_IMAGE = 102;
+		public static final int ERROR_UPLOAD_IMAGE = 102; 
+		public class ADD_DISH{
+			public static final int ERROR_ADD_DISH = 103;
+		}
 	}
 	public class NETWORK {
 		public final static int NETWORK_ERROR = 202;

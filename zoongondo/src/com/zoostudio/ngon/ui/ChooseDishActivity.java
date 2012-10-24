@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -52,6 +51,8 @@ public class ChooseDishActivity extends NgonActivity implements
 
 	public static final String EXTRA_SPOT = "com.ngon.do.choosedish.SPOT";
 	public static final String EXTRA_MENU_ITEM = "com.ngon.do.choosedish.MENUITEM";
+	public static final String EXTRA_DISH_SELECTED = "com.ngon.do.choosedish.DISH_SELECTED";
+	public static final String EXTRA_DISH_ORIGIN = "com.ngon.do.choosedish.DISH_ORIGIN";
 	protected static final String TAG = "ChooseDishActivity";
 
 	private ListView lvMenu;
@@ -73,6 +74,7 @@ public class ChooseDishActivity extends NgonActivity implements
 	private ButtonUp btnUp;
 	private View footerView;
 	private View mAddNew;
+	private boolean hasAction;
 	
 	@Override
 	protected int setLayoutView() {
@@ -98,10 +100,14 @@ public class ChooseDishActivity extends NgonActivity implements
 		btnUp = (ButtonUp) findViewById(R.id.btn_up);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void copyToOriginal(ArrayList<MenuItem> arrayList) {
+		originalList.clear();
+		mTempOriginalList.clear();
 		for (int i = 0, n = arrayList.size(); i < n; i++) {
 			originalList.add((MenuItem) PipedDeepCopy.copy(arrayList.get(i)));
 		}
+		mTempOriginalList = ArrayUtils.copyArray(originalList);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -140,9 +146,9 @@ public class ChooseDishActivity extends NgonActivity implements
 	private void getMenuDishFromExtras() {
 		Bundle bundle = this.getIntent().getExtras();
 		originalList = (ArrayList<MenuItem>) bundle
-				.getSerializable("LIST_DISH");
+				.getSerializable(EXTRA_DISH_ORIGIN);
 		listSelected = (ArrayList<MenuItem>) bundle
-				.getSerializable("LIST_SELECTED");
+				.getSerializable(EXTRA_DISH_SELECTED);
 		if (null == originalList)
 			originalList = new ArrayList<MenuItem>();
 	}
@@ -191,7 +197,7 @@ public class ChooseDishActivity extends NgonActivity implements
 	@Override
 	public void onClick(View v) {
 		if (v == btnDone) {
-			if (!mTempDish.isEmpty()) {
+			if (!mTempDish.isEmpty() || hasAction) {
 				Intent intent = new Intent();
 				intent.putExtra("LIST_DISH", mTempOriginalList);
 				intent.putExtra("LIST_SELECTED", mTempDish);
@@ -242,7 +248,7 @@ public class ChooseDishActivity extends NgonActivity implements
 		});
 	}
 
-	protected void gotoAddDish() {
+	private void gotoAddDish() {
 		Intent intent = new Intent(getApplicationContext(),
 				AddDishActivity.class);
 		intent.putExtra(AddDishActivity.EXTRA_SPOT, mSpot);
@@ -259,6 +265,7 @@ public class ChooseDishActivity extends NgonActivity implements
 		if (mCount == 0) {
 			showLayoutCount();
 		}
+		hasAction = true;
 		mCount++;
 		mDishChoiced.setText("" + mCount + " " + strDish + "    ");
 		mTempDish.add(dishItem);
@@ -312,6 +319,7 @@ public class ChooseDishActivity extends NgonActivity implements
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						hasAction = true;
 						dialog.dismiss();
 						checkDeleteDish();
 					}
@@ -394,19 +402,9 @@ public class ChooseDishActivity extends NgonActivity implements
 		}
 	}
 
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		Logger.e(TAG, "onActivityResult");
-//		if (resultCode == RESULT_OK) {
-//			MenuItem item = (MenuItem) data.getExtras().getSerializable(
-//					EXTRA_MENU_ITEM);
-//			mMenuAdapter.add(item);
-//			mTempOriginalList.add(item);
-//			mMenuAdapter.notifyDataSetChanged();
-//		}
-//	};
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
 		Logger.e(TAG, "onActivityResult");
 		if (resultCode == RESULT_OK) {
 			MenuItem item = (MenuItem) data.getExtras().getSerializable(
