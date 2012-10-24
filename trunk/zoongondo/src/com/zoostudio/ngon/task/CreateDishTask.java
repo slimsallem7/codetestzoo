@@ -87,8 +87,7 @@ public class CreateDishTask extends RestClientTask {
 
 	@Override
 	protected void onProgressUpdate(Void... values) {
-		super.onProgressUpdate(values);
-		dishListener.onAddDishListenerSuccess();
+		dishListener.onAddDishListenerSuccess(mDishId);
 
 	}
 

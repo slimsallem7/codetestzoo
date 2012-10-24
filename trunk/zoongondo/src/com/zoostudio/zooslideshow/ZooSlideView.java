@@ -10,8 +10,11 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ImageView.ScaleType;
 
+import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.android.image.SmartImageView;
+import com.zoostudio.android.image.ZooImageThumb;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.utils.ScreenUtil;
 
@@ -19,7 +22,7 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 	private LinearLayout mLayoutThumb;
 	private SmartImageView mMainPhoto;
 	private ImageButton mTakePhoto;
-	private ArrayList<String> mUrlsImage;
+	private ArrayList<PhotoItem> mUrlsImage;
 	private OnSlideShowListener mListener;
 	private int height;
 	private int width;
@@ -40,13 +43,13 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 
 	}
 
-	public void setDatas(ArrayList<String> urlsImage) {
+	public void setDatas(ArrayList<PhotoItem> urlsImage) {
 		this.mUrlsImage = urlsImage;
 		setUpImages();
 	}
 
 	private void initViews(Context context) {
-		mUrlsImage = new ArrayList<String>();
+		mUrlsImage = new ArrayList<PhotoItem>();
 		setUpDefaultImage();
 		mTakePhoto = (ImageButton) findViewById(R.id.addphoto);
 		mLayoutThumb = (LinearLayout) findViewById(R.id.thumbnail_list);
@@ -72,8 +75,6 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 	}
 
 	private void setUpImages() {
-		// mMainPhoto.setImageResource(R.drawable.main_dish_image);
-
 		findViewById(R.id.addphotohint).setVisibility(View.GONE);
 		int thumbSize = getResources().getDimensionPixelOffset(
 				R.dimen.thumbSize);
@@ -88,9 +89,12 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 			size = 4;
 
 		for (int i = 0; i < size; i++) {
-			SmartImageView imageView = new SmartImageView(getContext());
+			ZooImageThumb imageView = new ZooImageThumb(getContext());
+			imageView.setShowBorder(false);
 			imageView.setBackgroundResource(R.drawable.img_listlikeavatar);
-			imageView.setImageResource(R.drawable.thumb_dish_image);
+//			imageView.setImageResource(R.drawable.thumb_dish_image);
+			imageView.setScaleType(ScaleType.CENTER_CROP);
+			imageView.setImageUrl(mUrlsImage.get(i).getSmallPath());
 			mLayoutThumb.addView(imageView, params);
 		}
 

@@ -160,10 +160,11 @@ public class AddDishActivity extends NgonActivity implements
 	}
 
 	@Override
-	public void onAddDishListenerSuccess() {
+	public void onAddDishListenerSuccess(String dishId) {
 		mWaitingDialog.dismiss();
 		Toast.makeText(getApplicationContext(), addDishOk, Toast.LENGTH_SHORT)
 				.show();
+		menuItem.setDishId(dishId);
 		Intent intent = new Intent();
 		intent.putExtra(ChooseDishActivity.EXTRA_MENU_ITEM, menuItem);
 		setResult(RESULT_OK, intent);

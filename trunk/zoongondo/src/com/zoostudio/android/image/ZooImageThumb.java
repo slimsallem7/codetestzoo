@@ -15,6 +15,7 @@ import com.zoostudio.ngon.utils.ConfigSize;
 public class ZooImageThumb extends ZooAvatarImageView {
 	private static Rect rect;
 	private Paint paintBorderWhite;
+	private boolean mIsShowBorder;
 	private static int width;
 	private static int height;
 	private static float ratio;
@@ -41,6 +42,7 @@ public class ZooImageThumb extends ZooAvatarImageView {
 	@Override
 	protected void initVariables() {
 		super.initVariables();
+		mIsShowBorder= true;
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setStyle(Style.STROKE);
 		paint.setColor(Color.parseColor("#CEB786"));
@@ -85,7 +87,8 @@ public class ZooImageThumb extends ZooAvatarImageView {
 			rect = new Rect(0, 0, this.getWidth(), this.getHeight());
 		}
 		canvas.drawRect(rect, paintBorderWhite);
-		canvas.drawRect(rect, paint);
+		if (mIsShowBorder)
+			canvas.drawRect(rect, paint);
 	}
 
 	/**
@@ -122,6 +125,10 @@ public class ZooImageThumb extends ZooAvatarImageView {
 			}
 		}
 		return inSampleSize;
+	}
+
+	public void setShowBorder(boolean b) {
+		mIsShowBorder = b;
 	}
 
 }

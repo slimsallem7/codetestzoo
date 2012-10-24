@@ -36,6 +36,7 @@ public class GetSpotPhotoTask extends RestClientTask {
 		mSpotId = spot_id;
 		mLimit = limit;
 		mOffset = offset;
+		data = new ArrayList<PhotoItem>();
 	}
 
 	public void setOffset(int offset) {
@@ -80,10 +81,6 @@ public class GetSpotPhotoTask extends RestClientTask {
 
 	@Override
 	protected void onPostExecute(Integer status) {
-		if (mWaitingStatus && mWaitingDialog != null) {
-			mWaitingDialog.dismiss();
-		}
-
 		if (status == RestClientNotification.OK) {
 			mListener.onSpotPhotoTaskListener(data);
 		} else if (status == RestClientNotification.ERROR
