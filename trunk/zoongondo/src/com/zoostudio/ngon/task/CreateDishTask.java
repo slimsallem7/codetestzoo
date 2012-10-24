@@ -26,6 +26,7 @@ public class CreateDishTask extends RestClientTask {
 	private MediaItem mMediaItem;
 	private OnAddDishListener dishListener;
 	private String dishImageUrl = "";
+	private boolean hasImage;
 
 	public CreateDishTask(Activity activity, String dish_name, String spot_id,
 			MediaItem mediaItem) {
@@ -34,6 +35,8 @@ public class CreateDishTask extends RestClientTask {
 		mDishName = dish_name;
 		mSpotId = spot_id;
 		mMediaItem = mediaItem;
+		hasImage = null == mMediaItem ? false : !mMediaItem.getPathMedia()
+				.equals("");
 	}
 
 	@Override
@@ -47,35 +50,35 @@ public class CreateDishTask extends RestClientTask {
 	protected int parseJSONToObject(JSONObject jsonObject) {
 		try {
 			boolean status = jsonObject.getBoolean("status");
+			mErrorCode = ZooException.JSON.ADD_DISH.ERROR_ADD_DISH;
 			if (status) {
 				mDishId = result.getString("dish_id");
 				publishProgress();
-				if (null == mMediaItem)
+				if (!hasImage)
 					return RestClientNotification.OK;
 				Uri photoUri = Uri
 						.fromFile(new File(mMediaItem.getPathMedia()));
-				Log.e("SupportCheckIn", " doInBackground Context =" + mContext);
 				byte[] photoData = Utility.scaleImageDish(mContext, photoUri,
 						mMediaItem);
 				restClient.addParam("dish_id", mDishId);
 				restClient.postMultiPart("/photo", "photo", NgonTaskUtil
 						.convertByteToByteArrayBody(mDishId,
 								mMediaItem.getMineType(), photoData));
+
+				mErrorCode = ZooException.JSON.ERROR_UPLOAD_IMAGE;
 				JSONObject result = new JSONObject(restClient.getResponse());
 				if (result.getBoolean("status")) {
-					dishImageUrl = result.getString("image_url");
 					return RestClientNotification.OK;
 				} else {
-					mErrorCode = result.getInt("error_code");
+					mErrorCode = result.getInt("error");
 					return RestClientNotification.ERROR;
 				}
 			} else {
-				mErrorCode = result.getInt("error_code");
+				mErrorCode = result.getInt("error");
 				return RestClientNotification.ERROR;
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			mErrorCode = ZooException.JSON.JSON_PARSE_ERROR;
 			return RestClientNotification.ERROR_DATA;
 		} catch (IOException e) {
 			e.printStackTrace();

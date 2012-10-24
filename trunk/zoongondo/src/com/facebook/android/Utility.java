@@ -165,7 +165,7 @@ public class Utility extends Application {
 
         Bitmap srcBitmap;
         is = context.getContentResolver().openInputStream(photoUri);
-        if (rotatedWidth > MAX_IMAGE_DIMENSION || rotatedHeight > MAX_IMAGE_DISH_DIMENSION) {
+        if (rotatedWidth > MAX_IMAGE_DISH_DIMENSION || rotatedHeight > MAX_IMAGE_DISH_DIMENSION) {
             float widthRatio = ((float) rotatedWidth) / ((float) MAX_IMAGE_DISH_DIMENSION);
             float heightRatio = ((float) rotatedHeight) / ((float) MAX_IMAGE_DISH_DIMENSION);
             float maxRatio = Math.max(widthRatio, heightRatio);

@@ -21,15 +21,6 @@ public class GetMenuTask extends RestClientTask {
 	private ArrayList<MenuItem> data;
 	private OnMenuTaskListener mListener;
 
-	private String[] imageDump = {
-			"http://i366.photobucket.com/albums/oo105/AvonB7/Food/Rovellones.jpg",
-			"http://i284.photobucket.com/albums/ll26/msbowjangles16/Chinese-food.jpg",
-			"http://i870.photobucket.com/albums/ab270/moonbeambouvier/Food/20121008Dessert.jpg",
-			"http://i1245.photobucket.com/albums/gg587/PB_Loves/Scratch%20n%20Sniff/f2d9c76b.jpg",
-			"http://i1245.photobucket.com/albums/gg587/PB_Loves/Scratch%20n%20Sniff/0664ca87.jpg",
-			"http://i255.photobucket.com/albums/hh149/MargieHaire/Animals/food_02.jpg",
-			"http://i1092.photobucket.com/albums/i414/herrysusanto1/food.jpg" };
-
 	public GetMenuTask(Activity activity, String spot_id) {
 		super(activity);
 		mSpotId = spot_id;
@@ -51,7 +42,6 @@ public class GetMenuTask extends RestClientTask {
 				for (int i = 0, size = menuData.length(); i < size; i++) {
 					JSONObject row = menuData.getJSONObject(i);
 					MenuItem item = ParserUtils.parseMenu(row, mSpotId);
-					item.setUrlImageThumb(imageDump[getImageDump()]);
 					data.add(item);
 				}
 				return RestClientNotification.OK;

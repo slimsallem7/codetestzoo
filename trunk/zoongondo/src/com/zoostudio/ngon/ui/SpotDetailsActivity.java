@@ -87,6 +87,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private ZooLikerView mLikerView;
 	private ListCommentView mListCommentView;
 	private TextView mMenu;
+	private ImageButton mMapSpot;
 
 	private View mAddReView;
 	private volatile boolean hasLoadReview;
@@ -108,6 +109,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mAddReView = this.findViewById(R.id.addreview);
 		tvSpotName = (TextView) findViewById(R.id.spot_name);
 		tvSpotAddress = (TextView) findViewById(R.id.spot_address);
+		mMapSpot = (ImageButton) findViewById(R.id.spot_map);
 		mMenu.setOnClickListener(this);
 		mAddReView.setOnClickListener(this);
 
@@ -268,6 +270,17 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 			@Override
 			public void onListThumbClicked() {
+			}
+		});
+
+		mMapSpot.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				double lat = mSpot.getLocation().getLatitude();
+				double lon = mSpot.getLocation().getLongtitude();
+				String uri = "geo:"+lat+","+lon+"?z=17";
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+				startActivity(intent);
 			}
 		});
 
