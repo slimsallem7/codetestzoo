@@ -25,7 +25,6 @@ public class CreateDishTask extends RestClientTask {
 	private Context mContext;
 	private MediaItem mMediaItem;
 	private OnAddDishListener dishListener;
-	private String dishImageUrl = "";
 	private boolean hasImage;
 
 	public CreateDishTask(Activity activity, String dish_name, String spot_id,
@@ -95,7 +94,7 @@ public class CreateDishTask extends RestClientTask {
 
 	@Override
 	protected void onPostExecute(Integer status) {
-		if (null != onDataErrorDelegate) {
+		if (null != onDataErrorDelegate && status != RestClientNotification.OK) {
 			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}

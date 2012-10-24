@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -79,7 +79,8 @@ public class CropImageActivity extends Activity implements
 	public static final String MEDIA_ITEM = "com.zoostudio.cropimage.mediaitem";
 
 	private MediaItem mMediaItem;
-	private Handler handler = new Handler() {
+	@SuppressLint("HandlerLeak")
+	Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			Intent intent = new Intent();
 			if (msg.what == RESULT_OK) {
@@ -252,16 +253,18 @@ public class CropImageActivity extends Activity implements
 	}
 
 	public void doCancel(View view) {
-		if (mSource == FROM_CAMERA) {
-			Intent intent = new Intent(IMAGE_CANCEL_CROP_FROM_CAMERA_ACTION);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.putExtra(MEDIA_CALL_BACK, mMediaItem);
-			startActivity(intent);
-
-		} else {
-			this.setResult(RESULT_CANCELED);
-			this.finish();
-		}
+		// if (mSource == FROM_CAMERA) {
+		// Intent intent = new Intent(IMAGE_CANCEL_CROP_FROM_CAMERA_ACTION);
+		// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// intent.putExtra(MEDIA_CALL_BACK, mMediaItem);
+		// startActivity(intent);
+		//
+		// } else {
+		Intent intent = new Intent();
+		intent.putExtra(MEDIA_CALL_BACK, mMediaItem);
+		this.setResult(RESULT_CANCELED,intent);
+		this.finish();
+		// }
 	}
 
 	@Override

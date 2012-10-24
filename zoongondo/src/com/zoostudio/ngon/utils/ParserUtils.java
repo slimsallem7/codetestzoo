@@ -57,6 +57,8 @@ public class ParserUtils {
 		item.setDishId(menu.getString("id"));
 		item.setSpotId(spot_id);
 		item.setName(menu.getString("name"));
+//		item.setLargeImageUrl(menu.getString("path"));
+//		item.setThumbImageUrl(menu.getString("medium_path"));
 		return item;
 	}
 

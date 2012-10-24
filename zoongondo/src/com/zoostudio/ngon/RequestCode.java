@@ -12,8 +12,8 @@ public class RequestCode {
     public static final int CHECKIN = 6;
     public static final int CROP_IMAGE = 7;
 
-    public static final int REQUEST_PICK_IMAGE_FROM_GALLERY = 8;
-    public static final int REQUEST_PICK_IMAGE_FROM_CAMERA = 9;
+    public static final int REQUEST_IMAGE_FROM_GALLERY = 8;
+    public static final int REQUEST_IMAGE_FROM_CAMERA = 9;
     public static final int REQUEST_CROP_IMAGE = 10;
 
     public static final int REGISTER = 11;

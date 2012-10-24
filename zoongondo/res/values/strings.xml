@@ -4,7 +4,7 @@
     <string name="string_add_new_dish">THÊM MÓN MỚI</string>
     <string name="title_notification">ngon.đó</string>
     <string name="content_notification_ok">Post ảnh thành công</string>
-    <string name="content_notification_fail">Post ảnh lỗi</string>
+    <string name="content_notification_fail">Upload ảnh lỗi</string>
     <string name="request_location">Đang lấy vị trí</string>
     <string name="mess_invalid_image">Ảnh phải lớn hơn 256x256</string>
     <string name="accept">XONG</string>

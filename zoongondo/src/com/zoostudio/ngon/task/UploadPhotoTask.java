@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 
+import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.ngon.task.callback.OnUploadPhotoTask;
 import com.zoostudio.ngon.utils.ParserUtils;
@@ -26,6 +27,14 @@ public class UploadPhotoTask extends RestClientTask {
 	private ContentBody mPhoto;
 	private OnUploadPhotoTask mListener;
 	private PhotoItem photoItem;
+	private MediaItem mMediaItem;
+
+	public UploadPhotoTask(Activity activity, String spot_id, MediaItem item) {
+		super(activity);
+		mDishesId = new int[] {};
+		mSpotId = spot_id;
+		mMediaItem = item;
+	}
 
 	public UploadPhotoTask(Activity activity, String spot_id, File photo) {
 		this(activity, spot_id, photo, new int[] {});
@@ -73,7 +82,7 @@ public class UploadPhotoTask extends RestClientTask {
 
 			restClient.addParam("dishes", dishes);
 		}
-
+		
 		restClient.postMultiPart("/photo", "photo", mPhoto);
 	}
 
@@ -116,7 +125,7 @@ public class UploadPhotoTask extends RestClientTask {
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
-		if (status == RestClientNotification.OK && photoItem !=null) {
+		if (status == RestClientNotification.OK && photoItem != null) {
 			mListener.onUploadPhotoTaskListener(photoItem);
 
 		} else if (status == RestClientNotification.ERROR
@@ -124,8 +133,8 @@ public class UploadPhotoTask extends RestClientTask {
 			onDataErrorDelegate.onActionDataError(this, mErrorCode);
 		}
 	}
-	
-	public void setOnUploadPhotoTaskListener(OnUploadPhotoTask  listener){
+
+	public void setOnUploadPhotoTaskListener(OnUploadPhotoTask listener) {
 		mListener = listener;
 	}
 }

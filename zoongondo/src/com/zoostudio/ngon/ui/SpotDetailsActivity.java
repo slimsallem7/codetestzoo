@@ -1,12 +1,11 @@
 package com.zoostudio.ngon.ui;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,11 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zoostudio.adapter.SpotPhotoAdapter;
+import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.adapter.item.ReviewItem;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.android.image.SmartImageView;
-import com.zoostudio.cropimage.CropImageActivity;
 import com.zoostudio.ngon.NgonActivity;
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.RequestCode;
@@ -44,6 +43,7 @@ import com.zoostudio.ngon.task.callback.OnSpotPhotoTaskListener;
 import com.zoostudio.ngon.task.callback.OnSpotReviewTaskListener;
 import com.zoostudio.ngon.task.callback.OnSpotTaskListener;
 import com.zoostudio.ngon.task.callback.OnUploadPhotoTask;
+import com.zoostudio.ngon.utils.NotificationUtil;
 import com.zoostudio.ngon.views.ButtonCaptionedIcon;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.ListCommentView;
@@ -179,55 +179,33 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == RequestCode.CROP_IMAGE) {
+		if (requestCode == RequestCode.REQUEST_IMAGE_FROM_CAMERA) {
 			if (resultCode == RESULT_OK) {
-				Uri selectedImage = data.getData();
-				this.getContentResolver().notifyChange(selectedImage, null);
-				ContentResolver cr = this.getContentResolver();
-				try {
-					Bitmap bitmapOrgi = android.provider.MediaStore.Images.Media
-							.getBitmap(cr, selectedImage);
-					UploadPhotoTask uploadTask = new UploadPhotoTask(this,
-							mSpot.getId(), bitmapOrgi);
-					uploadTask.setOnPreExecuteDelegate(this);
-					uploadTask.setOnUploadPhotoTaskListener(this);
-					uploadTask.execute();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		} else if (requestCode == RequestCode.REQUEST_PICK_IMAGE_FROM_CAMERA) {
-			pickImageDialog.dismiss();
-			if (resultCode == RESULT_OK) {
-				startActivityCropBitmap(mSelectImageSoucreDialog.getImageUri(),
-						CropImageActivity.FROM_CAMERA);
+				MediaItem photo = (MediaItem) data.getExtras().get(
+						ZooCameraCommonActivity.MEDIA_CAPTURED);
+				File file = new File(photo.getPathMedia());
+				UploadPhotoTask photoTask = new UploadPhotoTask(
+						SpotDetailsActivity.this, mSpot.getId(), file);
+				photoTask.setOnPreExecuteDelegate(this);
+				photoTask.setOnDataErrorDelegate(this);
+				photoTask.setOnUploadPhotoTaskListener(this);
+				photoTask.execute();
 			}
 
-		} else if (requestCode == RequestCode.REQUEST_PICK_IMAGE_FROM_GALLERY) {
-			pickImageDialog.dismiss();
+		} else if (requestCode == RequestCode.REQUEST_IMAGE_FROM_GALLERY) {
 			if (resultCode == RESULT_OK) {
-				Uri selectedImage = data.getData();
-
-				startActivityCropBitmap(selectedImage,
-						CropImageActivity.FROM_GALLERY);
+				MediaItem photo = (MediaItem) data.getExtras().get(
+						ChooseCommonMediaActivity.MEDIA_PICKED);
+				File file = new File(photo.getPathMedia());
+				UploadPhotoTask photoTask = new UploadPhotoTask(
+						SpotDetailsActivity.this, mSpot.getId(), file);
+				photoTask.setOnPreExecuteDelegate(this);
+				photoTask.setOnDataErrorDelegate(this);
+				photoTask.setOnUploadPhotoTaskListener(this);
+				photoTask.execute();
 			}
 		}
-	}
-
-	private void startActivityCropBitmap(final Uri yourURIWithImage,
-			final int source) {
-		mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				Intent intent = new Intent(getApplicationContext(),
-						CropImageActivity.class);
-				intent.setData(yourURIWithImage);
-				intent.putExtra("SOURCE", source);
-				startActivityForResult(intent, RequestCode.CROP_IMAGE);
-			}
-		});
 	}
 
 	@Override
@@ -278,7 +256,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 			public void onClick(View v) {
 				double lat = mSpot.getLocation().getLatitude();
 				double lon = mSpot.getLocation().getLongtitude();
-				String uri = "geo:"+lat+","+lon+"?z=17";
+				String uri = "geo:" + lat + "," + lon + "?z=17";
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 				startActivity(intent);
 			}
@@ -351,6 +329,12 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mGallery.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						ChooseCommonMediaActivity.class);
+				intent.putExtra(ChooseCommonMediaActivity.RETURN_WITH_RESULT, true);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				startActivityForResult(intent,
+						RequestCode.REQUEST_IMAGE_FROM_GALLERY);
 				dialog.dismiss();
 			}
 		});
@@ -358,6 +342,11 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mCamera.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						ZooCameraCommonActivity.class);
+				intent.putExtra(ZooCameraCommonActivity.RETURN_WITH_RESULT, true);
+				startActivityForResult(intent,
+						RequestCode.REQUEST_IMAGE_FROM_CAMERA);
 				dialog.dismiss();
 			}
 		});
@@ -389,6 +378,10 @@ public class SpotDetailsActivity extends NgonActivity implements
 			int errorCode) {
 		if (null != mWaitingDialog && mWaitingDialog.isShowing()) {
 			mWaitingDialog.dismiss();
+		}
+		if (task instanceof UploadPhotoTask) {
+			NotificationUtil.notificationUploadImage(this,
+					NotificationUtil.ID_IMAGE_UPLOAD_SPOT_FAIL, false);
 		}
 	}
 
@@ -442,6 +435,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 		if (mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 			mWaitingDialog = null;
+			NotificationUtil.notificationUploadImage(this,
+					NotificationUtil.ID_IMAGE_UPLOAD_SPOT_OK, true);
 		}
 	}
 

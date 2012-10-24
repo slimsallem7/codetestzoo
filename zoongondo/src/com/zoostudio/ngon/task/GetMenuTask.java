@@ -1,7 +1,6 @@
 package com.zoostudio.ngon.task;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,11 +52,6 @@ public class GetMenuTask extends RestClientTask {
 			e.printStackTrace();
 			return RestClientNotification.ERROR_DATA;
 		}
-	}
-
-	private int getImageDump() {
-		Random random = new Random();
-		return random.nextInt(7);
 	}
 
 	@Override

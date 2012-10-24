@@ -153,7 +153,7 @@ public class AddDishActivity extends NgonActivity implements
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
-						ChooseDishMediaActivity.class);
+						ChooseCommonMediaActivity.class);
 				startActivity(intent);
 			}
 		});
