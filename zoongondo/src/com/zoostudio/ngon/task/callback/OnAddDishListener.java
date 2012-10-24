@@ -1,5 +1,5 @@
 package com.zoostudio.ngon.task.callback;
 
 public interface OnAddDishListener {
-	public void onAddDishListenerSuccess();
+	public void onAddDishListenerSuccess(String dishId);
 }

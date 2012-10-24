@@ -18,7 +18,6 @@ public class NgonProgressDialog extends NgonDialog {
 		getWindow().setBackgroundDrawable(
 				new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		initLayout();
-
 		mCtx = context;
 	}
 

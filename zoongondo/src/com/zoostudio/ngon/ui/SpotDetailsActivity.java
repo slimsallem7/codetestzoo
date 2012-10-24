@@ -420,13 +420,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	public void onSpotPhotoTaskListener(ArrayList<PhotoItem> data) {
-		dataTest = new ArrayList<String>();
-		dataTest.add("");
-		dataTest.add("");
-		dataTest.add("");
-		dataTest.add("");
-		dataTest.add("");
-		mSlideImageView.setDatas(dataTest);
+		mSlideImageView.setDatas(data);
 	}
 
 	@Override
@@ -434,8 +428,9 @@ public class SpotDetailsActivity extends NgonActivity implements
 		if (mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 			mWaitingDialog = null;
+			long id = System.currentTimeMillis();
 			NotificationUtil.notificationUploadImage(this,
-					NotificationUtil.ID_IMAGE_UPLOAD_SPOT_OK, true);
+					(int)id, true);
 		}
 	}
 
