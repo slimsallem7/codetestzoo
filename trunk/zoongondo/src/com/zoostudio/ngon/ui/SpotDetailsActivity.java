@@ -184,9 +184,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 			if (resultCode == RESULT_OK) {
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ZooCameraCommonActivity.MEDIA_CAPTURED);
-				File file = new File(photo.getPathMedia());
 				UploadPhotoTask photoTask = new UploadPhotoTask(
-						SpotDetailsActivity.this, mSpot.getId(), file);
+						SpotDetailsActivity.this, mSpot.getId(), photo);
 				photoTask.setOnPreExecuteDelegate(this);
 				photoTask.setOnDataErrorDelegate(this);
 				photoTask.setOnUploadPhotoTaskListener(this);
@@ -197,9 +196,9 @@ public class SpotDetailsActivity extends NgonActivity implements
 			if (resultCode == RESULT_OK) {
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ChooseCommonMediaActivity.MEDIA_PICKED);
-				File file = new File(photo.getPathMedia());
+
 				UploadPhotoTask photoTask = new UploadPhotoTask(
-						SpotDetailsActivity.this, mSpot.getId(), file);
+						SpotDetailsActivity.this, mSpot.getId(), photo);
 				photoTask.setOnPreExecuteDelegate(this);
 				photoTask.setOnDataErrorDelegate(this);
 				photoTask.setOnUploadPhotoTaskListener(this);
