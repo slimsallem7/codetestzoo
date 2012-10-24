@@ -44,7 +44,7 @@ public class SelectImageSoucreDialog extends Builder {
 					cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,mImageUri);
 					// start camera intent
 					activity.startActivityForResult(cameraIntent,
-							RequestCode.REQUEST_PICK_IMAGE_FROM_CAMERA);
+							RequestCode.REQUEST_IMAGE_FROM_CAMERA);
 				} catch (IOException e) {
 					Log.v("TEMP", "Can't create file to take picture!");
 					Toast.makeText(activity,
@@ -63,7 +63,7 @@ public class SelectImageSoucreDialog extends Builder {
 						Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				activity.startActivityForResult(intent,
-						RequestCode.REQUEST_PICK_IMAGE_FROM_GALLERY);
+						RequestCode.REQUEST_IMAGE_FROM_GALLERY);
 			}
 		});
 		setCustomView(mCustomView);

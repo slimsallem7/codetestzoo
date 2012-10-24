@@ -177,17 +177,12 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.ChooseDishMediaActivity"
-            android:launchMode="singleTask"
+            android:name=".ui.ChooseCommonMediaActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NgonDo" >
-            <intent-filter>
-                <action android:name="com.zoostudio.action.CANCEL_CROP_FROM_CAMERA" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
-            android:name=".ui.CameraForSquareActivity"
+            android:name=".ui.ZooCameraCommonActivity"
             android:noHistory="true"
             android:theme="@style/Theme.NgonDo"
             android:screenOrientation="landscape" >

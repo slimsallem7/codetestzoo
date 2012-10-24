@@ -16,6 +16,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
@@ -38,9 +39,11 @@ import com.zoostudio.ngon.views.ZooImageButtonView;
 import com.zoostudio.ngon.views.ZooImageView;
 
 @TargetApi(9)
-public class CameraForSquareActivity extends NgonActivity implements
+public class ZooCameraCommonActivity extends NgonActivity implements
 		OnCheckedChangeListener, ZooCameraView.OnFocusListener {
 	public static final String IMAGE_IDS = "IMAGE ID CAPTURED";
+	public static final String RETURN_WITH_RESULT = "com.zoostudio.ngon.ui.ZooCameraCommonActivity.RETURN_WITH_RESULT";
+	public static final String MEDIA_CAPTURED = "com.zoostudio.ngon.ui.ZooCameraCommonActivity.MEDIA_CAPTURED";
 	private ZooImageButtonView btnCamera;
 	private Camera mCamera;
 	private ZooCheckBoxButtonView checkBox;
@@ -51,7 +54,7 @@ public class CameraForSquareActivity extends NgonActivity implements
 	private ZooImageView mBtnChangeCamera;
 	private volatile boolean isCaputring;
 	private PowerManager.WakeLock wl;
-
+	private boolean needReturn;
 
 	@Override
 	protected int setLayoutView() {
@@ -117,7 +120,10 @@ public class CameraForSquareActivity extends NgonActivity implements
 	@Override
 	protected void initVariables() {
 		isCaputring = false;
-	
+		Bundle bundle = getIntent().getExtras();
+		if (null != bundle) {
+			needReturn = bundle.getBoolean(RETURN_WITH_RESULT, false);
+		}
 	}
 
 	@Override
@@ -134,7 +140,7 @@ public class CameraForSquareActivity extends NgonActivity implements
 				}
 			}
 		});
-	
+
 	}
 
 	private Camera getCameraInstance() {
@@ -179,13 +185,21 @@ public class CameraForSquareActivity extends NgonActivity implements
 				long mediaId = ContentUris.parseId(url);
 				String mediaPath = getRealPathFromURI(url);
 				MediaItem item = new MediaItem();
-				item.setValue(mediaPath, mediaId, degree,"image/jpg");
+				item.setValue(mediaPath, mediaId, degree, "image/jpg");
 				
-				Intent intent = new Intent(getApplicationContext(),
-						CropImageActivity.class);
-				intent.putExtra(CropImageActivity.MEDIA_ITEM, item);
-				intent.putExtra("SOURCE", CropImageActivity.FROM_CAMERA);
-				startActivity(intent);
+				if (needReturn) {
+					Intent intent = new Intent();
+					intent.putExtra(MEDIA_CAPTURED, item);
+					setResult(RESULT_OK, intent);
+					finish();
+				} else {
+					Intent intent = new Intent(getApplicationContext(),
+							CropImageActivity.class);
+					intent.putExtra(CropImageActivity.MEDIA_ITEM, item);
+					intent.putExtra("SOURCE", CropImageActivity.FROM_CAMERA);
+					startActivity(intent);
+				}
+
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}

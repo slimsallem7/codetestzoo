@@ -63,7 +63,7 @@ public class MenuItem implements Serializable {
 		return price;
 	}
 
-	public void setUrlImageThumb(String imageUrl) {
+	public void setThumbImageUrl(String imageUrl) {
 		this.urlImageThumb = imageUrl;
 	}
 

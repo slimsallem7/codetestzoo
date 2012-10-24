@@ -395,6 +395,8 @@ public class ChooseDishActivity extends NgonActivity implements
 
 	@Override
 	public void onActionDataError(RestClientTask task, int errorCode) {
+		if (mWaitingDialog.isShowing())
+			mWaitingDialog.dismiss();
 		if (errorCode == RestClientNotification.ERROR_DATA) {
 			this.finish();
 		} else {

@@ -119,20 +119,18 @@ public class SupportCheckInUploadPhoto extends
 		CharSequence contentTitle;
 		RemoteViews remoteViews = new RemoteViews(mActivity.getPackageName(),
 				R.layout.layout_notification);
-		int icon;
+		int icon = R.drawable.icon_notifi;
+		
+		remoteViews.setImageViewResource(R.id.img_notification,
+				R.drawable.icon_notifi);
 		if (values[0].status) {
 			contentTitle = mActivity.getResources().getString(
 					R.string.content_notification_ok);
-			icon = R.drawable.icon_notifi_ok;
-			remoteViews.setImageViewResource(R.id.img_notification,
-					R.drawable.icon_notifi_ok);
 		} else {
 			contentTitle = mActivity.getResources().getString(
 					R.string.content_notification_fail);
-			remoteViews.setImageViewResource(R.id.img_notification,
-					R.drawable.icon_notifi_fail);
-			icon = R.drawable.icon_notifi_fail;
 		}
+		
 		Notification updateComplete = new Notification(icon, tickerText, when);
 		remoteViews.setTextViewText(R.id.txtContentNotification, contentTitle);
 		updateComplete.contentView = remoteViews;

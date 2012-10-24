@@ -35,14 +35,14 @@ public class PickImageDialog extends NgonDialog implements
 					Intent.ACTION_CAMERA_BUTTON,
 					android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 			getOwnerActivity().startActivityForResult(intent,
-					RequestCode.REQUEST_PICK_IMAGE_FROM_CAMERA);
+					RequestCode.REQUEST_IMAGE_FROM_CAMERA);
 			dismiss();
 		} else {
 			Intent intent = new Intent(
 					Intent.ACTION_PICK,
 					android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 			getOwnerActivity().startActivityForResult(intent,
-					RequestCode.REQUEST_PICK_IMAGE_FROM_GALLERY);
+					RequestCode.REQUEST_IMAGE_FROM_GALLERY);
 			dismiss();
 		}
 	}
