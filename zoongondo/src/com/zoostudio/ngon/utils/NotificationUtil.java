@@ -12,8 +12,8 @@ import com.zoostudio.ngon.R;
 
 public class NotificationUtil {
 	public static final int ID_IMAGE_UPLOAD_SPOT_OK = 1;
-	public static final int ID_IMAGE_UPLOAD_SPOT_FAIL = 2;
-	
+	public static final int ID_IMAGE_UPLOAD_SPOT_FAIL = -1;
+
 	public static void notificationUploadImage(Activity mActivity,
 			int idUpload, boolean status) {
 		NotificationManager notificationManager = (NotificationManager) mActivity
@@ -24,8 +24,6 @@ public class NotificationUtil {
 		CharSequence contentTitle;
 		RemoteViews remoteViews = new RemoteViews(mActivity.getPackageName(),
 				R.layout.layout_notification);
-		int icon = R.drawable.icon_notifi;
-
 		remoteViews.setImageViewResource(R.id.img_notification,
 				R.drawable.icon_notifi);
 		if (status) {
@@ -35,8 +33,8 @@ public class NotificationUtil {
 			contentTitle = mActivity.getResources().getString(
 					R.string.content_notification_fail);
 		}
-
-		Notification updateComplete = new Notification(icon, tickerText, when);
+		Notification updateComplete = new Notification(R.drawable.icon_notifi,
+				tickerText, when);
 		remoteViews.setTextViewText(R.id.txtContentNotification, contentTitle);
 		updateComplete.contentView = remoteViews;
 		updateComplete.contentIntent = PendingIntent.getActivity(

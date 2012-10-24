@@ -2,6 +2,7 @@ package com.zoostudio.ngon.task;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.ContentBody;
@@ -10,11 +11,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 
+import com.facebook.android.Utility;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.adapter.item.PhotoItem;
+import com.zoostudio.exception.ZooException;
 import com.zoostudio.ngon.task.callback.OnUploadPhotoTask;
 import com.zoostudio.ngon.utils.ParserUtils;
 import com.zoostudio.restclient.RestClientNotification;
@@ -28,44 +33,19 @@ public class UploadPhotoTask extends RestClientTask {
 	private OnUploadPhotoTask mListener;
 	private PhotoItem photoItem;
 	private MediaItem mMediaItem;
+	private Context mContext;
 
 	public UploadPhotoTask(Activity activity, String spot_id, MediaItem item) {
+		this(activity, spot_id, item, new int[] {});
+	}
+
+	public UploadPhotoTask(Activity activity, String spot_id, MediaItem item,
+			int[] dishesId) {
 		super(activity);
-		mDishesId = new int[] {};
+		mContext = activity.getApplicationContext();
+		mDishesId = dishesId;
 		mSpotId = spot_id;
 		mMediaItem = item;
-	}
-
-	public UploadPhotoTask(Activity activity, String spot_id, File photo) {
-		this(activity, spot_id, photo, new int[] {});
-	}
-
-	public UploadPhotoTask(Activity activity, String spot_id, File photo,
-			int[] dishes) {
-		this(activity, spot_id, new FileBody(photo, "image/png"), dishes);
-	}
-
-	public UploadPhotoTask(Activity activity, String spot_id, Bitmap photo) {
-		this(activity, spot_id, photo, new int[] {});
-	}
-
-	public UploadPhotoTask(Activity activity, String spot_id, byte[] photoData) {
-		this(activity, spot_id, convertByteToByteArrayBody(spot_id, photoData),
-				new int[] {});
-	}
-
-	public UploadPhotoTask(Activity activity, String spot_id, Bitmap photo,
-			int[] dishes) {
-		this(activity, spot_id, convertBitmapToByteArray(spot_id, photo),
-				dishes);
-	}
-
-	public UploadPhotoTask(Activity activity, String spot_id,
-			ContentBody photo, int[] dishes) {
-		super(activity);
-		mSpotId = spot_id;
-		mPhoto = photo;
-		mDishesId = dishes;
 	}
 
 	@Override
@@ -73,34 +53,22 @@ public class UploadPhotoTask extends RestClientTask {
 		restClient.addParam("spot_id", mSpotId);
 		if (mDishesId.length > 0) {
 			String dishes = "";
-
 			for (int dish : mDishesId) {
 				dishes += dish + ",";
 			}
-
 			dishes = dishes.substring(0, dishes.length() - 1);
-
 			restClient.addParam("dishes", dishes);
 		}
-		
-		restClient.postMultiPart("/photo", "photo", mPhoto);
-	}
-
-	private static ByteArrayBody convertBitmapToByteArray(String spot_id,
-			Bitmap photo) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		photo.compress(CompressFormat.PNG, 90, bos);
-		byte[] data = bos.toByteArray();
-		ByteArrayBody bab = new ByteArrayBody(data, "image/png", "photo_spot_"
-				+ spot_id + ".png");
-		return bab;
-	}
-
-	private static ByteArrayBody convertByteToByteArrayBody(String spot_id,
-			byte[] data) {
-		ByteArrayBody bab = new ByteArrayBody(data, "image/png", "photo_spot_"
-				+ spot_id + ".png");
-		return bab;
+		Uri photoUri = Uri.fromFile(new File(mMediaItem.getPathMedia()));
+		try {
+			byte[] photoData = Utility.scaleImage(mContext, photoUri,
+					mMediaItem);
+			mPhoto = NgonTaskUtil.convertByteToByteArrayBody(mSpotId,
+					mMediaItem.getMineType(), photoData);
+			restClient.postMultiPart("/photo", "photo", mPhoto);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -109,15 +77,17 @@ public class UploadPhotoTask extends RestClientTask {
 		try {
 			status = jsonObject.getBoolean("status");
 			if (status) {
-				JSONObject photoData = jsonObject.getJSONObject("data");
-				photoItem = ParserUtils.parsePhoto(photoData);
+				photoItem = ParserUtils.parsePhoto(jsonObject);
 				return RestClientNotification.OK;
+			} else {
+				mErrorCode = ZooException.NETWORK.CANT_GET_DATA;
+				return RestClientNotification.ERROR;
 			}
-			return RestClientNotification.NO_DATA;
 		} catch (JSONException e) {
 			e.printStackTrace();
+			mErrorCode = ZooException.JSON.JSON_PARSE_ERROR;
 		}
-		return RestClientNotification.ERROR_DATA;
+		return RestClientNotification.ERROR;
 	}
 
 	@Override
@@ -125,7 +95,8 @@ public class UploadPhotoTask extends RestClientTask {
 		if (mWaitingStatus && mWaitingDialog != null) {
 			mWaitingDialog.dismiss();
 		}
-		if (status == RestClientNotification.OK && photoItem != null) {
+		if (null != mListener && status == RestClientNotification.OK
+				&& photoItem != null) {
 			mListener.onUploadPhotoTaskListener(photoItem);
 
 		} else if (status == RestClientNotification.ERROR
