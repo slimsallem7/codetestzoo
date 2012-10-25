@@ -92,11 +92,13 @@
     <string name="checkin_getting_location">Đang lấy địa chỉ &#8230;</string>
     <string name="dialog_spotdetail_addphoto">Thêm ảnh</string>
     <string name="dialog_close">Đóng</string>
+    <string name="dialog_send">Gửi</string>
     <string name="dialog_userprofile_removeavatar">Xóa avatar</string>
-    <string name="comment_eat_dish">Ăn món...</string>
+    <string name="comment_eat_dish">Ăn món&#8230;</string>
     <string name="comment_dish_count">Đã chọn </string>
     <string name="comment_label_dish">Món</string>
-    <string name="hint_comment">Viết cảm nhận...</string>
+    <string name="hint_comment">Viết cảm nhận&#8230;</string>
+    <string name="notifi_create_review_done">Đã đăng cảm nhận</string>
     <string name="button_done">XONG</string>
     <string name="dialog_pickphoto_camera">Chụp ảnh</string>
     <string name="dialog_pickphoto_gallery">Chọn từ máy</string>
@@ -133,4 +135,7 @@
     <string name="adddish_addmore">THÊM NỮA</string>
     <string name="adddish_done">XONG</string>
 	<string name="add_dish_success">Đã thêm</string>
+	<string name="share_spot">Chia sẻ địa chỉ</string>
+	<string name="title_dialog_add_review">Viết cảm nhận</string>
+	<string name="share_content">Ăn thử ở đây nha !!!</string>
 </resources>
