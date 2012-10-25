@@ -17,7 +17,6 @@
     </style>
 
     <style name="NgonDialog" parent="android:style/Theme.Dialog">
-        <item name="android:windowBackground">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
     </style>

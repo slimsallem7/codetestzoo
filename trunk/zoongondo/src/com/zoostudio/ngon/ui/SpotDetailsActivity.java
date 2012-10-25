@@ -1,17 +1,20 @@
 package com.zoostudio.ngon.ui;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,11 +36,13 @@ import com.zoostudio.ngon.dialog.NgonErrorDialog;
 import com.zoostudio.ngon.dialog.NgonProgressDialog;
 import com.zoostudio.ngon.dialog.SelectImageSoucreDialog;
 import com.zoostudio.ngon.dialog.WaitingDialog;
+import com.zoostudio.ngon.task.CreateReviewTask;
 import com.zoostudio.ngon.task.GetSpotPhotoTask;
 import com.zoostudio.ngon.task.GetSpotReviewTask;
 import com.zoostudio.ngon.task.GetSpotTask;
 import com.zoostudio.ngon.task.LikeTask;
 import com.zoostudio.ngon.task.UploadPhotoTask;
+import com.zoostudio.ngon.task.callback.OnCreateReviewTaskListener;
 import com.zoostudio.ngon.task.callback.OnLikeTaskListener;
 import com.zoostudio.ngon.task.callback.OnSpotPhotoTaskListener;
 import com.zoostudio.ngon.task.callback.OnSpotReviewTaskListener;
@@ -58,7 +63,7 @@ import com.zoostudio.zooslideshow.ZooSlideView;
 public class SpotDetailsActivity extends NgonActivity implements
 		OnClickListener, OnPreExecuteDelegate, OnDataErrorDelegate,
 		OnSpotTaskListener, OnSpotReviewTaskListener, OnLikeTaskListener,
-		OnSpotPhotoTaskListener, OnUploadPhotoTask {
+		OnSpotPhotoTaskListener, OnUploadPhotoTask, OnCreateReviewTaskListener {
 	public static final String EXTRA_SPOT = "com.ngon.do.spotdetailactivity.SPOT";
 
 	protected static final int DIALOG_TAKE_PHOTO = 1000;
@@ -90,6 +95,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private ImageButton mMapSpot;
 
 	private View mAddReView;
+	private ImageButton mShareButton;
 	private volatile boolean hasLoadReview;
 	private ArrayList<String> dataTest;
 
@@ -103,6 +109,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mSlideImageView = (ZooSlideView) this
 				.findViewById(R.id.spot_details_slideImageDish);
 		mLikerView = (ZooLikerView) findViewById(R.id.zooLikerView);
+		mShareButton = (ImageButton) findViewById(R.id.share);
 		btnCheckin = (ImageButton) findViewById(R.id.checkin);
 		mListCommentView = (ListCommentView) findViewById(R.id.reView_ListCommentView);
 		mMenu = (TextView) findViewById(R.id.menu);
@@ -112,7 +119,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mMapSpot = (ImageButton) findViewById(R.id.spot_map);
 		mMenu.setOnClickListener(this);
 		mAddReView.setOnClickListener(this);
-
+		mShareButton.setOnClickListener(this);
 		ArrayList<LikerItem> likers = new ArrayList<LikerItem>();
 		likers.add(new LikerItem("", "11"));
 		likers.add(new LikerItem("", "12"));
@@ -145,8 +152,10 @@ public class SpotDetailsActivity extends NgonActivity implements
 			startActivity(intent);
 			break;
 		case R.id.addreview:
+			showDialogAddReview();
 			break;
 		case R.id.share:
+			shareSpot();
 			break;
 		case R.id.like:
 			LikeTask likeTask = new LikeTask(this, mSpot.getId());
@@ -164,6 +173,48 @@ public class SpotDetailsActivity extends NgonActivity implements
 			doNavigator();
 			break;
 		}
+	}
+
+	/**
+	 * Hien thi dialog de gui di nhan xet ve Spot
+	 */
+	private void showDialogAddReview() {
+		NgonDialog.Builder builder = new NgonDialog.Builder(this);
+		final EditText content = new EditText(getApplicationContext());
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+		content.setLines(5);
+		content.setLayoutParams(layoutParams);
+		content.setBackgroundDrawable(null);
+		content.setPadding(5, 5, 5, 5);
+		content.setGravity(Gravity.TOP | Gravity.LEFT);
+		builder.setCancelable(true);
+		builder.setTitle(getString(R.string.title_dialog_add_review));
+		builder.setNegativeButton(R.string.dialog_close,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		builder.setPositiveButton(R.string.dialog_send,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						CreateReviewTask reviewTask = new CreateReviewTask(
+								SpotDetailsActivity.this, mSpot.getId(),
+								content.getText().toString());
+						reviewTask
+								.setOnDataErrorDelegate(SpotDetailsActivity.this);
+						reviewTask
+								.setOnCreateReviewTaskListener(SpotDetailsActivity.this);
+						reviewTask.execute();
+						dialog.dismiss();
+					}
+				});
+		builder.setInnerCustomView(content);
+		builder.show();
 	}
 
 	private void doNavigator() {
@@ -184,12 +235,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 			if (resultCode == RESULT_OK) {
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ZooCameraCommonActivity.MEDIA_CAPTURED);
-				UploadPhotoTask photoTask = new UploadPhotoTask(
-						SpotDetailsActivity.this, mSpot.getId(), photo);
-				photoTask.setOnPreExecuteDelegate(this);
-				photoTask.setOnDataErrorDelegate(this);
-				photoTask.setOnUploadPhotoTaskListener(this);
-				photoTask.execute();
+				uploadPhoto(photo);
 			}
 
 		} else if (requestCode == RequestCode.REQUEST_IMAGE_FROM_GALLERY) {
@@ -197,14 +243,18 @@ public class SpotDetailsActivity extends NgonActivity implements
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ChooseCommonMediaActivity.MEDIA_PICKED);
 
-				UploadPhotoTask photoTask = new UploadPhotoTask(
-						SpotDetailsActivity.this, mSpot.getId(), photo);
-				photoTask.setOnPreExecuteDelegate(this);
-				photoTask.setOnDataErrorDelegate(this);
-				photoTask.setOnUploadPhotoTaskListener(this);
-				photoTask.execute();
+				uploadPhoto(photo);
 			}
 		}
+	}
+
+	private void uploadPhoto(MediaItem photo) {
+		UploadPhotoTask photoTask = new UploadPhotoTask(
+				SpotDetailsActivity.this, mSpot.getId(), photo);
+		photoTask.setOnPreExecuteDelegate(this);
+		photoTask.setOnDataErrorDelegate(this);
+		photoTask.setOnUploadPhotoTaskListener(this);
+		photoTask.execute();
 	}
 
 	@Override
@@ -257,7 +307,13 @@ public class SpotDetailsActivity extends NgonActivity implements
 				double lon = mSpot.getLocation().getLongtitude();
 				String uri = "geo:" + lat + "," + lon + "?z=17";
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-				startActivity(intent);
+				try {
+					startActivity(intent);
+				} catch (ActivityNotFoundException e) {
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(), "Không thể mở Map",
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -330,7 +386,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						ChooseCommonMediaActivity.class);
-				intent.putExtra(ChooseCommonMediaActivity.RETURN_WITH_RESULT, true);
+				intent.putExtra(ChooseCommonMediaActivity.RETURN_WITH_RESULT,
+						true);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivityForResult(intent,
 						RequestCode.REQUEST_IMAGE_FROM_GALLERY);
@@ -343,7 +400,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						ZooCameraCommonActivity.class);
-				intent.putExtra(ZooCameraCommonActivity.RETURN_WITH_RESULT, true);
+				intent.putExtra(ZooCameraCommonActivity.RETURN_WITH_RESULT,
+						true);
 				startActivityForResult(intent,
 						RequestCode.REQUEST_IMAGE_FROM_CAMERA);
 				dialog.dismiss();
@@ -429,9 +487,28 @@ public class SpotDetailsActivity extends NgonActivity implements
 			mWaitingDialog.dismiss();
 			mWaitingDialog = null;
 			long id = System.currentTimeMillis();
-			NotificationUtil.notificationUploadImage(this,
-					(int)id, true);
+			NotificationUtil.notificationUploadImage(this, (int) id, true);
 		}
+	}
+
+	@Override
+	public void onCreateReviewTaskListener() {
+		Toast.makeText(getApplicationContext(),
+				R.string.notifi_create_review_done, Toast.LENGTH_SHORT).show();
+
+	}
+
+	private void shareSpot() {
+		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+		String appName = getResources().getString(R.string.app_name);
+		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, appName);
+		String shareContent = getResources().getString(R.string.share_content);
+		String shareMessage = shareContent + mSpot.getName() + " - "
+				+ mSpot.getAddress();
+		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
+		String titleShare = getResources().getString(R.string.share_spot);
+		startActivity(Intent.createChooser(shareIntent, titleShare));
 	}
 
 }

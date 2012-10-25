@@ -9,12 +9,13 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.zoostudio.ngon.R;
 import com.zoostudio.ngon.utils.ConfigSize;
 
 public class ZooAvatarImageView extends SmartImageView {
-	protected  Paint paint;
+	protected Paint paint;
 	protected WebImage border;
 	private static Bitmap bitmapBorder;
 	private static Bitmap bitmapAvatarDefault;
@@ -61,18 +62,17 @@ public class ZooAvatarImageView extends SmartImageView {
 			bitmapBgCircle = BitmapFactory.decodeStream(getContext()
 					.getResources().openRawResource(R.drawable.ic_bg_circle));
 		}
-		
-		if(null == bitmapBorder){
+
+		if (null == bitmapBorder) {
 			bitmapBorder = BitmapFactory.decodeStream(getContext()
-					.getResources().openRawResource(R.drawable.ic_border_circle));
+					.getResources()
+					.openRawResource(R.drawable.ic_border_circle));
 		}
 		setImageBitmap(bitmapAvatarDefault);
 	}
 
 	@Override
 	public void setImageBitmap(Bitmap source) {
-		if (null == source || source.getWidth() <=0 || source.getHeight() <=0)
-			return;
 		Bitmap result = makeCircleImage(source);
 		super.setImageBitmap(result);
 	}
