@@ -1,5 +1,7 @@
 package com.zoostudio.ngon;
 
+import com.zoostudio.ngon.utils.ConfigSize;
+
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import twitter4j.Twitter;
@@ -51,5 +53,12 @@ public class ZooNgonDo extends Application {
 	 */
 	public CommonsHttpOAuthConsumer getConsumer() {
 		return consumer;
+	}
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		ConfigSize configSize = new ConfigSize(getApplicationContext(),getResources());
+		configSize.loadResources();
 	}
 }
