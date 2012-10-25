@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -141,6 +142,11 @@ public class SpotDetailsActivity extends NgonActivity implements
 	protected void onStop() {
 		super.onStop();
 		SmartImageView.cancelAllTasks();
+	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.e("SpotDetailActivity","onDestroy");
 	}
 
 	@Override
