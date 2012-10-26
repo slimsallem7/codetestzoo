@@ -71,6 +71,8 @@ public abstract class BaseMapActivity extends MapActivity implements
 
 	private Bitmap bitmapPickerMe;
 
+	private Bitmap bitmapPicker;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,6 +107,8 @@ public abstract class BaseMapActivity extends MapActivity implements
 	}
 
 	protected void initVariables() {
+		bitmapPicker = BitmapFactory.decodeResource(getResources(),
+				R.drawable.map_other_pointer);
 		bitmapPickerMe = BitmapFactory.decodeResource(getResources(),
 				R.drawable.icon_picker_location);
 		mapOverlay = new MapOverlay();
@@ -133,17 +137,11 @@ public abstract class BaseMapActivity extends MapActivity implements
 
 	protected void drawSpotLocation(MapView mapView, Canvas canvas) {
 		if (null != mCurrentGeoPoint) {
-
 			// ---translate the GeoPoint to screen pixels---
 			Point screenPts = new Point();
 			mapView.getProjection().toPixels(mCurrentGeoPoint, screenPts);
-
 			// ---add the marker---
-			// TODO: @DUYNT Sua anh Marker cho map
-			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-					R.drawable.pushpin);
-
-			canvas.drawBitmap(bmp, screenPts.x - 7, screenPts.y - 26, null);
+			canvas.drawBitmap(bitmapPicker, screenPts.x - 7, screenPts.y - 26, null);
 		}
 	}
 	
@@ -236,7 +234,7 @@ public abstract class BaseMapActivity extends MapActivity implements
 
 		@Override
 		public boolean onTouchEvent(MotionEvent event, MapView mapView) {
-
+			Log.e("BaseMapActivity","TOUCH");
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 			// Neu action la down mode = Drag (Scroll)
 			case MotionEvent.ACTION_DOWN:

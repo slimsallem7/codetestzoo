@@ -34,18 +34,23 @@ public class UploadPhotoTask extends RestClientTask {
 	private PhotoItem photoItem;
 	private MediaItem mMediaItem;
 	private Context mContext;
+	private int mType;
+	public final static int COVER = 0;
+	public final static int THUMB = 1;
 
-	public UploadPhotoTask(Activity activity, String spot_id, MediaItem item) {
-		this(activity, spot_id, item, new int[] {});
+	public UploadPhotoTask(Activity activity, String spot_id, MediaItem item,
+			int type) {
+		this(activity, spot_id, item, new int[] {}, type);
 	}
 
 	public UploadPhotoTask(Activity activity, String spot_id, MediaItem item,
-			int[] dishesId) {
+			int[] dishesId, int type) {
 		super(activity);
 		mContext = activity.getApplicationContext();
 		mDishesId = dishesId;
 		mSpotId = spot_id;
 		mMediaItem = item;
+		mType = type;
 	}
 
 	@Override
@@ -97,8 +102,11 @@ public class UploadPhotoTask extends RestClientTask {
 		}
 		if (null != mListener && status == RestClientNotification.OK
 				&& photoItem != null) {
-			mListener.onUploadPhotoTaskListener(photoItem);
-
+			if (mType == THUMB) {
+				mListener.onUploadPhotoTaskListener(photoItem);
+			} else {
+				mListener.onUploadCoverPhotoTaskListener(photoItem);
+			}
 		} else if (status == RestClientNotification.ERROR
 				&& null != onDataErrorDelegate) {
 			onDataErrorDelegate.onActionDataError(this, mErrorCode);

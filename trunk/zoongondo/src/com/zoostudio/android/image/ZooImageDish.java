@@ -22,6 +22,6 @@ public class ZooImageDish extends ZooImageThumb {
 	
 	@Override
 	public void setImageUrl(String url) {
-		setImage(new ZooAvatarWebImage(url, ConfigSize.SIZE_THUMB));
+		setImage(new ZooScaleAbleWebImage(url, ConfigSize.SIZE_THUMB));
 	}
 }

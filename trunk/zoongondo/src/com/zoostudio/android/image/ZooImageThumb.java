@@ -38,7 +38,11 @@ public class ZooImageThumb extends ZooAvatarImageView {
 	public void setImagePath(String pathMedia) {
 		setImage(new LocalImage(pathMedia));
 	}
-
+	
+	public void setImageUrl(String url) {
+		setImage(new ZooScaleAbleWebImage(url, ConfigSize.SIZE_THUMB));
+	}
+	
 	@Override
 	protected void initVariables() {
 		super.initVariables();
@@ -56,26 +60,26 @@ public class ZooImageThumb extends ZooAvatarImageView {
 
 	@Override
 	public void setImageBitmap(Bitmap source) {
-		width = source.getWidth();
-		height = source.getHeight();
-		if (width <= 0 || height <= 0)
-			return;
-
-		ratio = calculateRatio(width, height, ConfigSize.SIZE_THUMB,
-				ConfigSize.SIZE_THUMB);
-
-		Matrix matrix = new Matrix();
-		matrix.postScale(ratio, ratio);
-		source = Bitmap.createBitmap(source, 0, 0, width, height, matrix, true);
-
-		width = source.getWidth();
-		height = source.getHeight();
-
-		x = (width - ConfigSize.SIZE_THUMB) / 2;
-		y = (height - ConfigSize.SIZE_THUMB) / 2;
-
-		source = Bitmap.createBitmap(source, x, y, ConfigSize.SIZE_THUMB,
-				ConfigSize.SIZE_THUMB);
+//		width = source.getWidth();
+//		height = source.getHeight();
+//		if (width <= 0 || height <= 0)
+//			return;
+//
+//		ratio = calculateRatio(width, height, ConfigSize.SIZE_THUMB,
+//				ConfigSize.SIZE_THUMB);
+//
+//		Matrix matrix = new Matrix();
+//		matrix.postScale(ratio, ratio);
+//		source = Bitmap.createBitmap(source, 0, 0, width, height, matrix, true);
+//
+//		width = source.getWidth();
+//		height = source.getHeight();
+//
+//		x = (width - ConfigSize.SIZE_THUMB) / 2;
+//		y = (height - ConfigSize.SIZE_THUMB) / 2;
+//
+//		source = Bitmap.createBitmap(source, x, y, ConfigSize.SIZE_THUMB,
+//				ConfigSize.SIZE_THUMB);
 
 		super.setImageBitmap(source);
 	}

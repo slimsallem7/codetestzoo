@@ -4,10 +4,109 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
+    <!--
+         <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/setting_logout" />
+        android:text="@string/setting_logout" />
+    -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_item_settings" >
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/icon_fb_setting" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ImageView01"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/ImageView01"
+            android:text="@string/title_facebook"
+            android:textColor="@color/NgonDoBlack"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtStatusFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/TextView01"
+            android:layout_below="@+id/TextView01"
+            android:text="ON" />
+
+        <CheckBox
+            android:id="@+id/CheckBox01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bg_checkbox_facebook"
+            android:button="@null" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_item_settings" >
+
+        <ImageView
+            android:id="@+id/icon_fb_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:contentDescription="@string/content_description"
+            android:src="@drawable/icon_tw_setting" />
+
+        <TextView
+            android:id="@+id/txtFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/icon_fb_setting"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/NgonDoBlack"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/icon_fb_setting"
+            android:text="@string/title_twitter" />
+
+        <TextView
+            android:id="@+id/txtStatusTwitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txtFacebook"
+            android:layout_below="@id/txtFacebook"
+            android:text="ON" />
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_checkbox_twitter"
+            android:button="@null"
+            android:checked="true"
+            android:layout_marginRight="5dp"
+            android:text="" />
+
+    </RelativeLayout>
 
 </LinearLayout>

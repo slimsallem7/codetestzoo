@@ -46,7 +46,7 @@
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity
-            android:name=".ui.AddSpot"
+            android:name=".ui.AddSpotActivity"
             android:theme="@style/Theme.NgonDo" >
         </activity>
         <activity

@@ -82,7 +82,6 @@ public class NearByPager extends NgonHomePager implements OnClickListener {
 
 		lvSpot.addHeaderView(header, null, false);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
-		lvSpot.addFooterView(mFooterView);
 
 		lvSpot.setOnScrollListener(new OnScrollListener() {
 			@Override

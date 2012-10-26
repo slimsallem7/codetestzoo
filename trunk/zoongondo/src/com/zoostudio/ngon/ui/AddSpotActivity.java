@@ -25,7 +25,7 @@ import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnPostExecuteDelegate;
 import com.zoostudio.service.impl.NgonLocationManager;
 
-public class AddSpot extends BaseMapActivity implements
+public class AddSpotActivity extends BaseMapActivity implements
 OnPostExecuteDelegate {
 	private EditText etSpotName;
 	private EditText etSpotAddress;
@@ -49,7 +49,11 @@ OnPostExecuteDelegate {
 		locationAddress.setOnAddressChangedListener(this);
 		locationAddress.getAddress(this, location);
 	}
-
+	
+	@Override
+	protected void loadLocation() {
+		
+	}
 	protected void initVariables() {
 		super.initVariables();
 		try {

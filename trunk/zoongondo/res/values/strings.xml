@@ -138,4 +138,7 @@
 	<string name="share_spot">Chia sẻ địa chỉ</string>
 	<string name="title_dialog_add_review">Viết cảm nhận</string>
 	<string name="share_content">Ăn thử ở đây nha !!!</string>
+	<string name="title_facebook">Facebook</string>
+	<string name="title_twitter">Twitter</string>
+	<string name="string_add_new_spot">Thêm quán</string>
 </resources>

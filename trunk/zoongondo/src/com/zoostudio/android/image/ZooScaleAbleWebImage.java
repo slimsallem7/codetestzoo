@@ -13,10 +13,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 
-public class ZooAvatarWebImage extends WebImage {
+public class ZooScaleAbleWebImage extends WebImage {
 	private int size;
 
-	public ZooAvatarWebImage(String url, int size) {
+	public ZooScaleAbleWebImage(String url, int size) {
 		super(url);
 		this.size = size;
 	}
