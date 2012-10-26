@@ -49,7 +49,6 @@ public class TopLikePager extends NgonHomePager implements OnPreExecuteDelegate 
 		});
 
 		lvSpot.addHeaderView(header, null, false);
-		lvSpot.addFooterView(mFooterView);
 		lvSpot.setOnItemClickListener(new OnSpotitemClick(getActivity()));
 		lvSpot.setAdapter(mAdapter);
 	}

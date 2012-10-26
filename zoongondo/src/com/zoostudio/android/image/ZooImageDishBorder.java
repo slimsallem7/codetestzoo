@@ -54,7 +54,7 @@ public class ZooImageDishBorder extends SmartImageView {
 		this.mImageLargeUrl = dishItem.getUrlImageThumb();
 		this.mTitleDish = dishItem.getTitle();
 		this.disItem = dishItem;
-		setImage(new ZooAvatarWebImage(url, ConfigSize.SIZE_THUMB));
+		setImage(new ZooScaleAbleWebImage(url, ConfigSize.SIZE_THUMB));
 	}
 	
 	public void setImageBitmap(Bitmap source, int type,MenuItem dishItem) {

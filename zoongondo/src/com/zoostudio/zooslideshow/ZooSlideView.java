@@ -8,24 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView.ScaleType;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ImageView.ScaleType;
 
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.android.image.ZooImageThumb;
 import com.zoostudio.ngon.R;
-import com.zoostudio.ngon.utils.ScreenUtil;
 
 public class ZooSlideView extends RelativeLayout implements OnClickListener {
 	private LinearLayout mLayoutThumb;
 	private SmartImageView mMainPhoto;
+	private ImageButton mMaskImage;
 	private ImageButton mTakePhoto;
 	private ArrayList<PhotoItem> mUrlsImage;
 	private OnSlideShowListener mListener;
-	private int height;
-	private int width;
 
 	public ZooSlideView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -54,10 +53,13 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 		mTakePhoto = (ImageButton) findViewById(R.id.addphoto);
 		mLayoutThumb = (LinearLayout) findViewById(R.id.thumbnail_list);
 		mMainPhoto = (SmartImageView) findViewById(R.id.imageViewPhoto);
-
+		mMaskImage = (ImageButton) findViewById(R.id.maskMainImage);
 	}
 
 	public void setImageMainSpot(String urlImage) {
+		if (null== urlImage || urlImage.equals(""))
+			return;
+		mMaskImage.setVisibility(View.GONE);
 		mMainPhoto.setImageUrl(urlImage);
 	}
 
@@ -65,9 +67,6 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 		LayoutInflater inflater = (LayoutInflater) getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.default_slide_image, this);
-		height = this.getResources().getDimensionPixelSize(
-				R.dimen.height_main_image_in_spotdetail_screen);
-		width = ScreenUtil.getIntance(getContext()).getWidth();
 	}
 
 	public void setOnSildeShowListener(OnSlideShowListener listener) {
@@ -75,6 +74,7 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 	}
 
 	private void setUpImages() {
+		mLayoutThumb.removeAllViews();
 		findViewById(R.id.addphotohint).setVisibility(View.GONE);
 		int thumbSize = getResources().getDimensionPixelOffset(
 				R.dimen.thumbSize);
@@ -92,14 +92,19 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 			ZooImageThumb imageView = new ZooImageThumb(getContext());
 			imageView.setShowBorder(false);
 			imageView.setBackgroundResource(R.drawable.img_listlikeavatar);
-//			imageView.setImageResource(R.drawable.thumb_dish_image);
 			imageView.setScaleType(ScaleType.CENTER_CROP);
-			imageView.setImageUrl(mUrlsImage.get(i).getSmallPath());
+			imageView.setImageUrl(mUrlsImage.get(i).getMediumPath());
 			mLayoutThumb.addView(imageView, params);
 		}
 
 		mTakePhoto.setOnClickListener(this);
 		mLayoutThumb.setOnClickListener(this);
+		mMaskImage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mListener.onTakePhotoCoverSpot();
+			}
+		});
 	}
 
 	@Override
@@ -109,11 +114,12 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 				mListener.onTakePhoto();
 			} else if (v == mLayoutThumb) {
 				mListener.onListThumbClicked();
-			}
+			} 
 		}
 	}
 
 	public void releaseBitmap() {
 		mMainPhoto.setImageBitmap(null);
+		mMaskImage.setVisibility(View.VISIBLE);
 	}
 }

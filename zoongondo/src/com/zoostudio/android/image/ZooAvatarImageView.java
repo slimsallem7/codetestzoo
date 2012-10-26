@@ -33,7 +33,7 @@ public class ZooAvatarImageView extends SmartImageView {
 
 	// Helpers to set image by URL
 	public void setImageUrl(String url) {
-		setImage(new ZooAvatarWebImage(url, ConfigSize.SIZE_AVATAR));
+		setImage(new ZooScaleAbleWebImage(url, ConfigSize.SIZE_AVATAR));
 	}
 
 	public ZooAvatarImageView(Context context, AttributeSet attrs, int defStyle) {

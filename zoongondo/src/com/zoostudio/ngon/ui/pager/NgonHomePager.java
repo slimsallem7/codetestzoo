@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -20,8 +21,10 @@ import android.widget.TextView;
 import com.zoostudio.adapter.SpotAdapter;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.RequestCode;
 import com.zoostudio.ngon.task.callback.OnSpotItemListener;
 import com.zoostudio.ngon.ui.ActivityMapSpot;
+import com.zoostudio.ngon.ui.AddSpotActivity;
 import com.zoostudio.ngon.ui.base.BaseFragmentScreen;
 import com.zoostudio.ngon.utils.Logger;
 import com.zoostudio.ngon.views.NgonProgressView;
@@ -53,8 +56,15 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 	private NgonProgressView mProgressLoadMore;
 	protected ArrayList<SpotItem> mDataBackup;
 	private boolean mNeedShow;
+	private View mLayoutAddSpot;
 	protected ListView lvSpot;
-
+	protected int mIndexPager;
+	protected boolean mHasLoadData;
+	protected LayoutInflater mInflater;
+	protected boolean hasRequestLocation;
+	private String mStringError;
+	private String mStringEmpty;
+	
 	protected void initControls() {
 		lvSpot = (ListView) findViewById(R.id.spotlist);
 		mProgressBar = (NgonProgressView) findViewById(R.id.progressbar);
@@ -63,9 +73,13 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		mRetry = (Button) findViewById(R.id.retry);
 		mFooterView = (RelativeLayout) getLayoutInflater(null).inflate(
 				R.layout.item_loading_more, null);
+		mLayoutAddSpot = getLayoutInflater(null).inflate(
+				R.layout.inc_footer_add_spot, null);
 		mProgressLoadMore = (NgonProgressView) mFooterView
 				.findViewById(R.id.ngonProgressLoadMore);
 		mProgressLoadMore.setAutoShow(false);
+		// lvSpot.addFooterView(mFooterView);
+		lvSpot.addFooterView(mLayoutAddSpot);
 		mFooterView.setVisibility(mNeedShow ? View.VISIBLE : View.GONE);
 	}
 
@@ -74,13 +88,6 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 		mAdapter = new SpotAdapter(getActivity(), new ArrayList<SpotItem>(),
 				null);
 	}
-
-	protected int mIndexPager;
-	protected boolean mHasLoadData;
-	protected LayoutInflater mInflater;
-	protected boolean hasRequestLocation;
-	private String mStringError;
-	private String mStringEmpty;
 
 	public NgonHomePager() {
 		hasRequestLocation = false;
@@ -105,7 +112,7 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 			Bundle savedInstanceState) {
 		this.mInflater = inflater;
 		mView = mInflater.inflate(R.layout.fragment_home_page, null);
-		if(null != savedInstanceState){
+		if (null != savedInstanceState) {
 			mState = savedInstanceState.getInt(KEY_STATE);
 			mDataBackup = (ArrayList<SpotItem>) savedInstanceState
 					.getSerializable(KEY_ARRAY_SPOT);
@@ -151,6 +158,14 @@ public abstract class NgonHomePager extends BaseFragmentScreen implements
 			@Override
 			public void onClick(View v) {
 				refreshSpotItem();
+			}
+		});
+
+		mLayoutAddSpot.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(mParent, AddSpotActivity.class);
+				startActivityForResult(intent, RequestCode.ADD_SPOT);
 			}
 		});
 	}

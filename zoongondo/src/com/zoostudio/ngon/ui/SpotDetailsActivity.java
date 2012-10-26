@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,7 +70,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	private ImageButton btnCheckin;
 	private ImageButton btnSpotMenu;
-	private GetSpotPhotoTask photoTask;
+	private GetSpotPhotoTask getPhotoSpotTask;
 	private GetSpotReviewTask reviewTask;
 	private GetSpotTask infoTask;
 	private TextView tvSpotName;
@@ -99,6 +98,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private ImageButton mShareButton;
 	private volatile boolean hasLoadReview;
 	private ArrayList<String> dataTest;
+
+	private int mCurrentTypeUpload;
 
 	@Override
 	protected int setLayoutView() {
@@ -134,6 +135,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	@Override
 	protected void initVariables() {
 		mHandler = new Handler();
+		mCurrentTypeUpload = UploadPhotoTask.THUMB;
 		Bundle bundle = this.getIntent().getExtras();
 		mSpot = (SpotItem) bundle.getSerializable(EXTRA_SPOT);
 	}
@@ -143,10 +145,11 @@ public class SpotDetailsActivity extends NgonActivity implements
 		super.onStop();
 		SmartImageView.cancelAllTasks();
 	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.e("SpotDetailActivity","onDestroy");
+		Log.e("SpotDetailActivity", "onDestroy");
 	}
 
 	@Override
@@ -241,7 +244,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 			if (resultCode == RESULT_OK) {
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ZooCameraCommonActivity.MEDIA_CAPTURED);
-				uploadPhoto(photo);
+				uploadPhoto(photo,mCurrentTypeUpload);
 			}
 
 		} else if (requestCode == RequestCode.REQUEST_IMAGE_FROM_GALLERY) {
@@ -249,14 +252,14 @@ public class SpotDetailsActivity extends NgonActivity implements
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ChooseCommonMediaActivity.MEDIA_PICKED);
 
-				uploadPhoto(photo);
+				uploadPhoto(photo,mCurrentTypeUpload);
 			}
 		}
 	}
 
-	private void uploadPhoto(MediaItem photo) {
+	private void uploadPhoto(MediaItem photo,int type) {
 		UploadPhotoTask photoTask = new UploadPhotoTask(
-				SpotDetailsActivity.this, mSpot.getId(), photo);
+				SpotDetailsActivity.this, mSpot.getId(), photo,type);
 		photoTask.setOnPreExecuteDelegate(this);
 		photoTask.setOnDataErrorDelegate(this);
 		photoTask.setOnUploadPhotoTaskListener(this);
@@ -294,6 +297,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mSlideImageView.setOnSildeShowListener(new OnSlideShowListener() {
 			@Override
 			public void onTakePhoto() {
+				mCurrentTypeUpload = UploadPhotoTask.THUMB;
 				showDialog(DIALOG_TAKE_PHOTO);
 			}
 
@@ -303,6 +307,11 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 			@Override
 			public void onListThumbClicked() {
+			}
+
+			@Override
+			public void onTakePhotoCoverSpot() {
+				mCurrentTypeUpload = UploadPhotoTask.COVER;
 			}
 		});
 
@@ -331,9 +340,15 @@ public class SpotDetailsActivity extends NgonActivity implements
 		infoTask.execute();
 
 		// load photo
-		photoTask = new GetSpotPhotoTask(this, mSpot.getId());
-		photoTask.setOnSpotPhotoTaskListener(this);
-		photoTask.execute();
+		getPhotoSpot();
+	}
+
+	private void getPhotoSpot() {
+		if (null != getPhotoSpotTask && getPhotoSpotTask.isLoading())
+			getPhotoSpotTask.cancel(true);
+		getPhotoSpotTask = new GetSpotPhotoTask(this, mSpot.getId());
+		getPhotoSpotTask.setOnSpotPhotoTaskListener(this);
+		getPhotoSpotTask.execute();
 	}
 
 	private void sendMailReport() {
@@ -484,6 +499,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	public void onSpotPhotoTaskListener(ArrayList<PhotoItem> data) {
+		Log.e("SpotDetailActivity", "data =" + data);
 		mSlideImageView.setDatas(data);
 	}
 
@@ -494,6 +510,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 			mWaitingDialog = null;
 			long id = System.currentTimeMillis();
 			NotificationUtil.notificationUploadImage(this, (int) id, true);
+			getPhotoSpot();
 		}
 	}
 
@@ -517,4 +534,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 		startActivity(Intent.createChooser(shareIntent, titleShare));
 	}
 
+	@Override
+	public void onUploadCoverPhotoTaskListener(PhotoItem photoItem) {
+		mSlideImageView.setImageMainSpot(photoItem.getPath());
+	}
 }

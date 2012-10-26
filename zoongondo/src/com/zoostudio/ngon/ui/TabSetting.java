@@ -26,7 +26,7 @@ public class TabSetting extends FragmentActivity implements OnPageChangeListener
 	}
 
 	private void initControls() {
-		mLogout = (Button) findViewById(R.id.logout);
+//		mLogout = (Button) findViewById(R.id.logout);
 	}
 
 	private void initVariables() {
@@ -34,12 +34,12 @@ public class TabSetting extends FragmentActivity implements OnPageChangeListener
 	}
 
 	private void initActions() {
-		mLogout.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				logout();
-			}
-		});
+//		mLogout.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				logout();
+//			}
+//		});
 	}
 
 	private void logout() {

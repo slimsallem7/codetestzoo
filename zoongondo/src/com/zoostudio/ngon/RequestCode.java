@@ -18,6 +18,7 @@ public class RequestCode {
 
     public static final int REGISTER = 11;
     public static final int RELOGIN = 12;
+	public static final int ADD_SPOT = 13;
     
     
 }
