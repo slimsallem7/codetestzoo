@@ -14,7 +14,7 @@
         android:scaleType="centerCrop" >
     </com.zoostudio.android.image.SmartImageView>
 
-    <ImageViewButton
+    <ImageButton
         android:id="@+id/maskMainImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

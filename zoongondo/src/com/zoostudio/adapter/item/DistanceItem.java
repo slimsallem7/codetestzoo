@@ -12,11 +12,6 @@ public class DistanceItem {
 		this.unit = unit;
 	}
 
-	@Override
-	public String toString() {
-		return getDistance() + " " + unit;
-	}
-
 	public String getDistance() {
 		return distance;
 	}
@@ -24,5 +19,10 @@ public class DistanceItem {
 	public void setDistance(String distance) {
 		this.distance = distance;
 	}
-
+	
+	public String toString(){
+		StringBuffer buffer = new StringBuffer(1024);
+		buffer.append(distance).append(" ").append(unit);
+		return buffer.toString();
+	}
 }

@@ -1,8 +1,14 @@
 package com.zoostudio.adapter.item;
 
-public class PhotoItem {
+import java.io.Serializable;
 
-    private String id;
+public class PhotoItem implements Serializable{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6230190900341892772L;
+	private String id;
     private String path;
     private String medium_path;
     private String small_path;

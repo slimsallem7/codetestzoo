@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zoostudio.adapter.SpotPhotoAdapter;
 import com.zoostudio.adapter.item.MediaItem;
 import com.zoostudio.adapter.item.PhotoItem;
 import com.zoostudio.adapter.item.ReviewItem;
@@ -52,10 +50,10 @@ import com.zoostudio.ngon.utils.NotificationUtil;
 import com.zoostudio.ngon.views.ButtonCaptionedIcon;
 import com.zoostudio.ngon.views.ButtonUp;
 import com.zoostudio.ngon.views.ListCommentView;
+import com.zoostudio.ngon.views.ListCommentView.OnViewAllCommentListener;
 import com.zoostudio.restclient.RestClientTask;
 import com.zoostudio.restclient.RestClientTask.OnDataErrorDelegate;
 import com.zoostudio.restclient.RestClientTask.OnPreExecuteDelegate;
-import com.zoostudio.zooslideshow.LikerItem;
 import com.zoostudio.zooslideshow.OnSlideShowListener;
 import com.zoostudio.zooslideshow.ZooLikerView;
 import com.zoostudio.zooslideshow.ZooSlideView;
@@ -63,7 +61,8 @@ import com.zoostudio.zooslideshow.ZooSlideView;
 public class SpotDetailsActivity extends NgonActivity implements
 		OnClickListener, OnPreExecuteDelegate, OnDataErrorDelegate,
 		OnSpotTaskListener, OnSpotReviewTaskListener, OnLikeTaskListener,
-		OnSpotPhotoTaskListener, OnUploadPhotoTask, OnCreateReviewTaskListener {
+		OnSpotPhotoTaskListener, OnUploadPhotoTask, OnCreateReviewTaskListener,
+		OnViewAllCommentListener {
 	public static final String EXTRA_SPOT = "com.ngon.do.spotdetailactivity.SPOT";
 
 	protected static final int DIALOG_TAKE_PHOTO = 1000;
@@ -80,9 +79,7 @@ public class SpotDetailsActivity extends NgonActivity implements
 	private LinearLayout mListReview;
 	private ButtonCaptionedIcon mLike;
 	private ImageView mImageFood;
-	private SpotPhotoAdapter photoAdapter;
 	private Dialog pickImageDialog;
-	private Handler mHandler;
 	private SelectImageSoucreDialog mSelectImageSoucreDialog;
 	private ImageView ivSpotMap;
 	private ButtonUp mUp;
@@ -122,19 +119,18 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mMenu.setOnClickListener(this);
 		mAddReView.setOnClickListener(this);
 		mShareButton.setOnClickListener(this);
-		ArrayList<LikerItem> likers = new ArrayList<LikerItem>();
-		likers.add(new LikerItem("", "11"));
-		likers.add(new LikerItem("", "12"));
-		likers.add(new LikerItem("", "13"));
-		likers.add(new LikerItem("", "14"));
-		mLikerView.setDatas(likers, 15);
+		// ArrayList<LikerItem> likers = new ArrayList<LikerItem>();
+		// likers.add(new LikerItem("", "11"));
+		// likers.add(new LikerItem("", "12"));
+		// likers.add(new LikerItem("", "13"));
+		// likers.add(new LikerItem("", "14"));
+		// mLikerView.setDatas(likers, 15);
 
 		mUp = (ButtonUp) findViewById(R.id.btn_up);
 	}
 
 	@Override
 	protected void initVariables() {
-		mHandler = new Handler();
 		mCurrentTypeUpload = UploadPhotoTask.THUMB;
 		Bundle bundle = this.getIntent().getExtras();
 		mSpot = (SpotItem) bundle.getSerializable(EXTRA_SPOT);
@@ -244,22 +240,21 @@ public class SpotDetailsActivity extends NgonActivity implements
 			if (resultCode == RESULT_OK) {
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ZooCameraCommonActivity.MEDIA_CAPTURED);
-				uploadPhoto(photo,mCurrentTypeUpload);
+				uploadPhoto(photo, mCurrentTypeUpload);
 			}
 
 		} else if (requestCode == RequestCode.REQUEST_IMAGE_FROM_GALLERY) {
 			if (resultCode == RESULT_OK) {
 				MediaItem photo = (MediaItem) data.getExtras().get(
 						ChooseCommonMediaActivity.MEDIA_PICKED);
-
-				uploadPhoto(photo,mCurrentTypeUpload);
+				uploadPhoto(photo, mCurrentTypeUpload);
 			}
 		}
 	}
 
-	private void uploadPhoto(MediaItem photo,int type) {
+	private void uploadPhoto(MediaItem photo, int type) {
 		UploadPhotoTask photoTask = new UploadPhotoTask(
-				SpotDetailsActivity.this, mSpot.getId(), photo,type);
+				SpotDetailsActivity.this, mSpot.getId(), photo, type);
 		photoTask.setOnPreExecuteDelegate(this);
 		photoTask.setOnDataErrorDelegate(this);
 		photoTask.setOnUploadPhotoTaskListener(this);
@@ -276,6 +271,8 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 	@Override
 	protected void initActions() {
+		mListCommentView.setOnViewAllCommentListener(this);
+
 		mSlideImageView.setImageMainSpot(mSpot.getUrlImageSpot());
 
 		btnCheckin.setOnClickListener(this);
@@ -303,15 +300,22 @@ public class SpotDetailsActivity extends NgonActivity implements
 
 			@Override
 			public void onSelectFullImage() {
+				Toast.makeText(getApplicationContext(), "Full Image Selected",
+						Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
-			public void onListThumbClicked() {
+			public void onListThumbClicked(ArrayList<PhotoItem> items) {
+				Intent intent = new Intent(getApplicationContext(),
+						ActivityImageDetailSpot.class);
+				intent.putExtra(ActivityImageDetailSpot.IMAGE_THUMB, items);
+				startActivity(intent);
 			}
 
 			@Override
 			public void onTakePhotoCoverSpot() {
 				mCurrentTypeUpload = UploadPhotoTask.COVER;
+				showDialog(DIALOG_TAKE_PHOTO);
 			}
 		});
 
@@ -419,17 +423,20 @@ public class SpotDetailsActivity extends NgonActivity implements
 		mCamera.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
-						ZooCameraCommonActivity.class);
-				intent.putExtra(ZooCameraCommonActivity.RETURN_WITH_RESULT,
-						true);
-				startActivityForResult(intent,
-						RequestCode.REQUEST_IMAGE_FROM_CAMERA);
+				openCameraActivity();
 				dialog.dismiss();
 			}
+
 		});
 
 		return dialog;
+	}
+
+	private void openCameraActivity() {
+		Intent intent = new Intent(getApplicationContext(),
+				ZooCameraCommonActivity.class);
+		intent.putExtra(ZooCameraCommonActivity.RETURN_WITH_RESULT, true);
+		startActivityForResult(intent, RequestCode.REQUEST_IMAGE_FROM_CAMERA);
 	}
 
 	@Override
@@ -518,7 +525,6 @@ public class SpotDetailsActivity extends NgonActivity implements
 	public void onCreateReviewTaskListener() {
 		Toast.makeText(getApplicationContext(),
 				R.string.notifi_create_review_done, Toast.LENGTH_SHORT).show();
-
 	}
 
 	private void shareSpot() {
@@ -537,5 +543,12 @@ public class SpotDetailsActivity extends NgonActivity implements
 	@Override
 	public void onUploadCoverPhotoTaskListener(PhotoItem photoItem) {
 		mSlideImageView.setImageMainSpot(photoItem.getPath());
+	}
+
+	@Override
+	public void onViewAllCommentClick() {
+		Intent intent = new Intent(getApplicationContext(),
+				ActivityReviewSpot.class);
+		startActivity(intent);
 	}
 }

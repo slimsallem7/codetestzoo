@@ -21,13 +21,13 @@ import com.zoostudio.ngon.views.PhotoToggleButton;
 
 public class GalleryPagerAdapter extends PagerAdapter {
 
-	private ArrayList<MediaItem> data;
+	protected ArrayList<MediaItem> data;
 	private LayoutInflater inflater;
 	private View view;
 	private ZooAjustImageView imageView;
 	private PhotoToggleButton button;
 	private OnItemSelectListener listener;
-
+	
 	public GalleryPagerAdapter(Activity activity, ArrayList<MediaItem> datas) {
 		this.data = datas;
 		this.inflater = activity.getLayoutInflater();
