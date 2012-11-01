@@ -15,9 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.zoostudio.adapter.item.DistanceItem;
 import com.zoostudio.adapter.item.SpotItem;
 import com.zoostudio.android.image.SmartImageView;
 import com.zoostudio.ngon.R;
+import com.zoostudio.ngon.utils.DistanceUtils;
 
 public class SpotAdapter extends ArrayAdapter<SpotItem> {
 
@@ -85,7 +87,9 @@ public class SpotAdapter extends ArrayAdapter<SpotItem> {
 		try {
 			double distance = Math.round(item.getLocation().distanceTo(
 					mLongtitude, mLatitude) * 100) / 100;
-			viewHolder.tvDistance.setText(FormatterCore.numberFormat(distance));
+			DistanceItem distanceItem = DistanceUtils.getDistanceDisplay(distance);
+//			viewHolder.tvDistance.setText(FormatterCore.numberFormat(distance));
+			viewHolder.tvDistance.setText(distanceItem.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

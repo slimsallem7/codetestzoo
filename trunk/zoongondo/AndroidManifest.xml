@@ -192,6 +192,8 @@
             android:name=".ui.ActivityMapSpot"
             android:theme="@style/Theme.NgonDo" >
         </activity>
+        <activity android:name=".ui.ActivityImageDetailSpot" android:theme="@android:style/Theme.Black.NoTitleBar" android:screenOrientation="portrait"></activity>
+        <activity android:theme="@style/Theme.NgonDo" android:screenOrientation="portrait" android:name=".ui.ActivityReviewSpot"></activity>
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.zoostudio.adapter.item.ReviewItem;
 import com.zoostudio.ngon.R;
-
+ 
 public class ReviewAdapter extends ArrayAdapter<ReviewItem> {
 
     private LayoutInflater mInflater;

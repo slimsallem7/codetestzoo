@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView.ScaleType;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -54,11 +53,15 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 		mLayoutThumb = (LinearLayout) findViewById(R.id.thumbnail_list);
 		mMainPhoto = (SmartImageView) findViewById(R.id.imageViewPhoto);
 		mMaskImage = (ImageButton) findViewById(R.id.maskMainImage);
+		mLayoutThumb.setVisibility(View.GONE);
+		mTakePhoto.setVisibility(View.GONE);
 	}
 
 	public void setImageMainSpot(String urlImage) {
 		if (null== urlImage || urlImage.equals(""))
 			return;
+		mLayoutThumb.setVisibility(View.VISIBLE);
+		mTakePhoto.setVisibility(View.VISIBLE);
 		mMaskImage.setVisibility(View.GONE);
 		mMainPhoto.setImageUrl(urlImage);
 	}
@@ -113,7 +116,7 @@ public class ZooSlideView extends RelativeLayout implements OnClickListener {
 			if (v == mTakePhoto) {
 				mListener.onTakePhoto();
 			} else if (v == mLayoutThumb) {
-				mListener.onListThumbClicked();
+				mListener.onListThumbClicked(mUrlsImage);
 			} 
 		}
 	}
